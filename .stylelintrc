@@ -11,5 +11,11 @@
         "ignorePseudoElements": ["v-deep", "v-global", "v-slotted"]
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.vue"],
+      "customSyntax": "postcss-html"
+    }
+  ]
 } 
