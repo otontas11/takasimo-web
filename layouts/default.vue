@@ -1,10 +1,8 @@
+<!-- layouts/default.vue -->
 <template>
   <v-app>
-    <v-app-bar app>
-      <v-app-bar-title>Takasimo</v-app-bar-title>
-      <v-spacer />
-      <v-btn to="/" text>Ana Sayfa</v-btn>
-      <v-btn to="/about" text>Hakkımızda</v-btn>
+    <v-app-bar app color="primary" dark>
+      <v-app-bar-title>MyApp</v-app-bar-title>
     </v-app-bar>
 
     <v-main>
@@ -13,12 +11,8 @@
       </v-container>
     </v-main>
 
-    <v-footer app>
-      <span>&copy; {{ new Date().getFullYear() }} Takasimo</span>
+    <v-footer app color="primary" dark>
+      <v-col class="text-center">© {{ new Date().getFullYear() }} MyApp</v-col>
     </v-footer>
   </v-app>
 </template>
-
-<script setup lang="ts">
-// Layout logic here
-</script>
