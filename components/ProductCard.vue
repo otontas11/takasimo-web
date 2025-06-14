@@ -1,10 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="400">
-    <v-img
-      :src="image"
-      height="200"
-      cover
-    />
+    <v-img :src="image" height="200" cover />
 
     <v-card-title>{{ title }}</v-card-title>
 
@@ -17,13 +13,9 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn color="primary" variant="text">
-        Detaylar
-      </v-btn>
-      <v-spacer/>
-      <v-btn color="primary" variant="text">
-        Takas Et
-      </v-btn>
+      <v-btn color="primary" variant="text"> Detaylar </v-btn>
+      <v-spacer />
+      <v-btn color="primary" variant="text"> Takas Et </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -36,4 +28,4 @@ defineProps<{
   category: string
   condition: string
 }>()
-</script> 
+</script>

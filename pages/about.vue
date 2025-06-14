@@ -5,7 +5,10 @@
       <v-card-title>Takasimo Nedir?</v-card-title>
       <v-card-text>
         <p>Takasimo, kullanıcıların eşyalarını takas etmelerini sağlayan bir platformdur.</p>
-        <p>Amacımız, sürdürülebilir bir tüketim alışkanlığı oluşturmak ve eşyaların yeniden değerlendirilmesini sağlamaktır.</p>
+        <p>
+          Amacımız, sürdürülebilir bir tüketim alışkanlığı oluşturmak ve eşyaların yeniden
+          değerlendirilmesini sağlamaktır.
+        </p>
       </v-card-text>
     </v-card>
   </div>
@@ -15,4 +18,4 @@
 definePageMeta({
   layout: 'default'
 })
-</script> 
+</script>

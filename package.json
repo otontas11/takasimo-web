@@ -11,8 +11,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "stylelint": "stylelint \"**/*.{css,vue}\"",
-    "stylelint:fix": "stylelint \"**/*.{css,vue}\" --fix"
+    "stylelint:fix": "stylelint \"**/*.{css,vue}\" --fix",
+    "format:all": "npm run format && npm run stylelint:fix && npm run lint:fix"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
@@ -34,6 +36,8 @@
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
     "postcss-html": "^1.8.0",
     "prettier": "^3.5.3",
     "stylelint": "^16.20.0",

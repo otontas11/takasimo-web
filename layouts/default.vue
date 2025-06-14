@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app>
       <v-app-bar-title>Takasimo</v-app-bar-title>
-      <v-spacer/>
+      <v-spacer />
       <v-btn to="/" text>Ana Sayfa</v-btn>
       <v-btn to="/about" text>Hakkımızda</v-btn>
     </v-app-bar>
@@ -21,4 +21,4 @@
 
 <script setup lang="ts">
 // Layout logic here
-</script> 
+</script>

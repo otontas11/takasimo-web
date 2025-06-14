@@ -3,27 +3,18 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
 
-  modules: [
-    '@nuxt/content',
-    '@nuxt/eslint',
-    '@nuxt/image',
-    '@nuxt/scripts',
-    '@pinia/nuxt'
-  ],
+  modules: ['@nuxt/content', '@nuxt/eslint', '@nuxt/image', '@nuxt/scripts', '@pinia/nuxt'],
 
-  css: [
-    'vuetify/lib/styles/main.sass',
-    '@mdi/font/css/materialdesignicons.min.css',
-  ],
+  css: ['vuetify/lib/styles/main.sass', '@mdi/font/css/materialdesignicons.min.css'],
 
   build: {
-    transpile: ['vuetify'],
+    transpile: ['vuetify']
   },
 
   vite: {
     define: {
-      'process.env.DEBUG': false,
-    },
+      'process.env.DEBUG': false
+    }
   },
 
   typescript: {

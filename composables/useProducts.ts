@@ -19,7 +19,7 @@ export const useProducts = () => {
   ])
 
   const getProduct = (id: number) => {
-    return products.value.find(product => product.id === id)
+    return products.value.find((product) => product.id === id)
   }
 
   const addProduct = (product: any) => {
@@ -31,4 +31,4 @@ export const useProducts = () => {
     getProduct,
     addProduct
   }
-} 
+}
