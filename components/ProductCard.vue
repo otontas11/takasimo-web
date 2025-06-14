@@ -4,7 +4,7 @@
       :src="image"
       height="200"
       cover
-    ></v-img>
+    />
 
     <v-card-title>{{ title }}</v-card-title>
 
@@ -20,7 +20,7 @@
       <v-btn color="primary" variant="text">
         Detaylar
       </v-btn>
-      <v-spacer></v-spacer>
+      <v-spacer/>
       <v-btn color="primary" variant="text">
         Takas Et
       </v-btn>
