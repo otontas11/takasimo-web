@@ -7,7 +7,8 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxt/eslint',
     '@nuxt/image',
-    '@nuxt/scripts'
+    '@nuxt/scripts',
+    '@pinia/nuxt'
   ],
 
   css: [
@@ -24,4 +25,8 @@ export default defineNuxtConfig({
       'process.env.DEBUG': false,
     },
   },
+
+  typescript: {
+    strict: true
+  }
 })
