@@ -13,12 +13,18 @@
       
       <!-- Popular Categories -->
       <section class="categories-section">
-        <PopularCategories />
+        <v-container>
+          <PopularCategories />
+        </v-container>
+
       </section>
       
       <!-- Featured Products -->
       <section class="products-section">
-        <FeaturedProducts />
+        <v-container>
+          <FeaturedProducts />
+        </v-container>
+
       </section>
       
       <!-- Footer -->

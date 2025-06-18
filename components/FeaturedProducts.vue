@@ -1,5 +1,5 @@
 <template>
-  <v-container class="py-16 mb-0">
+  <div class="py-16 mb-0">
 
     <v-row>
       <v-col

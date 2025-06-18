@@ -1,5 +1,5 @@
 <template>
-  <v-container class="py-16">
+  <div class="py-16">
     <v-row>
       <v-col cols="12" class="text-center mb-8">
         <h2 class="text-h4 font-weight-bold">Popüler Kategoriler</h2>
@@ -35,7 +35,7 @@
         </v-card>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">

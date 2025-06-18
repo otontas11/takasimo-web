@@ -7,7 +7,7 @@
     height="80"
     class="px-4"
   >
-    <v-container fluid class="pa-0">
+          <v-container class="pa-0" style="max-width: 1320px;">
       <v-row align="center" no-gutters>
         <!-- Logo -->
         <v-col cols="auto" class="mr-8">

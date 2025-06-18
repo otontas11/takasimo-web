@@ -15,7 +15,7 @@
       class="hero-slide"
     >
       <div class="hero-content">
-        <v-container class="fill-height">
+        <v-container class="fill-height" style="max-width: 1320px;">
           <v-row align="center" justify="center" class="fill-height">
             <v-col cols="12" md="6" class="text-center text-md-left">
               <div class="hero-text">

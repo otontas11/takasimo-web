@@ -3,7 +3,7 @@
     class="category-header"
     :class="{ 'scrollable': isScrollable }"
   >
-    <v-container fluid class="pa-0">
+    <v-container class="pa-0" style="max-width: 1320px;">
       <v-row align="center" no-gutters class="px-4 py-3">
         <v-col>
           <div class="d-flex align-center justify-space-between">
