@@ -1,8 +1,10 @@
 <!-- pages/index.vue -->
 <template>
-  <div>
+  <div class="home-page">
     <!-- Hero Slider -->
-    <HeroSlider />
+    <div class="hero-section">
+      <HeroSlider />
+    </div>
     
     <!-- Ana İçerik -->
     <v-container class="py-12">
@@ -96,6 +98,15 @@ useHead({
 </script>
 
 <style scoped>
+.home-page {
+  margin-top: -140px;
+}
+
+.hero-section {
+  position: relative;
+  z-index: 1;
+}
+
 .v-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }

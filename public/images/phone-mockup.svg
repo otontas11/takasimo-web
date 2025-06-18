@@ -1,0 +1,43 @@
+<svg width="300" height="600" viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Phone Frame -->
+  <rect x="20" y="20" width="260" height="560" rx="30" ry="30" fill="#2c3e50" stroke="#34495e" stroke-width="2"/>
+  
+  <!-- Screen -->
+  <rect x="35" y="80" width="230" height="440" rx="15" ry="15" fill="#ecf0f1"/>
+  
+  <!-- Top Speaker -->
+  <rect x="120" y="45" width="60" height="8" rx="4" ry="4" fill="#34495e"/>
+  
+  <!-- Home Button -->
+  <circle cx="150" cy="550" r="15" fill="#34495e"/>
+  
+  <!-- Screen Content - Takasimo App -->
+  <rect x="35" y="80" width="230" height="440" rx="15" ry="15" fill="linear-gradient(135deg, #8B2865 0%, #a64d79 100%)"/>
+  
+  <!-- App Header -->
+  <rect x="35" y="80" width="230" height="60" fill="rgba(255,255,255,0.1)" rx="15"/>
+  <text x="150" y="115" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" font-weight="bold">takasimo</text>
+  
+  <!-- Content Cards -->
+  <rect x="50" y="160" width="200" height="80" rx="10" fill="white" opacity="0.9"/>
+  <rect x="60" y="170" width="60" height="60" rx="5" fill="#f39c12"/>
+  <rect x="130" y="175" width="110" height="8" rx="4" fill="#bdc3c7"/>
+  <rect x="130" y="190" width="80" height="6" rx="3" fill="#bdc3c7"/>
+  <rect x="130" y="205" width="90" height="6" rx="3" fill="#bdc3c7"/>
+  
+  <rect x="50" y="260" width="200" height="80" rx="10" fill="white" opacity="0.9"/>
+  <rect x="60" y="270" width="60" height="60" rx="5" fill="#e74c3c"/>
+  <rect x="130" y="275" width="110" height="8" rx="4" fill="#bdc3c7"/>
+  <rect x="130" y="290" width="80" height="6" rx="3" fill="#bdc3c7"/>
+  <rect x="130" y="305" width="90" height="6" rx="3" fill="#bdc3c7"/>
+  
+  <rect x="50" y="360" width="200" height="80" rx="10" fill="white" opacity="0.9"/>
+  <rect x="60" y="370" width="60" height="60" rx="5" fill="#27ae60"/>
+  <rect x="130" y="375" width="110" height="8" rx="4" fill="#bdc3c7"/>
+  <rect x="130" y="390" width="80" height="6" rx="3" fill="#bdc3c7"/>
+  <rect x="130" y="405" width="90" height="6" rx="3" fill="#bdc3c7"/>
+  
+  <!-- Bottom Button -->
+  <rect x="70" y="460" width="160" height="40" rx="20" fill="#8B2865"/>
+  <text x="150" y="485" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">İlan Ver</text>
+</svg> 

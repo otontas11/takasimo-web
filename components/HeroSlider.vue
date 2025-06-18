@@ -69,7 +69,7 @@ const slides: Slide[] = [
     buttonText: "Planları İncele",
     buttonColor: "#8B2865",
     background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-    image: "/images/phone-mockup.png"
+    image: "/images/phone-mockup.svg"
   },
   {
     title: "Güvenli Takas İmkanı",
