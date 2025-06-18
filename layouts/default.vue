@@ -2,7 +2,7 @@
 <template>
   <v-app>
     <AppHeader />
-    <v-main>
+    <v-main style="padding-top: 140px;">
       <v-container fluid>
         <slot />
       </v-container>
