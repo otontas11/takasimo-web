@@ -1,5 +1,8 @@
 <template>
-  <div class="category-header">
+  <div 
+    class="category-header"
+    :class="{ 'scrollable': isScrollable }"
+  >
     <v-container fluid class="pa-0">
       <v-row align="center" no-gutters class="px-4 py-3">
         <v-col>
@@ -28,7 +31,23 @@
 </template>
 
 <script setup lang="ts">
-// Category header logic
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const isScrollable = ref(false)
+const scrollThreshold = 300 // 300px scroll sonrası scrollable olur
+
+const handleScroll = () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  isScrollable.value = scrollTop > scrollThreshold
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <style scoped>
@@ -39,6 +58,18 @@
   top: 80px; /* AppHeader'ın yüksekliği kadar */
   z-index: 999;
   width: 100%;
+  transition: all 0.3s ease;
+}
+
+/* İlk başta fixed, scroll sonrası scrollable */
+.category-header:not(.scrollable) {
+  position: sticky;
+  top: 80px;
+}
+
+.category-header.scrollable {
+  position: relative;
+  top: auto;
 }
 
 .category-list {

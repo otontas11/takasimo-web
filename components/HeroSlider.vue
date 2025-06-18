@@ -116,14 +116,14 @@ const slides: Slide[] = [
 }
 
 .hero-title {
-  font-size: 1.75rem !important;
+  font-size: 2.5rem !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hero-subtitle {
-  font-size: 1rem !important;
+  font-size: 1.25rem !important;
   font-weight: 400 !important;
   line-height: 1.4 !important;
   opacity: 0.95;
@@ -151,10 +151,10 @@ const slides: Slide[] = [
 }
 
 .phone-mockup {
-  max-width: 150px;
+  max-width: 250px;
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
   animation: float 3s ease-in-out infinite;
 }
 
@@ -170,11 +170,11 @@ const slides: Slide[] = [
 /* Responsive Design */
 @media (max-width: 959px) {
   .hero-title {
-    font-size: 1.5rem !important;
+    font-size: 2rem !important;
   }
   
   .hero-subtitle {
-    font-size: 0.9rem !important;
+    font-size: 1.1rem !important;
   }
   
   .hero-text {
@@ -183,21 +183,21 @@ const slides: Slide[] = [
   }
   
   .phone-mockup {
-    max-width: 120px;
+    max-width: 200px;
   }
 }
 
 @media (max-width: 599px) {
   .hero-title {
-    font-size: 1.25rem !important;
+    font-size: 1.75rem !important;
   }
   
   .hero-subtitle {
-    font-size: 0.85rem !important;
+    font-size: 1rem !important;
   }
   
   .phone-mockup {
-    max-width: 100px;
+    max-width: 150px;
   }
 }
 

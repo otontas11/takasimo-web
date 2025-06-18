@@ -1,9 +1,7 @@
 <template>
-  <v-footer
-    app
-    color="#f8f9fa"
-    class="py-8"
-    style="min-height: 200px; width: 100%;"
+  <footer
+    class="app-footer py-8"
+    style="min-height: 200px; width: 100%; background-color: #f8f9fa;"
   >
     <v-container style="max-width: 100%;">
       <v-row style="width: 100%;">
@@ -101,7 +99,7 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-footer>
+  </footer>
 </template>
 
 <script setup lang="ts">
@@ -110,9 +108,11 @@
 
 <style scoped>
 /* Footer container stabilization */
-.v-footer {
+.app-footer {
   width: 100% !important;
   box-sizing: border-box !important;
+  border-top: 1px solid #e9ecef;
+  margin-top: 0;
 }
 
 .v-container {
@@ -167,7 +167,7 @@
 }
 
 /* Layout stability during loading */
-.v-footer * {
+.app-footer * {
   box-sizing: border-box !important;
 }
 </style> 

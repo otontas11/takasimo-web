@@ -20,8 +20,10 @@
       <section class="products-section">
         <FeaturedProducts />
       </section>
+      
+      <!-- Footer -->
+      <AppFooter />
     </div>
-    <AppFooter/>
   </v-main>
 </template>
 
@@ -44,6 +46,7 @@ useHead({
 .home-page {
   /* Ana sayfa container */
   min-height: 100vh;
+  padding-top: 80px; /* AppHeader için space */
 }
 
 .page-content {
@@ -62,6 +65,11 @@ useHead({
 /* Hero section'ı category header'ın altına yerleştir */
 .hero-section {
   margin-top: 0;
+}
+
+/* Footer section */
+.products-section {
+  margin-bottom: 0; /* Footer ile arasında boşluk olmasın */
 }
 
 .v-card {
