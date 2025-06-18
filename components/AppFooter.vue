@@ -1,7 +1,7 @@
 <template>
-  <footer
+  <div
     class="app-footer py-8"
-    style="min-height: 200px; width: 100%; background-color: #f8f9fa;"
+    style="min-height: 200px; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef;"
   >
     <v-container style="max-width: 100%;">
       <v-row style="width: 100%;">
@@ -99,7 +99,7 @@
         </v-col>
       </v-row>
     </v-container>
-  </footer>
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -47,11 +47,14 @@ useHead({
   /* Ana sayfa container */
   min-height: 100vh;
   padding-top: 80px; /* AppHeader için space */
+  display: flex;
+  flex-direction: column;
 }
 
 .page-content {
   /* İçerik alanı */
   position: relative;
+  flex: 1;
 }
 
 .hero-section,
