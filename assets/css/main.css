@@ -18,7 +18,7 @@ html, body {
 }
 
 .v-main {
-  min-height: calc(100vh - 200px);
+  min-height: calc(100vh - 280px); /* Header + Footer space */
   width: 100%;
 }
 
@@ -74,6 +74,12 @@ html, body {
   left: 0 !important;
   right: 0 !important;
   z-index: 1001 !important;
+}
+
+/* Sticky Category Header */
+.category-header {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 /* Prevent Layout Shift */

@@ -1,18 +1,26 @@
 <!-- pages/index.vue -->
 <template>
   <div class="home-page">
-    <!-- Hero Slider -->
-    <div class="hero-section">
-      <HeroSlider />
+    <!-- Category Header (Sticky Navigation) -->
+    <CategoryHeader />
+    
+    <!-- Page Content -->
+    <div class="page-content">
+      <!-- Hero Slider -->
+      <section class="hero-section">
+        <HeroSlider />
+      </section>
+      
+      <!-- Popular Categories -->
+      <section class="categories-section">
+        <PopularCategories />
+      </section>
+      
+      <!-- Featured Products -->
+      <section class="products-section">
+        <FeaturedProducts />
+      </section>
     </div>
-    
-    <!-- Popular Categories -->
-    <PopularCategories />
-    
-    <!-- Featured Products -->
-    <FeaturedProducts />
-    
-
   </div>
 </template>
 
@@ -31,12 +39,26 @@ useHead({
 
 <style scoped>
 .home-page {
-  margin-top: -140px;
+  /* Ana sayfa container */
+  min-height: 100vh;
 }
 
-.hero-section {
+.page-content {
+  /* İçerik alanı */
+  position: relative;
+}
+
+.hero-section,
+.categories-section,
+.products-section {
+  /* Section'lar için temel stilleri */
   position: relative;
   z-index: 1;
+}
+
+/* Hero section'ı category header'ın altına yerleştir */
+.hero-section {
+  margin-top: 0;
 }
 
 .v-card {

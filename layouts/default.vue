@@ -2,10 +2,8 @@
 <template>
   <v-app>
     <AppHeader />
-    <v-main style="padding-top: 140px;" class="main-content">
-      <v-container fluid>
-        <slot />
-      </v-container>
+    <v-main>
+      <slot />
     </v-main>
     <AppFooter />
   </v-app>
@@ -15,3 +13,10 @@
 import AppHeader from '~/components/AppHeader.vue'
 import AppFooter from '~/components/AppFooter.vue'
 </script>
+
+<style scoped>
+/* Layout-specific styles */
+.v-main {
+  padding-top: 80px !important;
+}
+</style>

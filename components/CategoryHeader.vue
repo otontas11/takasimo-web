@@ -35,6 +35,10 @@
 .category-header {
   background-color: #f8f9fa;
   border-bottom: 1px solid #e9ecef;
+  position: sticky;
+  top: 80px; /* AppHeader'ın yüksekliği kadar */
+  z-index: 999;
+  width: 100%;
 }
 
 .category-list {
