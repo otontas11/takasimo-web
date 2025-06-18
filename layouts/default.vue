@@ -1,17 +1,14 @@
 <!-- layouts/default.vue -->
 <template>
   <v-app>
-    <AppHeader />
-    <v-main>
-      <slot />
-    </v-main>
-    <AppFooter />
+    <AppHeader/>
+    <slot/>
+
   </v-app>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import AppHeader from '~/components/AppHeader.vue'
-import AppFooter from '~/components/AppFooter.vue'
 </script>
 
 <style scoped>

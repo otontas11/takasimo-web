@@ -1,6 +1,6 @@
 <!-- pages/index.vue -->
 <template>
-  <div class="home-page">
+  <v-main class="home-page">
     <!-- Category Header (Sticky Navigation) -->
     <CategoryHeader />
     
@@ -21,11 +21,14 @@
         <FeaturedProducts />
       </section>
     </div>
-  </div>
+    <AppFooter/>
+  </v-main>
 </template>
 
 <script setup lang="ts">
 // SEO ayarları
+import AppFooter from "~/components/AppFooter.vue";
+
 useHead({
   title: 'Takasimo - Güvenli Ürün Takası',
   meta: [
