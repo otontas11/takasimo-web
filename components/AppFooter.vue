@@ -3,58 +3,100 @@
     app
     color="#f8f9fa"
     class="py-8"
-    style="min-height: 200px;"
+    style="min-height: 200px; width: 100%;"
   >
-    <v-container>
-      <v-row>
+    <v-container style="max-width: 100%;">
+      <v-row style="width: 100%;">
         <!-- Kurumsal Section -->
-        <v-col cols="12" md="4">
-          <h3 class="text-h6 font-weight-bold mb-4" style="color: #333;">
+        <v-col 
+          cols="12" 
+          md="4" 
+          style="min-width: 0; flex: 0 0 auto;"
+          class="d-flex flex-column"
+        >
+          <h3 
+            class="text-h6 font-weight-bold mb-4" 
+            style="color: #333; margin-bottom: 16px; font-size: 1.125rem; line-height: 1.5;"
+          >
             Kurumsal
           </h3>
-          <div class="d-flex flex-column ga-2">
-            <a href="#" class="footer-link">Hakkımızda</a>
-            <a href="#" class="footer-link">Takasimo Destek</a>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <a href="#" class="footer-link" style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6;">Hakkımızda</a>
+            <a href="#" class="footer-link" style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6;">Takasimo Destek</a>
           </div>
         </v-col>
 
         <!-- Gizlilik ve Kullanım Section -->
-        <v-col cols="12" md="4">
-          <h3 class="text-h6 font-weight-bold mb-4" style="color: #333;">
+        <v-col 
+          cols="12" 
+          md="4" 
+          style="min-width: 0; flex: 0 0 auto;"
+          class="d-flex flex-column"
+        >
+          <h3 
+            class="text-h6 font-weight-bold mb-4" 
+            style="color: #333; margin-bottom: 16px; font-size: 1.125rem; line-height: 1.5;"
+          >
             Gizlilik ve Kullanım
           </h3>
-          <div class="d-flex flex-column ga-2">
-            <a href="#" class="footer-link">Güvenliğinizi önemsiyoruz</a>
-            <a href="#" class="footer-link">Sözleşmeler ve kurallar</a>
-            <a href="#" class="footer-link">Kişisel verilerin korunması</a>
-            <a href="#" class="footer-link">Nasıl çalışır</a>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <a href="#" class="footer-link" style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6;">Güvenliğinizi önemsiyoruz</a>
+            <a href="#" class="footer-link" style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6;">Sözleşmeler ve kurallar</a>
+            <a href="#" class="footer-link" style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6;">Kişisel verilerin korunması</a>
+            <a href="#" class="footer-link" style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6;">Nasıl çalışır</a>
           </div>
         </v-col>
 
         <!-- Bizi Takip Et Section -->
-        <v-col cols="12" md="4">
-          <h3 class="text-h6 font-weight-bold mb-4" style="color: #333;">
+        <v-col 
+          cols="12" 
+          md="4" 
+          style="min-width: 0; flex: 0 0 auto;"
+          class="d-flex flex-column"
+        >
+          <h3 
+            class="text-h6 font-weight-bold mb-4" 
+            style="color: #333; margin-bottom: 16px; font-size: 1.125rem; line-height: 1.5;"
+          >
             Bizi Takip Et
           </h3>
-          <div class="d-flex ga-3">
-            <v-btn
-              icon
-              variant="text"
-              size="large"
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <a
               href="#"
               class="social-btn"
+              style="
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 48px;
+                height: 48px;
+                background-color: white;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                text-decoration: none;
+                transition: background-color 0.2s;
+              "
             >
               <v-icon size="24" color="#E4405F">mdi-instagram</v-icon>
-            </v-btn>
-            <v-btn
-              icon
-              variant="text"
-              size="large"
+            </a>
+            <a
               href="#"
               class="social-btn"
+              style="
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 48px;
+                height: 48px;
+                background-color: white;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                text-decoration: none;
+                transition: background-color 0.2s;
+              "
             >
               <v-icon size="24" color="#000">mdi-twitter</v-icon>
-            </v-btn>
+            </a>
           </div>
         </v-col>
       </v-row>
@@ -67,26 +109,65 @@
 </script>
 
 <style scoped>
+/* Footer container stabilization */
+.v-footer {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.v-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+.v-row {
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.v-col {
+  padding: 12px !important;
+}
+
 .footer-link {
-  color: #666;
-  text-decoration: none;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  transition: color 0.2s;
+  color: #666 !important;
+  text-decoration: none !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  transition: color 0.2s ease !important;
+  display: block !important;
 }
 
 .footer-link:hover {
-  color: #8B2865;
-  text-decoration: none;
-}
-
-.social-btn {
-  background-color: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  color: #8B2865 !important;
+  text-decoration: none !important;
 }
 
 .social-btn:hover {
-  background-color: #f5f5f5;
+  background-color: #f5f5f5 !important;
+}
+
+/* Responsive fixes */
+@media (max-width: 959px) {
+  .v-col {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 960px) {
+  .v-col {
+    flex: 0 0 33.333333% !important;
+    max-width: 33.333333% !important;
+    width: 33.333333% !important;
+  }
+}
+
+/* Layout stability during loading */
+.v-footer * {
+  box-sizing: border-box !important;
 }
 </style> 

@@ -1,11 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-05-15',
+  compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
 
   modules: ['@nuxt/content', '@nuxt/eslint', '@nuxt/image', '@nuxt/scripts', '@pinia/nuxt'],
 
-  css: ['vuetify/lib/styles/main.sass', '@mdi/font/css/materialdesignicons.min.css'],
+  css: [
+    '~/assets/css/main.css',
+    'vuetify/lib/styles/main.sass', 
+    '@mdi/font/css/materialdesignicons.min.css'
+  ],
 
   build: {
     transpile: ['vuetify']
@@ -14,10 +18,25 @@ export default defineNuxtConfig({
   vite: {
     define: {
       'process.env.DEBUG': false
+    },
+    ssr: {
+      noExternal: ['vuetify']
     }
   },
 
   typescript: {
     strict: true
+  },
+
+  // SSR ayarları
+  ssr: true,
+
+  // Nitro ayarları
+  nitro: {
+    esbuild: {
+      options: {
+        target: 'es2020'
+      }
+    }
   }
 })
