@@ -1,0 +1,19 @@
+<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- TV -->
+  <rect x="8" y="15" width="44" height="26" rx="3" fill="#34495e" stroke="#2c3e50" stroke-width="1"/>
+  <rect x="12" y="19" width="36" height="18" rx="1" fill="#3498db"/>
+  
+  <!-- TV Stand -->
+  <rect x="26" y="41" width="8" height="6" fill="#34495e"/>
+  <rect x="18" y="47" width="24" height="2" rx="1" fill="#2c3e50"/>
+  
+  <!-- Washing Machine -->
+  <rect x="8" y="8" width="12" height="12" rx="2" fill="#95a5a6" stroke="#7f8c8d" stroke-width="1"/>
+  <circle cx="14" cy="14" r="4" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="1"/>
+  <circle cx="14" cy="14" r="2" fill="#3498db"/>
+  
+  <!-- Microwave -->
+  <rect x="40" y="8" width="12" height="8" rx="1" fill="#e74c3c" stroke="#c0392b" stroke-width="1"/>
+  <rect x="42" y="10" width="8" height="4" rx="0.5" fill="#2c3e50"/>
+  <circle cx="49" cy="12" r="1" fill="#f39c12"/>
+</svg> 

@@ -1,0 +1,26 @@
+<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Clothes Rack -->
+  <rect x="8" y="48" width="44" height="4" rx="2" fill="#8B2865"/>
+  <rect x="12" y="8" width="2" height="40" fill="#7f8c8d"/>
+  <rect x="46" y="8" width="2" height="40" fill="#7f8c8d"/>
+  
+  <!-- Shirt 1 -->
+  <rect x="16" y="15" width="8" height="12" rx="1" fill="#e74c3c" stroke="#c0392b" stroke-width="0.5"/>
+  <rect x="18" y="12" width="4" height="4" rx="2" fill="#e74c3c"/>
+  <rect x="16" y="27" width="8" height="15" rx="1" fill="#e74c3c"/>
+  
+  <!-- Shirt 2 -->
+  <rect x="26" y="15" width="8" height="12" rx="1" fill="#3498db" stroke="#2980b9" stroke-width="0.5"/>
+  <rect x="28" y="12" width="4" height="4" rx="2" fill="#3498db"/>
+  <rect x="26" y="27" width="8" height="15" rx="1" fill="#3498db"/>
+  
+  <!-- Shirt 3 -->
+  <rect x="36" y="15" width="8" height="12" rx="1" fill="#27ae60" stroke="#229954" stroke-width="0.5"/>
+  <rect x="38" y="12" width="4" height="4" rx="2" fill="#27ae60"/>
+  <rect x="36" y="27" width="8" height="15" rx="1" fill="#27ae60"/>
+  
+  <!-- Hangers -->
+  <path d="M18 10 Q20 8 22 10" stroke="#95a5a6" stroke-width="1" fill="none"/>
+  <path d="M28 10 Q30 8 32 10" stroke="#95a5a6" stroke-width="1" fill="none"/>
+  <path d="M38 10 Q40 8 42 10" stroke="#95a5a6" stroke-width="1" fill="none"/>
+</svg> 
