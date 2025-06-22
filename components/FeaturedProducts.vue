@@ -1,7 +1,7 @@
 <template>
   <div class="py-16 mb-0">
     <!-- Loading State -->
-    <v-row v-if="pending">
+    <v-row v-if="pending && products.length === 0">
       <v-col
         v-for="n in 4"
         :key="n"
@@ -54,11 +54,55 @@
         </v-alert>
       </v-col>
     </v-row>
+
+    <!-- Load More Button -->
+    <v-row v-if="products.length > 0" class="mt-4">
+      <v-col cols="12" class="text-center">
+        <v-btn
+          :loading="loadingMore"
+          :disabled="loadingMore"
+          color="primary"
+          variant="outlined"
+          size="large"
+          @click="loadMore"
+          class="load-more-btn"
+        >
+          <v-icon start>mdi-refresh</v-icon>
+          {{ loadingMore ? 'Yükleniyor...' : 'Daha Fazla Yükle' }}
+        </v-btn>
+        <div class="text-caption mt-2 text-medium-emphasis">
+          Sayfa {{ currentPage }} / {{ lastPage }}
+        </div>
+      </v-col>
+    </v-row>
+
+    <!-- Loading More Products Skeleton -->
+    <v-row v-if="loadingMore" class="mt-4">
+      <v-col
+        v-for="n in 4"
+        :key="`loading-${n}`"
+        cols="12"
+        sm="6"
+        md="3"
+        class="d-flex"
+      >
+        <v-card class="product-card" elevation="0" rounded="xl">
+          <v-skeleton-loader type="image, article" />
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script setup lang="ts">
 import {getImageUrl} from "~/utils/getImageUrl";
+
+// Pagination state
+const currentPage = ref(1)
+const lastPage = ref(1)
+const loadingMore = ref(false)
+const allProducts = ref<any[]>([])
+
 // API fonksiyonları
 const getMoreProduct = async (page: number = 1) => {
   try {
@@ -101,32 +145,36 @@ const getProductDopingShowcase = async () => {
   }
 }
 
-// SSR-friendly veri yükleme
-const { data: products, pending, error, refresh } = await useLazyAsyncData(
-  'featured-products',
-  async () => {
+// Ürün yükleme fonksiyonu
+const fetchProducts = async (page: number) => {
+  try {
+    let pageProducts: any[] = []
+    
+    // Normal ürünleri al
     try {
-      let allProducts: any[] = []
+      const productList = await getMoreProduct(page)
+      const responseData = Array.isArray(productList) 
+        ? productList 
+        : (productList as any)?.data || []
       
-      // 1. Normal ürünleri al
-      try {
-        const productList = await getMoreProduct(1)
-        const responseData = Array.isArray(productList) 
-          ? productList 
-          : (productList as any)?.data || []
-        
-        console.log('Normalized products:', responseData)
-        
-        if (Array.isArray(responseData) && responseData.length) {
-          allProducts = [...responseData]
-        }
-      } catch (productError) {
-        console.error('Normal products error:', productError)
-        // Normal ürünler hata verirse mock data kullan
-        allProducts = getMockProducts()
+      // Pagination bilgilerini güncelle
+      if ((productList as any)?.meta) {
+        lastPage.value = (productList as any).meta.last_page || 1
       }
+      
+      console.log('Fetched products for page', page, ':', responseData)
+      
+      if (Array.isArray(responseData) && responseData.length) {
+        pageProducts = [...responseData]
+      }
+    } catch (productError) {
+      console.error('Normal products error:', productError)
+      // Hata durumunda mock data kullan
+      pageProducts = getMockProducts()
+    }
 
-      // 2. Doping showcase ürünlerini al (optional)
+    // İlk sayfa için doping ürünlerini de ekle
+    if (page === 1) {
       try {
         const dopingProducts = await getProductDopingShowcase()
         const newShowcaseProducts = Array.isArray(dopingProducts) 
@@ -135,7 +183,7 @@ const { data: products, pending, error, refresh } = await useLazyAsyncData(
 
         if (Array.isArray(newShowcaseProducts) && newShowcaseProducts.length) {
           // Mevcut ürünlerden tekrar edenleri filtrele
-          const filteredExistingProducts = allProducts.filter(
+          const filteredExistingProducts = pageProducts.filter(
             existingProduct =>
               !newShowcaseProducts.some((newProduct: any) => 
                 newProduct.product_code === existingProduct.product_code
@@ -143,23 +191,63 @@ const { data: products, pending, error, refresh } = await useLazyAsyncData(
           )
           
           // Doping ürünlerini en başa ekle
-          allProducts = [...newShowcaseProducts, ...filteredExistingProducts]
+          pageProducts = [...newShowcaseProducts, ...filteredExistingProducts]
         }
       } catch (dopingError) {
         console.warn('Doping products error (ignored):', dopingError)
-        // Doping hata verirse sadece normal ürünlerle devam et
       }
+    }
 
-      // İlk 4 ürünü döndür
-      const finalProducts = allProducts.slice(0, 4)
-      console.log('Final products:', finalProducts)
-      
-      return finalProducts
-      
+    return pageProducts
+    
+  } catch (err) {
+    console.error('Fetch products error:', err)
+    return getMockProducts()
+  }
+}
+
+// Load more fonksiyonu
+const loadMore = async () => {
+  if (loadingMore.value) return
+  
+  loadingMore.value = true
+  
+  try {
+    let nextPage: number
+    
+    if (currentPage.value === lastPage.value) {
+      nextPage = 1
+    } else {
+      nextPage = currentPage.value + 1
+    }
+
+    const newProducts = await fetchProducts(nextPage)
+    
+    // Her zaman mevcut ürünlerin üstüne ekle
+    allProducts.value = [...allProducts.value, ...newProducts]
+    
+    currentPage.value = nextPage
+    
+  } catch (error) {
+    console.error('Load more error:', error)
+  } finally {
+    loadingMore.value = false
+  }
+}
+
+// SSR-friendly veri yükleme
+const { data: initialData, pending, error, refresh } = await useLazyAsyncData(
+  'featured-products',
+  async () => {
+    try {
+      const initialProducts = await fetchProducts(1)
+      allProducts.value = initialProducts
+      return initialProducts
     } catch (err) {
       console.error('Featured products loading error:', err)
-      // Tüm API'lar hata verirse mock data döndür
-      return getMockProducts()
+      const mockData = getMockProducts()
+      allProducts.value = mockData
+      return mockData
     }
   },
   {
@@ -167,6 +255,11 @@ const { data: products, pending, error, refresh } = await useLazyAsyncData(
     server: true
   }
 )
+
+// Products computed - allProducts'ı takip et
+const products = computed(() => {
+  return allProducts.value.length > 0 ? allProducts.value : initialData.value || []
+})
 
 // Mock data fallback
 const getMockProducts = () => [
@@ -262,5 +355,16 @@ const getProductLocation = (product: any) => {
 .product-card {
   width: 100%;
   min-height: 300px;
+}
+
+.load-more-btn {
+  min-width: 200px;
+  border-radius: 12px;
+  font-size: 16px;
+}
+
+.load-more-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(139, 40, 101, 0.15) !important;
 }
 </style> 
