@@ -7,7 +7,7 @@
     </v-row>
     
     <!-- Loading State -->
-    <v-row v-if="pending" justify="center">
+    <v-row v-if="isLoading" justify="center">
       <v-col
         v-for="n in 5"
         :key="n"
@@ -18,47 +18,14 @@
         xl="2"
         class="text-center"
       >
-        <v-card
-          class="category-card pa-3 pa-md-4"
-          elevation="0"
-          rounded="xl"
-        >
-          <v-skeleton-loader
-            type="avatar, text"
-            class="mx-auto"
-          />
+        <v-card class="category-card pa-3 pa-md-4" elevation="0" rounded="xl">
+          <v-skeleton-loader type="avatar, text" class="mx-auto" />
         </v-card>
       </v-col>
     </v-row>
 
-    <!-- Error State -->
-    <v-row v-else-if="error" justify="center">
-      <v-col cols="12" class="text-center">
-        <v-alert
-          type="error"
-          variant="tonal"
-          class="mx-auto"
-          style="max-width: 400px;"
-        >
-          <template v-slot:title>
-            Kategoriler Yüklenemedi
-          </template>
-          {{ error.message || 'Kategoriler yüklenirken bir hata oluştu.' }}
-          <template v-slot:append>
-            <v-btn
-              color="error"
-              variant="text"
-              @click="refresh()"
-            >
-              Tekrar Dene
-            </v-btn>
-          </template>
-        </v-alert>
-      </v-col>
-    </v-row>
-    
     <!-- Categories Data -->
-    <v-row v-else-if="categories && categories.length > 0" justify="center">
+    <v-row v-else-if="displayCategories.length > 0" justify="center">
       <v-col
         v-for="category in displayCategories"
         :key="category.id"
@@ -78,7 +45,7 @@
         >
           <div class="category-image-container mb-2 mb-md-3">
             <img
-              :src="getImageUrl({path:category.image,provider:'cdn'})"
+              :src="getImageUrl({path: category.image, provider: 'cdn'})"
               :alt="category.name"
               class="category-image"
               @error="onImageError"
@@ -91,19 +58,32 @@
       </v-col>
     </v-row>
 
+    <!-- Error State -->
+    <v-row v-else-if="hasError" justify="center">
+      <v-col cols="12" class="text-center">
+        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px;">
+          <template v-slot:title>Kategoriler Yüklenemedi</template>
+          Kategoriler yüklenirken bir hata oluştu.
+          <template v-slot:append>
+            <v-btn color="error" variant="text" @click="refresh">
+              Tekrar Dene
+            </v-btn>
+          </template>
+        </v-alert>
+      </v-col>
+    </v-row>
+
     <!-- Empty State -->
     <v-row v-else justify="center">
       <v-col cols="12" class="text-center">
-        <v-alert
-          type="info"
-          variant="tonal"
-          class="mx-auto"
-          style="max-width: 400px;"
-        >
-          <template v-slot:title>
-            Kategori Bulunamadı
-          </template>
+        <v-alert type="info" variant="tonal" class="mx-auto" style="max-width: 400px;">
+          <template v-slot:title>Kategori Bulunamadı</template>
           Şu anda görüntülenecek kategori bulunmuyor.
+          <template v-slot:append>
+            <v-btn color="info" variant="text" @click="refresh">
+              Yenile
+            </v-btn>
+          </template>
         </v-alert>
       </v-col>
     </v-row>
@@ -111,38 +91,46 @@
 </template>
 
 <script setup lang="ts">
-import {getImageUrl} from "~/utils/getImageUrl";
-// API composable'ını kullan
-const { getMainCategories } = useApi()
+import { getImageUrl } from "~/utils/getImageUrl"
 
-// Veri çekme işlemi
-const { data: categoriesData, pending, error, refresh } = await useLazyAsyncData(
-  'main-categories',
-  () => getMainCategories(),
+// SSR-friendly veri yükleme
+const { data: categories, pending, error, refresh } = await useLazyAsyncData(
+  'popular-categories',
+  async () => {
+    const { getMainCategories } = useApi()
+    return await getMainCategories()
+  },
   {
-    transform: (data: any) => data,
-    default: () => ({ data: [], success: false })
+    default: () => [],
+    server: true
   }
 )
 
 // Computed properties
-const categories = computed(() => {
-  if (!categoriesData.value) return []
-  return Array.isArray(categoriesData.value) ? categoriesData.value : categoriesData.value.data || []
-})
+const isLoading = computed(() => pending.value)
+const hasError = computed(() => !!error.value)
 
 const displayCategories = computed(() => {
-  // Uzun isimleri olan kategorileri filtrele ve kısa olanları tercih et
-  const filteredCategories = categories.value.filter((category: any) => {
-    return category.name && category.name.length <= 15 // 15 karakterden kısa olanları al
-  })
+  if (!categories.value) return []
   
-  // Eğer yeterli kısa kategori yoksa, uzun olanları da dahil et ama kısalt
-  if (filteredCategories.length < 5) {
-    return categories.value.slice(0, 5)
-  }
+  // API response'u normalize et
+  const categoryList = Array.isArray(categories.value) 
+    ? categories.value 
+    : (categories.value as any)?.data || []
   
-  return filteredCategories.slice(0, 5) // İlk 5 kategoriyi göster
+  if (!Array.isArray(categoryList) || categoryList.length === 0) return []
+  
+  // Kısa isimleri tercih et
+  const shortCategories = categoryList.filter((cat: any) => 
+    cat.name && cat.name.length <= 15
+  )
+  
+  // Yeterli kısa kategori varsa onları kullan, yoksa tümünden al
+  const selectedCategories = shortCategories.length >= 5 
+    ? shortCategories 
+    : categoryList
+  
+  return selectedCategories.slice(0, 5)
 })
 
 // Methods
@@ -153,13 +141,11 @@ const navigateToCategory = (category: any) => {
 
 const truncateText = (text: string, maxLength: number = 15) => {
   if (!text) return ''
-  if (text.length <= maxLength) return text
-  return text.substring(0, maxLength) + '...'
+  return text.length <= maxLength ? text : text.substring(0, maxLength) + '...'
 }
 
 const onImageError = (event: any) => {
-  const target = event.target
-  target.src = '/images/categories/default-category.svg'
+  event.target.src = '/images/categories/default-category.svg'
 }
 
 // SEO

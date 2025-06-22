@@ -54,9 +54,9 @@ export const useAppStore = defineStore('app', {
     // Theme actions
     setTheme(theme: 'light' | 'dark') {
       this.theme = theme
-      
-      // Update HTML class for CSS
-      if (process.client) {
+
+      // Update HTML class for CSS - only on client side
+      if (process.client && typeof document !== 'undefined') {
         document.documentElement.classList.toggle('dark', theme === 'dark')
       }
     },
@@ -137,7 +137,7 @@ export const useAppStore = defineStore('app', {
     addToSearchHistory(query: string) {
       if (query.trim() && !this.searchHistory.includes(query)) {
         this.searchHistory.unshift(query)
-        
+
         // Keep only last 10 searches
         if (this.searchHistory.length > 10) {
           this.searchHistory = this.searchHistory.slice(0, 10)
@@ -152,9 +152,9 @@ export const useAppStore = defineStore('app', {
     // Page meta actions
     setPageTitle(title: string) {
       this.pageTitle = title
-      
-      // Update document title
-      if (process.client) {
+
+      // Update document title - only on client side
+      if (process.client && typeof document !== 'undefined') {
         document.title = title
       }
     },
@@ -211,16 +211,20 @@ export const useAppStore = defineStore('app', {
 
     // Initialize app
     async initializeApp() {
-      // Load user preferences
-      if (process.client) {
-        const savedTheme = localStorage.getItem('theme') as 'light' | 'dark'
-        if (savedTheme) {
-          this.setTheme(savedTheme)
-        }
+      // Load user preferences - only on client side
+      if (process.client && typeof window !== 'undefined') {
+        try {
+          const savedTheme = localStorage.getItem('theme') as 'light' | 'dark'
+          if (savedTheme) {
+            this.setTheme(savedTheme)
+          }
 
-        const savedLocale = localStorage.getItem('locale')
-        if (savedLocale) {
-          this.setLocale(savedLocale)
+          const savedLocale = localStorage.getItem('locale')
+          if (savedLocale) {
+            this.setLocale(savedLocale)
+          }
+        } catch (error) {
+          console.warn('Failed to load user preferences:', error)
         }
       }
     }

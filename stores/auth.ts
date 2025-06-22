@@ -28,9 +28,13 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.isAuthenticated = false
       
-      // Local storage'ı temizle
-      if (process.client) {
-        localStorage.removeItem('auth-token')
+      // Local storage'ı temizle - only on client side
+      if (process.client && typeof localStorage !== 'undefined') {
+        try {
+          localStorage.removeItem('auth-token')
+        } catch (error) {
+          console.warn('Failed to clear auth token:', error)
+        }
       }
     },
 
