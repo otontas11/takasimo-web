@@ -1,19 +1,9 @@
 // composables/useApi.ts
-import type { CategoriesResponse } from '~/types/api'
-
 export const useApi = () => {
   const baseUrl = 'https://ap1.takasimo.com/api'
 
   // Generic API request function
-  const apiRequest = async <T>(
-    endpoint: string,
-    options: {
-      method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
-      params?: Record<string, any>
-      body?: any
-      headers?: Record<string, string>
-    } = {}
-  ): Promise<T> => {
+  const apiRequest = async (endpoint: string, options: any = {}) => {
     const {
       method = 'GET',
       params = {},
@@ -61,7 +51,7 @@ export const useApi = () => {
         requestOptions.body = JSON.stringify(body)
       }
 
-      const response = await $fetch<T>(finalUrl, requestOptions)
+      const response = await $fetch(finalUrl, requestOptions)
       return response
     } catch (error: any) {
       console.error('API Request Error:', error)
@@ -71,21 +61,21 @@ export const useApi = () => {
 
   // Specific API methods
   const api = {
-    get: <T>(endpoint: string, params?: Record<string, any>) =>
-      apiRequest<T>(endpoint, { method: 'GET', params }),
+    get: (endpoint: string, params?: any) =>
+      apiRequest(endpoint, { method: 'GET', params }),
     
-    post: <T>(endpoint: string, body?: any, headers?: Record<string, string>) =>
-      apiRequest<T>(endpoint, { method: 'POST', body, headers }),
+    post: (endpoint: string, body?: any, headers?: any) =>
+      apiRequest(endpoint, { method: 'POST', body, headers }),
     
-    put: <T>(endpoint: string, body?: any, headers?: Record<string, string>) =>
-      apiRequest<T>(endpoint, { method: 'PUT', body, headers }),
+    put: (endpoint: string, body?: any, headers?: any) =>
+      apiRequest(endpoint, { method: 'PUT', body, headers }),
     
-    delete: <T>(endpoint: string) =>
-      apiRequest<T>(endpoint, { method: 'DELETE' })
+    delete: (endpoint: string) =>
+      apiRequest(endpoint, { method: 'DELETE' })
   }
 
   // Categories API methods
-  const getMainCategories = (): Promise<CategoriesResponse> => {
+  const getMainCategories = () => {
     const filter = [
       '{"k": "is_deleted", "o": "=", "v": false}',
       '{"k": "parent_code", "o": "=", "v": null}'
@@ -96,7 +86,7 @@ export const useApi = () => {
       '{"k": "name", "v": "asc"}'
     ]
 
-    return api.get<CategoriesResponse>('categories', {
+    return api.get('categories', {
       filter,
       limit: 11,
       orderBy

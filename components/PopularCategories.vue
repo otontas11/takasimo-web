@@ -111,13 +111,11 @@
 </template>
 
 <script setup lang="ts">
-import type { Category, CategoriesResponse } from '~/types/api'
-
 // API composable'ını kullan
 const { getMainCategories } = useApi()
 
 // Veri çekme işlemi
-const { data: categoriesData, pending, error, refresh } = await useLazyAsyncData<CategoriesResponse>(
+const { data: categoriesData, pending, error, refresh } = await useLazyAsyncData(
   'main-categories',
   () => getMainCategories(),
   {
@@ -137,12 +135,12 @@ const displayCategories = computed(() => {
 })
 
 // Methods
-const navigateToCategory = (category: Category) => {
+const navigateToCategory = (category: any) => {
   const slug = category.slug || category.code || category.id.toString()
   navigateTo(`/kategori/${slug}`)
 }
 
-const getCategoryImage = (category: Category): string => {
+const getCategoryImage = (category: any) => {
   // Önce category'nin kendi image_url'ini kontrol et
   if (category.image_url) {
     return category.image_url
@@ -150,7 +148,7 @@ const getCategoryImage = (category: Category): string => {
   
   // Eğer images array'i varsa ilk resmi al
   if (category.images && category.images.length > 0) {
-    const primaryImage = category.images.find(img => img.is_primary)
+    const primaryImage = category.images.find((img: any) => img.is_primary)
     if (primaryImage) {
       return primaryImage.image_url
     }
@@ -161,8 +159,8 @@ const getCategoryImage = (category: Category): string => {
   return '/images/categories/default-category.svg'
 }
 
-const onImageError = (event: Event) => {
-  const target = event.target as HTMLImageElement
+const onImageError = (event: any) => {
+  const target = event.target
   target.src = '/images/categories/default-category.svg'
 }
 
