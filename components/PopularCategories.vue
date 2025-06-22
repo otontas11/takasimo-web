@@ -1,87 +1,181 @@
 <template>
-  <div class="py-16">
+  <div class="py-8 py-md-16">
     <v-row>
-      <v-col cols="12" class="text-center mb-8">
-        <h2 class="text-h4 font-weight-bold">Popüler Kategoriler</h2>
+      <v-col cols="12" class="text-center mb-4 mb-md-8">
+        <h2 class="text-h5 text-md-h4 font-weight-bold">Popüler Kategoriler</h2>
       </v-col>
     </v-row>
     
-    <v-row justify="center">
+    <!-- Loading State -->
+    <v-row v-if="pending" justify="center">
       <v-col
-        v-for="category in categories"
-        :key="category.id"
+        v-for="n in 5"
+        :key="n"
         cols="6"
         sm="4"
-        md="2"
+        md="3"
+        lg="2"
+        xl="2"
         class="text-center"
       >
         <v-card
-          class="category-card pa-4"
+          class="category-card pa-3 pa-md-4"
+          elevation="0"
+          rounded="xl"
+        >
+          <v-skeleton-loader
+            type="avatar, text"
+            class="mx-auto"
+          />
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <!-- Error State -->
+    <v-row v-else-if="error" justify="center">
+      <v-col cols="12" class="text-center">
+        <v-alert
+          type="error"
+          variant="tonal"
+          class="mx-auto"
+          style="max-width: 400px;"
+        >
+          <template v-slot:title>
+            Kategoriler Yüklenemedi
+          </template>
+          {{ error.message || 'Kategoriler yüklenirken bir hata oluştu.' }}
+          <template v-slot:append>
+            <v-btn
+              color="error"
+              variant="text"
+              @click="refresh()"
+            >
+              Tekrar Dene
+            </v-btn>
+          </template>
+        </v-alert>
+      </v-col>
+    </v-row>
+    
+    <!-- Categories Data -->
+    <v-row v-else-if="categories && categories.length > 0" justify="center">
+      <v-col
+        v-for="category in displayCategories"
+        :key="category.id"
+        cols="6"
+        sm="4"
+        md="3"
+        lg="2"
+        xl="2"
+        class="text-center"
+      >
+        <v-card
+          class="category-card pa-3 pa-md-4"
           elevation="0"
           rounded="xl"
           hover
-          @click="navigateToCategory(category.slug)"
+          @click="navigateToCategory(category)"
         >
-          <div class="category-image-container mb-3">
+          <div class="category-image-container mb-2 mb-md-3">
             <img
-              :src="category.image"
+              :src="getCategoryImage(category)"
               :alt="category.name"
               class="category-image"
+              @error="onImageError"
             />
           </div>
-          <h3 class="category-title text-subtitle-1 font-weight-medium">
+          <h3 class="category-title text-caption text-md-subtitle-1 font-weight-medium">
             {{ category.name }}
           </h3>
         </v-card>
+      </v-col>
+    </v-row>
+
+    <!-- Empty State -->
+    <v-row v-else justify="center">
+      <v-col cols="12" class="text-center">
+        <v-alert
+          type="info"
+          variant="tonal"
+          class="mx-auto"
+          style="max-width: 400px;"
+        >
+          <template v-slot:title>
+            Kategori Bulunamadı
+          </template>
+          Şu anda görüntülenecek kategori bulunmuyor.
+        </v-alert>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script setup lang="ts">
-interface Category {
-  id: number
-  name: string
-  slug: string
-  image: string
-}
+import type { Category, CategoriesResponse } from '~/types/api'
 
-const categories: Category[] = [
+// API composable'ını kullan
+const { getMainCategories } = useApi()
+
+// Veri çekme işlemi
+const { data: categoriesData, pending, error, refresh } = await useLazyAsyncData<CategoriesResponse>(
+  'main-categories',
+  () => getMainCategories(),
   {
-    id: 1,
-    name: 'Ev Elektroniği',
-    slug: 'ev-elektronigi',
-    image: '/images/categories/ev-elektronigi.svg'
-  },
-  {
-    id: 2,
-    name: 'Cep Telefonu & Tablet',
-    slug: 'cep-telefonu-tablet',
-    image: '/images/categories/telefon-tablet.svg'
-  },
-  {
-    id: 3,
-    name: 'Bilgisayar',
-    slug: 'bilgisayar',
-    image: '/images/categories/bilgisayar.svg'
-  },
-  {
-    id: 4,
-    name: 'Kıyafet',
-    slug: 'kiyafet',
-    image: '/images/categories/kiyafet.svg'
-  },
-  {
-    id: 5,
-    name: 'Ayakkabı',
-    slug: 'ayakkabi',
-    image: '/images/categories/ayakkabi.svg'
+    transform: (data: any) => data,
+    default: () => ({ data: [], success: false })
   }
-]
+)
 
-const navigateToCategory = (slug: string) => {
+// Computed properties
+const categories = computed(() => {
+  if (!categoriesData.value) return []
+  return Array.isArray(categoriesData.value) ? categoriesData.value : categoriesData.value.data || []
+})
+
+const displayCategories = computed(() => {
+  return categories.value.slice(0, 5) // İlk 5 kategoriyi göster
+})
+
+// Methods
+const navigateToCategory = (category: Category) => {
+  const slug = category.slug || category.code || category.id.toString()
   navigateTo(`/kategori/${slug}`)
 }
+
+const getCategoryImage = (category: Category): string => {
+  // Önce category'nin kendi image_url'ini kontrol et
+  if (category.image_url) {
+    return category.image_url
+  }
+  
+  // Eğer images array'i varsa ilk resmi al
+  if (category.images && category.images.length > 0) {
+    const primaryImage = category.images.find(img => img.is_primary)
+    if (primaryImage) {
+      return primaryImage.image_url
+    }
+    return category.images[0].image_url
+  }
+  
+  // Fallback olarak varsayılan resim
+  return '/images/categories/default-category.svg'
+}
+
+const onImageError = (event: Event) => {
+  const target = event.target as HTMLImageElement
+  target.src = '/images/categories/default-category.svg'
+}
+
+// SEO
+useHead({
+  title: 'Popüler Kategoriler - Takasimo',
+  meta: [
+    {
+      name: 'description',
+      content: 'Takasimo\'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası.'
+    }
+  ]
+})
 </script>
 
 <style scoped>
@@ -139,8 +233,12 @@ const navigateToCategory = (slug: string) => {
   color: #8B2865;
 }
 
-/* Responsive adjustments */
+/* Mobile responsive adjustments */
 @media (max-width: 959px) {
+  .category-card {
+    min-height: 120px;
+  }
+  
   .category-image-container {
     width: 70px;
     height: 70px;
@@ -158,7 +256,7 @@ const navigateToCategory = (slug: string) => {
 
 @media (max-width: 599px) {
   .category-card {
-    min-height: 120px;
+    min-height: 100px;
   }
   
   .category-image-container {
@@ -172,7 +270,30 @@ const navigateToCategory = (slug: string) => {
   }
   
   .category-title {
-    font-size: 0.85rem !important;
+    font-size: 0.8rem !important;
+    line-height: 1.2 !important;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 400px) {
+  .category-card {
+    min-height: 90px;
+    padding: 0.5rem !important;
+  }
+  
+  .category-image-container {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .category-image {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .category-title {
+    font-size: 0.75rem !important;
   }
 }
 </style> 
