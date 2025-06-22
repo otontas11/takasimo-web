@@ -1,21 +1,9 @@
 import { defineStore } from 'pinia'
 
-interface User {
-  id: number
-  email: string
-  name: string
-}
-
-interface AuthState {
-  user: User | null
-  token: string | null
-  isAuthenticated: boolean
-}
-
 export const useAuthStore = defineStore('auth', {
-  state: (): AuthState => ({
-    user: null,
-    token: null,
+  state: () => ({
+    user: null as any,
+    token: null as string | null,
     isAuthenticated: false
   }),
 
@@ -26,7 +14,7 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    setUser(user: User) {
+    setUser(user: any) {
       this.user = user
       this.isAuthenticated = true
     },
@@ -39,6 +27,49 @@ export const useAuthStore = defineStore('auth', {
       this.user = null
       this.token = null
       this.isAuthenticated = false
+      
+      // Local storage'ı temizle
+      if (process.client) {
+        localStorage.removeItem('auth-token')
+      }
+    },
+
+    async login(credentials: any) {
+      try {
+        // API call burada yapılacak - şimdilik mock
+        // const response = await $fetch('/api/auth/login', { method: 'POST', body: credentials })
+        
+        // Mock response for now
+        const mockResponse = {
+          success: true,
+          user: { id: 1, email: credentials.email, name: 'Test User' },
+          token: 'mock-token-123'
+        }
+        
+        if (mockResponse.success) {
+          this.setUser(mockResponse.user)
+          this.setToken(mockResponse.token)
+          
+          return { success: true }
+        }
+        
+        return { success: false, message: 'Giriş başarısız' }
+      } catch (error) {
+        console.error('Login error:', error)
+        return { success: false, message: 'Giriş yapılırken hata oluştu' }
+      }
+    },
+
+    async register(userData: any) {
+      try {
+        // API call burada yapılacak - şimdilik mock
+        // const response = await $fetch('/api/auth/register', { method: 'POST', body: userData })
+        
+        return { success: true, message: 'Kayıt başarılı' }
+      } catch (error) {
+        console.error('Register error:', error)
+        return { success: false, message: 'Kayıt olurken hata oluştu' }
+      }
     }
   },
 
