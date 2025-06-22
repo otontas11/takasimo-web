@@ -78,7 +78,7 @@
         >
           <div class="category-image-container mb-2 mb-md-3">
             <img
-              :src="getCategoryImage(category)"
+              :src="getImageUrl({path:category.image,provider:'cdn'})"
               :alt="category.name"
               class="category-image"
               @error="onImageError"
@@ -111,6 +111,7 @@
 </template>
 
 <script setup lang="ts">
+import {getImageUrl} from "~/utils/getImageUrl";
 // API composable'ını kullan
 const { getMainCategories } = useApi()
 
@@ -138,25 +139,6 @@ const displayCategories = computed(() => {
 const navigateToCategory = (category: any) => {
   const slug = category.slug || category.code || category.id.toString()
   navigateTo(`/kategori/${slug}`)
-}
-
-const getCategoryImage = (category: any) => {
-  // Önce category'nin kendi image_url'ini kontrol et
-  if (category.image_url) {
-    return category.image_url
-  }
-  
-  // Eğer images array'i varsa ilk resmi al
-  if (category.images && category.images.length > 0) {
-    const primaryImage = category.images.find((img: any) => img.is_primary)
-    if (primaryImage) {
-      return primaryImage.image_url
-    }
-    return category.images[0].image_url
-  }
-  
-  // Fallback olarak varsayılan resim
-  return '/images/categories/default-category.svg'
 }
 
 const onImageError = (event: any) => {
