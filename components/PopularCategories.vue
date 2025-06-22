@@ -85,7 +85,7 @@
             />
           </div>
           <h3 class="category-title text-caption text-md-subtitle-1 font-weight-medium">
-            {{ category.name }}
+            {{ truncateText(category.name, 15) }}
           </h3>
         </v-card>
       </v-col>
@@ -132,13 +132,29 @@ const categories = computed(() => {
 })
 
 const displayCategories = computed(() => {
-  return categories.value.slice(0, 5) // İlk 5 kategoriyi göster
+  // Uzun isimleri olan kategorileri filtrele ve kısa olanları tercih et
+  const filteredCategories = categories.value.filter((category: any) => {
+    return category.name && category.name.length <= 15 // 15 karakterden kısa olanları al
+  })
+  
+  // Eğer yeterli kısa kategori yoksa, uzun olanları da dahil et ama kısalt
+  if (filteredCategories.length < 5) {
+    return categories.value.slice(0, 5)
+  }
+  
+  return filteredCategories.slice(0, 5) // İlk 5 kategoriyi göster
 })
 
 // Methods
 const navigateToCategory = (category: any) => {
   const slug = category.slug || category.code || category.id.toString()
   navigateTo(`/kategori/${slug}`)
+}
+
+const truncateText = (text: string, maxLength: number = 15) => {
+  if (!text) return ''
+  if (text.length <= maxLength) return text
+  return text.substring(0, maxLength) + '...'
 }
 
 const onImageError = (event: any) => {
@@ -160,53 +176,57 @@ useHead({
 
 <style scoped>
 .category-card {
-  background-color: #f8f9fa !important;
+  background-color: #ffffff !important;
   border: 1px solid #e9ecef;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-height: 140px;
+  min-height: 160px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .category-card:hover {
-  background-color: #ffffff !important;
   border-color: #8B2865;
   transform: translateY(-4px);
   box-shadow: 0 8px 25px rgba(139, 40, 101, 0.15) !important;
 }
 
 .category-image-container {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto;
-  background-color: white;
+  margin: 0 auto 16px auto;
+  background-color: #f8f9fa;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  overflow: hidden;
+  position: relative;
 }
 
 .category-card:hover .category-image-container {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .category-image {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 .category-title {
   color: #2c3e50;
-  font-size: 0.95rem !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
   line-height: 1.3 !important;
   text-align: center;
-  margin-top: 8px;
+  margin: 0;
+  padding: 0 8px;
 }
 
 .category-card:hover .category-title {
@@ -216,17 +236,13 @@ useHead({
 /* Mobile responsive adjustments */
 @media (max-width: 959px) {
   .category-card {
-    min-height: 120px;
+    min-height: 140px;
   }
   
   .category-image-container {
-    width: 70px;
-    height: 70px;
-  }
-  
-  .category-image {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 75px;
+    margin-bottom: 12px;
   }
   
   .category-title {
@@ -236,21 +252,17 @@ useHead({
 
 @media (max-width: 599px) {
   .category-card {
-    min-height: 100px;
+    min-height: 120px;
   }
   
   .category-image-container {
-    width: 60px;
+    width: 80px;
     height: 60px;
-  }
-  
-  .category-image {
-    width: 40px;
-    height: 40px;
+    margin-bottom: 10px;
   }
   
   .category-title {
-    font-size: 0.8rem !important;
+    font-size: 0.85rem !important;
     line-height: 1.2 !important;
   }
 }
@@ -258,22 +270,18 @@ useHead({
 /* Extra small screens */
 @media (max-width: 400px) {
   .category-card {
-    min-height: 90px;
-    padding: 0.5rem !important;
+    min-height: 100px;
+    padding: 0.75rem !important;
   }
   
   .category-image-container {
-    width: 50px;
+    width: 70px;
     height: 50px;
-  }
-  
-  .category-image {
-    width: 35px;
-    height: 35px;
+    margin-bottom: 8px;
   }
   
   .category-title {
-    font-size: 0.75rem !important;
+    font-size: 0.8rem !important;
   }
 }
 </style> 
