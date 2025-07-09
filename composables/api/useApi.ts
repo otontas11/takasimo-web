@@ -74,28 +74,8 @@ export const useApi = () => {
       apiRequest(endpoint, { method: 'DELETE' })
   }
 
-  // Categories API methods
-  const getMainCategories = () => {
-    const filter = [
-      '{"k": "is_deleted", "o": "=", "v": false}',
-      '{"k": "parent_code", "o": "=", "v": null}'
-    ]
-    
-    const orderBy = [
-      '{"k": "sequence", "v": "asc"}',
-      '{"k": "name", "v": "asc"}'
-    ]
-
-    return api.get('categories', {
-      filter,
-      limit: 11,
-      orderBy
-    })
-  }
-
   return {
     api,
-    getMainCategories,
     baseUrl
   }
 } 

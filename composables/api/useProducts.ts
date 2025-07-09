@@ -1,3 +1,5 @@
+import {useApi} from "~/composables/api/useApi";
+
 export const useProducts = () => {
   const { api } = useApi()
 
