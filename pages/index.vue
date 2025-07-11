@@ -36,48 +36,22 @@ const productsStore = useProductsStore()
 // Store'lardan veri al
 const categories = computed(() => categoriesStore.getAllCategories)
 const products = computed(() => productsStore.getFeaturedProducts)
-const isLoading = computed(() => categoriesStore.isLoading || productsStore.isLoading)
-const hasError = computed(() => categoriesStore.getError || productsStore.getError)
 
-// SSR'da store'lara istek at
-if (process.server) {
-  // Server-side: Store'lar composable'ları kullanacak
-  await Promise.all([
+
+await useAsyncData('init-home', () => {
+  return Promise.all([
     categoriesStore.fetchCategories(),
     productsStore.fetchFeaturedProducts()
   ])
-} else {
-  // Client-side: Eğer veri yoksa yükle
-  onMounted(async () => {
-    if (categories.value.length === 0) {
-      await categoriesStore.fetchCategories()
-    }
-    if (products.value.length === 0) {
-      await productsStore.fetchFeaturedProducts()
-    }
-  })
-}
-
-// Veriyi template'e provide et
-provide('categories', categories)
-provide('products', products)
-provide('isLoading', isLoading)
-provide('hasError', hasError)
-
-// SEO
-useHead({
-  title: 'Takasimo - Güvenli Ürün Takası',
-  meta: [
-    {
-      name: 'description',
-      content: 'Ürünlerinizi güvenle takas edin. Takasimo ile yeni deneyimler yaşayın, çevreye katkıda bulunun.'
-    },
-    {
-      name: 'keywords',
-      content: 'takas, ürün takası, ikinci el, sürdürülebilir, çevre dostu'
-    }
-  ]
 })
+
+
+onMounted(async () => {
+  if (!categories.value.length) await categoriesStore.fetchCategories()
+  if (!products.value.length) await productsStore.fetchFeaturedProducts()
+})
+
+
 </script>
 
 <style scoped>
