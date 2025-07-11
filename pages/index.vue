@@ -4,28 +4,23 @@
     <!-- Category Header (Sticky Navigation) -->
     <CategoryHeader />
     
-    <!-- Page Content -->
     <div class="page-content">
-      <!-- Hero Slider -->
       <section class="hero-section">
         <HeroSlider />
       </section>
       
-      <!-- Popular Categories -->
       <section class="categories-section">
         <v-container>
           <PopularCategories />
         </v-container>
       </section>
       
-      <!-- Featured Products -->
       <section class="products-section">
         <v-container>
           <FeaturedProducts />
         </v-container>
       </section>
       
-      <!-- Footer -->
       <AppFooter />
     </div>
   </v-main>
