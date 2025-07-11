@@ -36,7 +36,6 @@
 <script setup lang="ts">
 // SEO ayarları
 import AppFooter from "~/components/AppFooter.vue";
-import {categoriesApi} from "~/server/api/categoriesApi";
 
 // Store'u initialize et
 const categoriesStore = useCategoriesStore()
@@ -45,7 +44,7 @@ const categoriesStore = useCategoriesStore()
 const { data: categories, pending, error } = await useLazyAsyncData(
   'main-categories',
   async () => {
-    const { getMainCategories } = categoriesApi()
+    const { getMainCategories } = useCategories()
     return await getMainCategories()
   },
   {

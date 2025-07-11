@@ -1,8 +1,7 @@
-// Categories API methods
-import {useApi} from "~/server/api/useApi";
+import { useApi } from '~/composables/useApi'
 
-export const categoriesApi = () => {
-    const {api} = useApi()
+export const useCategories = () => {
+    const { api } = useApi()
 
     const getMainCategories = () => {
         let filter = [
@@ -23,6 +22,5 @@ export const categoriesApi = () => {
         })
     }
 
-    return {getMainCategories}
-
-}
+    return { getMainCategories }
+} 
