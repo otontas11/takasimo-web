@@ -11,9 +11,9 @@ export const useCategoriesStore = defineStore('categories', {
   getters: {
     getAllCategories: (state) => state.categories,
     getMainCategories: (state) => state.categories.filter((cat: any) => !cat.parent_id),
-    getSubCategories: (state) => (parentId: number) => 
+    getSubCategories: (state) => (parentId: any) => 
       state.categories.filter((cat: any) => cat.parent_id === parentId),
-    getCategoryById: (state) => (id: number) => 
+    getCategoryById: (state) => (id: any) => 
       state.categories.find((cat: any) => cat.id === id),
     isLoading: (state) => state.loading,
     getError: (state) => state.error
@@ -37,29 +37,10 @@ export const useCategoriesStore = defineStore('categories', {
     },
 
     async fetchCategories() {
-      this.setLoading(true)
-      this.setError(null)
-      
-      try {
-        const { getMainCategories } = useApi()
-        const response = await getMainCategories()
-        
-        if (response) {
-          const categories = Array.isArray(response) ? response : (response as any).data || []
-          this.setCategories(categories)
-        }
-        
-        return { success: true }
-      } catch (error) {
-        console.error('Categories fetch error:', error)
-        this.setError('Kategoriler yüklenirken hata oluştu')
-        return { success: false, error: 'Kategoriler yüklenirken hata oluştu' }
-      } finally {
-        this.setLoading(false)
-      }
+
     },
 
-    async fetchCategoryById(id: number) {
+    async fetchCategoryById(id: any) {
       this.setLoading(true)
       this.setError(null)
       

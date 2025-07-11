@@ -36,6 +36,47 @@
 <script setup lang="ts">
 // SEO ayarları
 import AppFooter from "~/components/AppFooter.vue";
+import {categoriesApi} from "~/server/api/categoriesApi";
+
+// Store'u initialize et
+const categoriesStore = useCategoriesStore()
+
+// SSR ile kategorileri çek
+const { data: categories, pending, error } = await useLazyAsyncData(
+  'main-categories',
+  async () => {
+    const { getMainCategories } = categoriesApi()
+    return await getMainCategories()
+  },
+  {
+    default: () => [],
+    server: true
+  }
+)
+
+// Veri geldiğinde store'u güncelle
+watch(categories, (newCategories) => {
+  if (newCategories && Array.isArray(newCategories) && newCategories.length > 0) {
+    const categoryList = Array.isArray(newCategories) ? newCategories : (newCategories as any).data || []
+    categoriesStore.setCategories(categoryList)
+  } else if (newCategories && (newCategories as any).data) {
+    const categoryList = (newCategories as any).data || []
+    categoriesStore.setCategories(categoryList)
+  }
+}, { immediate: true })
+
+// Error handling
+watch(error, (newError) => {
+  if (newError) {
+    console.error('Categories fetch error:', newError)
+    categoriesStore.setError('Kategoriler yüklenirken hata oluştu')
+  }
+}, { immediate: true })
+
+// Loading state
+watch(pending, (isPending) => {
+  categoriesStore.setLoading(isPending)
+}, { immediate: true })
 
 useHead({
   title: 'Takasimo - Güvenli Ürün Takası',

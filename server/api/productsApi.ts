@@ -1,6 +1,6 @@
 import {useApi} from "~/server/api/useApi";
 
-export const useProducts = () => {
+export const productsApi = () => {
   const { api } = useApi()
 
   // Get featured products

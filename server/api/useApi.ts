@@ -2,7 +2,7 @@ export const useApi = () => {
   const config = useRuntimeConfig()
   const baseUrl = config.public.apiBase || 'https://fallback.api.com/api'
 
-  const apiRequest = async (endpoint: string, options: any = {}) => {
+  const apiRequest = async (endpoint: string, options = {}) => {
     const {
       method = 'GET',
       params = {},
@@ -12,7 +12,7 @@ export const useApi = () => {
 
     try {
       let url = `${baseUrl}/${endpoint.replace(/^\//, '')}`
-      const requestOptions: RequestInit = {
+      const requestOptions = {
         method,
         headers: {
           ...headers,
@@ -41,7 +41,7 @@ export const useApi = () => {
       }
 
       return await $fetch(url, requestOptions)
-    } catch (error: any) {
+    } catch (error) {
       console.error('API Request Error:', error)
       throw createError({
         statusCode: error?.response?.status || 500,
@@ -52,9 +52,9 @@ export const useApi = () => {
   }
 
   const api = {
-    get: (endpoint: string, params?: any) => apiRequest(endpoint, { method: 'GET', params }),
-    post: (endpoint: string, body?: any, headers?: any) => apiRequest(endpoint, { method: 'POST', body, headers }),
-    put: (endpoint: string, body?: any, headers?: any) => apiRequest(endpoint, { method: 'PUT', body, headers }),
+    get: (endpoint: string, params?) => apiRequest(endpoint, { method: 'GET', params }),
+    post: (endpoint: string, body?, headers?) => apiRequest(endpoint, { method: 'POST', body, headers }),
+    put: (endpoint: string, body?, headers?) => apiRequest(endpoint, { method: 'PUT', body, headers }),
     delete: (endpoint: string) => apiRequest(endpoint, { method: 'DELETE' })
   }
 
