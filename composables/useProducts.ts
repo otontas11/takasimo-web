@@ -105,10 +105,20 @@ export const useProducts = () => {
         })
     }
 
+    // Get product by ID
+    const getProductById = (id: string) => {
+        return api.get(`products/${id}`, {
+            params: {
+                with: ["images", "category", "user"]
+            }
+        })
+    }
+
     return { 
         getFeaturedProducts,
         getProductsByCategory,
         searchProducts,
-        getAllProducts
+        getAllProducts,
+        getProductById
     }
 } 

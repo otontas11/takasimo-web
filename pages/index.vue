@@ -16,7 +16,6 @@
         <v-container>
           <PopularCategories />
         </v-container>
-
       </section>
       
       <!-- Featured Products -->
@@ -24,7 +23,6 @@
         <v-container>
           <FeaturedProducts />
         </v-container>
-
       </section>
       
       <!-- Footer -->
@@ -34,55 +32,54 @@
 </template>
 
 <script setup lang="ts">
-// SEO ayarları
 import AppFooter from "~/components/AppFooter.vue";
 
-// Store'u initialize et
+// ✅ STORE YAKLAŞIMI - Store'lara istek at
 const categoriesStore = useCategoriesStore()
+const productsStore = useProductsStore()
 
-// SSR ile kategorileri çek
-const { data: categories, pending, error } = await useLazyAsyncData(
-  'main-categories',
-  async () => {
-    const { getMainCategories } = useCategories()
-    return await getMainCategories()
-  },
-  {
-    default: () => [],
-    server: true
-  }
-)
+// Store'lardan veri al
+const categories = computed(() => categoriesStore.getAllCategories)
+const products = computed(() => productsStore.getFeaturedProducts)
+const isLoading = computed(() => categoriesStore.isLoading || productsStore.isLoading)
+const hasError = computed(() => categoriesStore.getError || productsStore.getError)
 
-// Veri geldiğinde store'u güncelle
-watch(categories, (newCategories) => {
-  if (newCategories && Array.isArray(newCategories) && newCategories.length > 0) {
-    const categoryList = Array.isArray(newCategories) ? newCategories : (newCategories as any).data || []
-    categoriesStore.setCategories(categoryList)
-  } else if (newCategories && (newCategories as any).data) {
-    const categoryList = (newCategories as any).data || []
-    categoriesStore.setCategories(categoryList)
-  }
-}, { immediate: true })
+// SSR'da store'lara istek at
+if (process.server) {
+  // Server-side: Store'lar composable'ları kullanacak
+  await Promise.all([
+    categoriesStore.fetchCategories(),
+    productsStore.fetchFeaturedProducts()
+  ])
+} else {
+  // Client-side: Eğer veri yoksa yükle
+  onMounted(async () => {
+    if (categories.value.length === 0) {
+      await categoriesStore.fetchCategories()
+    }
+    if (products.value.length === 0) {
+      await productsStore.fetchFeaturedProducts()
+    }
+  })
+}
 
-// Error handling
-watch(error, (newError) => {
-  if (newError) {
-    console.error('Categories fetch error:', newError)
-    categoriesStore.setError('Kategoriler yüklenirken hata oluştu')
-  }
-}, { immediate: true })
+// Veriyi template'e provide et
+provide('categories', categories)
+provide('products', products)
+provide('isLoading', isLoading)
+provide('hasError', hasError)
 
-// Loading state
-watch(pending, (isPending) => {
-  categoriesStore.setLoading(isPending)
-}, { immediate: true })
-
+// SEO
 useHead({
   title: 'Takasimo - Güvenli Ürün Takası',
   meta: [
     {
       name: 'description',
       content: 'Ürünlerinizi güvenle takas edin. Takasimo ile yeni deneyimler yaşayın, çevreye katkıda bulunun.'
+    },
+    {
+      name: 'keywords',
+      content: 'takas, ürün takası, ikinci el, sürdürülebilir, çevre dostu'
     }
   ]
 })
@@ -90,15 +87,13 @@ useHead({
 
 <style scoped>
 .home-page {
-  /* Ana sayfa container */
   min-height: 100vh;
-  padding-top: 80px; /* AppHeader için space */
+  padding-top: 80px;
   display: flex;
   flex-direction: column;
 }
 
 .page-content {
-  /* İçerik alanı */
   position: relative;
   flex: 1;
 }
@@ -106,19 +101,16 @@ useHead({
 .hero-section,
 .categories-section,
 .products-section {
-  /* Section'lar için temel stilleri */
   position: relative;
   z-index: 1;
 }
 
-/* Hero section'ı category header'ın altına yerleştir */
 .hero-section {
   margin-top: 0;
 }
 
-/* Footer section */
 .products-section {
-  margin-bottom: 0; /* Footer ile arasında boşluk olmasın */
+  margin-bottom: 0;
 }
 
 .v-card {

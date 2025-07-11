@@ -1,31 +1,19 @@
 <template>
-  <div class="py-8 py-md-16">
-    <v-row>
-      <v-col cols="12" class="text-center mb-4 mb-md-8">
-        <h2 class="text-h5 text-md-h4 font-weight-bold">Popüler Kategoriler</h2>
-      </v-col>
-    </v-row>
-    
+  <div class="popular-categories">
+    <h2 class="text-h5 mb-6 text-center font-weight-bold">
+      Popüler Kategoriler
+    </h2>
+
     <!-- Loading State -->
     <v-row v-if="isLoading" justify="center">
-      <v-col
-        v-for="n in 5"
-        :key="n"
-        cols="6"
-        sm="4"
-        md="3"
-        lg="2"
-        xl="2"
-        class="text-center"
-      >
-        <v-card class="category-card pa-3 pa-md-4" elevation="0" rounded="xl">
-          <v-skeleton-loader type="avatar, text" class="mx-auto" />
-        </v-card>
+      <v-col cols="12" class="text-center">
+        <v-progress-circular indeterminate size="64" color="primary" />
+        <p class="mt-4">Kategoriler yükleniyor...</p>
       </v-col>
     </v-row>
 
-    <!-- Categories Data -->
-    <v-row v-else-if="displayCategories.length > 0" justify="center">
+    <!-- Categories Grid -->
+    <v-row v-else-if="displayCategories.length > 0" class="categories-grid">
       <v-col
         v-for="category in displayCategories"
         :key="category.id"
@@ -33,25 +21,22 @@
         sm="4"
         md="3"
         lg="2"
-        xl="2"
-        class="text-center"
+        class="d-flex"
       >
         <v-card
-          class="category-card pa-3 pa-md-4"
-          elevation="0"
-          rounded="xl"
-          hover
+          class="category-card w-100 d-flex flex-column align-center justify-center pa-4"
           @click="navigateToCategory(category)"
+          hover
         >
-          <div class="category-image-container mb-2 mb-md-3">
+          <div class="category-image-container">
             <img
-              :src="getImageUrl({path: category.image, provider: 'cdn'})"
+              :src="getImageUrl({ path: category.image_url || '/images/categories/default-category.svg', provider: 'locale' })"
               :alt="category.name"
               class="category-image"
               @error="onImageError"
             />
           </div>
-          <h3 class="category-title text-caption text-md-subtitle-1 font-weight-medium">
+          <h3 class="category-title">
             {{ truncateText(category.name, 15) }}
           </h3>
         </v-card>
@@ -93,42 +78,27 @@
 <script setup lang="ts">
 import { getImageUrl } from "~/utils/getImageUrl"
 
-// SSR-friendly veri yükleme
-const { data: categories, pending, error, refresh } = await useLazyAsyncData(
-  'popular-categories',
-  async () => {
-    const { getMainCategories } = useApi()
-    return await getMainCategories()
-  },
-  {
-    default: () => [],
-    server: true
-  }
-)
+// ✅ STORE VERİSİNİ KULLAN - Index.vue'den provide edilen veri
+const categories = inject('categories', ref([])) as any
+const isLoading = inject('isLoading', ref(false))
+const hasError = inject('hasError', ref(false))
+
+// Store'a erişim (refresh için)
+const categoriesStore = useCategoriesStore()
 
 // Computed properties
-const isLoading = computed(() => pending.value)
-const hasError = computed(() => !!error.value)
-
 const displayCategories = computed(() => {
-  if (!categories.value) return []
-  
-  // API response'u normalize et
-  const categoryList = Array.isArray(categories.value) 
-    ? categories.value 
-    : (categories.value as any)?.data || []
-  
-  if (!Array.isArray(categoryList) || categoryList.length === 0) return []
+  if (!categories.value || categories.value.length === 0) return []
   
   // Kısa isimleri tercih et
-  const shortCategories = categoryList.filter((cat: any) => 
+  const shortCategories = categories.value.filter((cat: any) => 
     cat.name && cat.name.length <= 15
   )
   
   // Yeterli kısa kategori varsa onları kullan, yoksa tümünden al
   const selectedCategories = shortCategories.length >= 5 
     ? shortCategories 
-    : categoryList
+    : categories.value
   
   return selectedCategories.slice(0, 5)
 })
@@ -146,6 +116,10 @@ const truncateText = (text: string, maxLength: number = 15) => {
 
 const onImageError = (event: any) => {
   event.target.src = '/images/categories/default-category.svg'
+}
+
+const refresh = async () => {
+  await categoriesStore.fetchCategories()
 }
 
 // SEO
