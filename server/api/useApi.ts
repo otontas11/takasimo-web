@@ -1,8 +1,7 @@
-// composables/useApi.ts
 export const useApi = () => {
-  const baseUrl = 'https://ap1.takasimo.com/api'
+  const config = useRuntimeConfig()
+  const baseUrl = config.public.apiBase || 'https://fallback.api.com/api'
 
-  // Generic API request function
   const apiRequest = async (endpoint: string, options: any = {}) => {
     const {
       method = 'GET',
@@ -12,70 +11,52 @@ export const useApi = () => {
     } = options
 
     try {
-      const url = `${baseUrl}/${endpoint.replace(/^\//, '')}`
-      
-      const requestOptions: any = {
+      let url = `${baseUrl}/${endpoint.replace(/^\//, '')}`
+      const requestOptions: RequestInit = {
         method,
         headers: {
-          'Content-Type': 'application/json',
-          ...headers
+          ...headers,
+          ...(method !== 'GET' && !headers['Content-Type']
+              ? { 'Content-Type': 'application/json' }
+              : {})
         }
       }
 
-      // Add query parameters for GET requests
-      let finalUrl = url
+      // GET query
       if (method === 'GET' && Object.keys(params).length > 0) {
         const searchParams = new URLSearchParams()
-        
         Object.entries(params).forEach(([key, value]) => {
           if (Array.isArray(value)) {
-            value.forEach(item => {
-              if (typeof item === 'string') {
-                searchParams.append(`${key}[]`, item)
-              } else {
-                searchParams.append(`${key}[]`, JSON.stringify(item))
-              }
-            })
-          } else if (typeof value === 'object' && value !== null) {
-            searchParams.append(key, JSON.stringify(value))
+            value.forEach(item => searchParams.append(key, item))
           } else if (value !== undefined && value !== null) {
             searchParams.append(key, String(value))
           }
         })
-        
-        finalUrl = `${url}?${searchParams.toString()}`
+        url += `?${searchParams.toString()}`
       }
 
-      // Add body for non-GET requests
+      // Body
       if (body && method !== 'GET') {
         requestOptions.body = JSON.stringify(body)
       }
 
-      const response = await $fetch(finalUrl, requestOptions)
-      return response
+      return await $fetch(url, requestOptions)
     } catch (error: any) {
       console.error('API Request Error:', error)
-      throw error
+      throw createError({
+        statusCode: error?.response?.status || 500,
+        statusMessage: error?.message || 'API error',
+        data: error?.data
+      })
     }
   }
 
-  // Specific API methods
   const api = {
-    get: (endpoint: string, params?: any) =>
-      apiRequest(endpoint, { method: 'GET', params }),
-    
-    post: (endpoint: string, body?: any, headers?: any) =>
-      apiRequest(endpoint, { method: 'POST', body, headers }),
-    
-    put: (endpoint: string, body?: any, headers?: any) =>
-      apiRequest(endpoint, { method: 'PUT', body, headers }),
-    
-    delete: (endpoint: string) =>
-      apiRequest(endpoint, { method: 'DELETE' })
+    get: (endpoint: string, params?: any) => apiRequest(endpoint, { method: 'GET', params }),
+    post: (endpoint: string, body?: any, headers?: any) => apiRequest(endpoint, { method: 'POST', body, headers }),
+    put: (endpoint: string, body?: any, headers?: any) => apiRequest(endpoint, { method: 'PUT', body, headers }),
+    delete: (endpoint: string) => apiRequest(endpoint, { method: 'DELETE' })
   }
 
-  return {
-    api,
-    baseUrl
-  }
-} 
+  return { api, baseUrl }
+}

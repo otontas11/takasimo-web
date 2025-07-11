@@ -28,6 +28,12 @@ export default defineNuxtConfig({
     strict: true
   },
 
+  runtimeConfig: {
+    public: {
+      apiBase: 'https://ap1.takasimo.com/api'
+    }
+  },
+
   // SSR ayarları
   ssr: true,
 
