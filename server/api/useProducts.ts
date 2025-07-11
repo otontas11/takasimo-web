@@ -1,4 +1,4 @@
-import {useApi} from "~/composables/api/useApi";
+import {useApi} from "~/server/api/useApi";
 
 export const useProducts = () => {
   const { api } = useApi()

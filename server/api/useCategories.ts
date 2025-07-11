@@ -1,5 +1,5 @@
 // Categories API methods
-import {useApi} from "~/composables/api/useApi";
+import {useApi} from "~/server/api/useApi";
 
 export const useCategories = () => {
     const {api} = useApi()
