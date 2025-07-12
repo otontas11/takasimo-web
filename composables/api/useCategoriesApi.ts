@@ -18,7 +18,7 @@ export const useCategoriesApi = () => {
                     '{"k": "name", "v": "asc"}'
                 ]
             })
-
+            console.log("getMainCategories",response)
             return response
         } catch (error) {
             console.error('getMainCategories error:', error)

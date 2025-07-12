@@ -1,4 +1,8 @@
+import {useCategoriesApi} from "~/composables/api/useCategoriesApi";
+
 export const useCategoriesStore = defineStore('categories', () => {
+  const { getMainCategories } = useCategoriesApi()
+
   // ✅ STATE - Reactive references
   const categories = ref<any[]>([])
   const selectedCategory = ref<any>(null)
@@ -7,7 +11,7 @@ export const useCategoriesStore = defineStore('categories', () => {
 
   // ✅ GETTERS - Computed properties
   const getAllCategories = computed(() => categories.value)
-  const getMainCategories = computed(() =>
+  const mainCategories = computed(() =>
       categories.value.filter((cat: any) => !cat.parent_id)
   )
   const getSubCategories = computed(() => (parentId: any) =>
@@ -41,10 +45,9 @@ export const useCategoriesStore = defineStore('categories', () => {
     setError(null)
 
     try {
-      const { getMainCategories } = useCategories()
       const response = await getMainCategories()
 
-      if (response) {
+       if (response) {
         const categoryData = Array.isArray(response) ? response : (response as any).data || []
         setCategories(categoryData)
       }
@@ -100,7 +103,7 @@ export const useCategoriesStore = defineStore('categories', () => {
 
     // Getters
     getAllCategories,
-    getMainCategories,
+    mainCategories,
     getSubCategories,
     getCategoryById,
     isLoading,

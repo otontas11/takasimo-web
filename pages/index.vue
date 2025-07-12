@@ -31,11 +31,11 @@ import AppFooter from "~/components/AppFooter.vue";
 
 // ✅ STORE YAKLAŞIMI - Store'lara istek at
 const categoriesStore = useCategoriesStore()
-const productsStore = useProductsStore()
+//const productsStore = useProductsStore()
 
 // Store'lardan veri al
-const categories = computed(() => categoriesStore.getAllCategories)
-const products = computed(() => productsStore.getFeaturedProducts)
+const allCategories = computed(() => categoriesStore.getAllCategories)
+//const products = computed(() => productsStore.getFeaturedProducts)
 
 
 await useAsyncData('init-home', () => {
@@ -47,7 +47,7 @@ await useAsyncData('init-home', () => {
 
 
 onMounted(async () => {
-  if (!categories.value.length) await categoriesStore.fetchCategories()
+  if (!allCategories.value.length) await categoriesStore.fetchCategories()
   //if (!products.value.length) await productsStore.fetchFeaturedProducts()
 })
 
