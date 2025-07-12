@@ -7,9 +7,9 @@
 ```
 📁 composables/
 ├── useApi.ts          # Base API logic
-├── useCategories.ts   # Categories API
-├── useProducts.ts     # Products API  
-├── useAuth.ts         # Authentication API
+├── useCategoriesApi.ts   # Categories API
+├── useProductsApi.ts     # Products API  
+├── useAuthApi.ts         # Authentication API
 └── useUsers.ts        # Users API (gelecekte)
 ```
 
@@ -43,9 +43,9 @@
 
 ### ✅ **Tamamlanan Düzenlemeler:**
 - ✅ `composables/useApi.ts` - Base API logic
-- ✅ `composables/useCategories.ts` - Categories API
-- ✅ `composables/useProducts.ts` - Products API
-- ✅ `composables/useAuth.ts` - Authentication API
+- ✅ `composables/useCategoriesApi.ts` - Categories API
+- ✅ `composables/useProductsApi.ts` - Products API
+- ✅ `composables/useAuthApi.ts` - Authentication API
 - ❌ `server/api/useApi.ts` - Silindi
 - ❌ `server/api/productsApi.ts` - Silindi
 - ❌ `server/api/categoriesApi.ts` - Silindi
@@ -54,8 +54,8 @@
 
 ### 1. **Categories API:**
 ```typescript
-// composables/useCategories.ts
-export const useCategories = () => {
+// composables/useCategoriesApi.ts
+export const useCategoriesApi = () => {
     const { api } = useApi()
 
     const getMainCategories = () => {
@@ -68,14 +68,14 @@ export const useCategories = () => {
 }
 
 // Kullanım - herhangi bir component'te
-const { getMainCategories } = useCategories()
+const { getMainCategories } = useCategoriesApi()
 const categories = await getMainCategories()
 ```
 
 ### 2. **Products API:**
 ```typescript
-// composables/useProducts.ts
-export const useProducts = () => {
+// composables/useProductsApi.ts
+export const useProductsApi = () => {
     const { api } = useApi()
 
     const getFeaturedProducts = (limit = 10) => {
@@ -88,14 +88,14 @@ export const useProducts = () => {
 }
 
 // Kullanım - herhangi bir component'te
-const { getFeaturedProducts } = useProducts()
+const { getFeaturedProducts } = useProductsApi()
 const products = await getFeaturedProducts()
 ```
 
 ### 3. **Auth API:**
 ```typescript
-// composables/useAuth.ts
-export const useAuth = () => {
+// composables/useAuthApi.ts
+export const useAuthApi = () => {
     const { api } = useApi()
 
     const login = (credentials) => {
@@ -106,7 +106,7 @@ export const useAuth = () => {
 }
 
 // Kullanım - login component'te
-const { login } = useAuth()
+const { login } = useAuthApi()
 const result = await login({ email, password })
 ```
 

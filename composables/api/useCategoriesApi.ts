@@ -1,6 +1,6 @@
-import { useApi } from '~/composables/useApi'
+import { useApi } from '~/composables/api/useApi'
 
-export const useCategories = () => {
+export const useCategoriesApi = () => {
     const { api } = useApi()
 
     const getMainCategories = () => {

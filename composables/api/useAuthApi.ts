@@ -1,6 +1,6 @@
-import { useApi } from '~/composables/useApi'
+import { useApi } from '~/composables/api/useApi'
 
-export const useAuth = () => {
+export const useAuthApi = () => {
     const { api } = useApi()
 
     // Login

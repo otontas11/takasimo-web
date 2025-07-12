@@ -8,13 +8,13 @@
 // Basit ve temiz - mevcut composable yapısını kullan
 const { data: categories } = await useLazyAsyncData(
   'categories',
-  () => useCategories().getMainCategories(),
+  () => useCategoriesApi().getMainCategories(),
   { default: () => [], server: true }
 )
 
 const { data: products } = await useLazyAsyncData(
   'products',
-  () => useProducts().getFeaturedProducts(),
+  () => useProductsApi().getFeaturedProducts(),
   { default: () => [], server: true }
 )
 </script>
@@ -62,13 +62,13 @@ watch(categories, (newCategories) => {
 // ✅ Minimal ve temiz
 const { data: categories } = await useLazyAsyncData(
   'categories',
-  () => useCategories().getMainCategories(),
+  () => useCategoriesApi().getMainCategories(),
   { default: () => [], server: true }
 )
 
 const { data: products } = await useLazyAsyncData(
   'products',
-  () => useProducts().getFeaturedProducts(),
+  () => useProductsApi().getFeaturedProducts(),
   { default: () => [], server: true }
 )
 
@@ -110,7 +110,7 @@ const route = useRoute()
 // ✅ Tek istek - temiz ve basit
 const { data: product, pending, error } = await useLazyAsyncData(
   `product-${route.params.id}`,
-  () => useProducts().getProductById(route.params.id),
+  () => useProductsApi().getProductById(route.params.id),
   { default: () => null, server: true }
 )
 
@@ -136,7 +136,7 @@ const route = useRoute()
 // Ana veri
 const { data: category } = await useLazyAsyncData(
   `category-${route.params.slug}`,
-  () => useCategories().getCategoryBySlug(route.params.slug),
+  () => useCategoriesApi().getCategoryBySlug(route.params.slug),
   { default: () => null, server: true }
 )
 
@@ -145,7 +145,7 @@ const { data: products } = await useLazyAsyncData(
   `category-products-${route.params.slug}`,
   () => {
     if (!category.value?.code) return []
-    return useProducts().getProductsByCategory(category.value.code)
+    return useProductsApi().getProductsByCategory(category.value.code)
   },
   { 
     default: () => [],
@@ -184,7 +184,7 @@ const { data: results, pending } = await useLazyAsyncData(
   'search-results',
   () => {
     if (!searchQuery.value) return []
-    return useProducts().searchProducts(searchQuery.value)
+    return useProductsApi().searchProducts(searchQuery.value)
   },
   { 
     default: () => [],
@@ -204,19 +204,19 @@ const search = useDebounceFn(() => {
 
 ### ✅ **Mevcut Composables:**
 ```javascript
-// composables/useCategories.ts
-useCategories().getMainCategories()
-useCategories().getCategoryBySlug(slug)
+// composables/useCategoriesApi.ts
+useCategoriesApi().getMainCategories()
+useCategoriesApi().getCategoryBySlug(slug)
 
-// composables/useProducts.ts  
-useProducts().getFeaturedProducts(limit)
-useProducts().getProductsByCategory(categoryCode, limit)
-useProducts().getProductById(id)
-useProducts().searchProducts(query)
+// composables/useProductsApi.ts  
+useProductsApi().getFeaturedProducts(limit)
+useProductsApi().getProductsByCategory(categoryCode, limit)
+useProductsApi().getProductById(id)
+useProductsApi().searchProducts(query)
 
-// composables/useAuth.ts
-useAuth().login(credentials)
-useAuth().getCurrentUser()
+// composables/useAuthApi.ts
+useAuthApi().login(credentials)
+useAuthApi().getCurrentUser()
 ```
 
 ### 🎯 **Kullanım Prensipleri:**
@@ -247,8 +247,8 @@ useAuth().getCurrentUser()
 
 **Mevcut composable yapısını kullanarak temiz kod yazın!**
 
-- ✅ `useLazyAsyncData` + `useCategories()`
-- ✅ `useLazyAsyncData` + `useProducts()`
-- ✅ `useLazyAsyncData` + `useAuth()`
+- ✅ `useLazyAsyncData` + `useCategoriesApi()`
+- ✅ `useLazyAsyncData` + `useProductsApi()`
+- ✅ `useLazyAsyncData` + `useAuthApi()`
 
 Bu yaklaşım hem performanslı hem de maintainable kod sağlar! 🎉 

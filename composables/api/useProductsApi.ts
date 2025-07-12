@@ -1,6 +1,6 @@
-import { useApi } from '~/composables/useApi'
+import { useApi } from '~/composables/api/useApi'
 
-export const useProducts = () => {
+export const useProductsApi = () => {
     const { api } = useApi()
 
     // Get featured products

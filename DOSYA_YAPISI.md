@@ -4,7 +4,7 @@
 
 ### ✅ **Tamamlanan İyileştirmeler:**
 - ❌ Gereksiz `server/api/categoriesApi.ts` silindi
-- ✅ `composables/useProducts.ts` oluşturuldu
+- ✅ `composables/useProductsApi.ts` oluşturuldu
 - ✅ `pages/404.vue` error sayfası eklendi
 - ✅ `types/index.ts` temel type tanımları oluşturuldu
 
@@ -43,9 +43,9 @@ takasimo-web-nuxt3/
 │       └── CategoryList.vue      🆕 Önerilir
 │
 ├── 📁 composables/
-│   ├── useCategories.ts          ✅ Mevcut
-│   ├── useProducts.ts            ✅ Yeni eklendi
-│   ├── useAuth.ts                🆕 Önerilir
+│   ├── useCategoriesApi.ts          ✅ Mevcut
+│   ├── useProductsApi.ts            ✅ Yeni eklendi
+│   ├── useAuthApi.ts                🆕 Önerilir
 │   ├── useLocalStorage.ts        🆕 Önerilir
 │   ├── useDebounce.ts            🆕 Önerilir
 │   └── usePagination.ts          🆕 Önerilir
