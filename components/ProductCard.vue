@@ -1,30 +1,15 @@
 <template>
-  <v-card
-    class="product-card"
-    elevation="0"
-    rounded="xl"
-    hover
-    @click="navigateToProduct"
-  >
+  <v-card class="product-card" elevation="0" rounded="xl" hover @click="navigateToProduct">
     <div class="product-image-container">
-      <v-img
-        :src="product.image"
-        :alt="product.title"
-        height="180"
-        cover
-        class="product-image"
-      >
+      <v-img :src="product.image" :alt="product.title" height="180" cover class="product-image">
         <template v-slot:placeholder>
           <div class="d-flex align-center justify-center fill-height">
-            <v-progress-circular
-              color="grey-lighten-4"
-              indeterminate
-            />
+            <v-progress-circular color="grey-lighten-4" indeterminate />
           </div>
         </template>
       </v-img>
     </div>
-    
+
     <v-card-text class="pa-4">
       <h3 class="product-title text-subtitle-1 font-weight-medium mb-2">
         {{ product.title }}
@@ -78,10 +63,10 @@ const navigateToProduct = () => {
 }
 
 .product-card:hover {
-  background-color: #ffffff !important;
-  border-color: #8B2865;
+  background-color: #fff !important;
+  border-color: #8b2865;
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(139, 40, 101, 0.15) !important;
+  box-shadow: 0 8px 25px rgb(139 40 101 / 15%) !important;
 }
 
 .product-image-container {
@@ -111,7 +96,7 @@ const navigateToProduct = () => {
 }
 
 .product-card:hover .product-title {
-  color: #8B2865;
+  color: #8b2865;
 }
 
 .product-location {
@@ -120,20 +105,20 @@ const navigateToProduct = () => {
 }
 
 .product-price {
-  color: #8B2865 !important;
+  color: #8b2865 !important;
   font-size: 1.1rem !important;
 }
 
 /* Responsive adjustments */
-@media (max-width: 599px) {
+@media (width <= 599px) {
   .product-image-container {
     height: 160px;
   }
-  
+
   .product-title {
     font-size: 0.9rem !important;
   }
-  
+
   .product-price {
     font-size: 1rem !important;
   }

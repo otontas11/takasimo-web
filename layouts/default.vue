@@ -1,9 +1,8 @@
 <!-- layouts/default.vue -->
 <template>
   <v-app>
-    <AppHeader/>
-    <slot/>
-
+    <AppHeader />
+    <slot />
   </v-app>
 </template>
 

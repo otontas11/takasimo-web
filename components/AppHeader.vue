@@ -1,17 +1,14 @@
 <template>
   <!-- Main Header -->
-  <v-app-bar
-    app
-    color="white"
-    elevation="1"
-    height="80"
-    class="px-4"
-  >
-          <v-container class="pa-0" style="max-width: 1320px;">
+  <v-app-bar app color="white" elevation="1" height="80" class="px-4">
+    <v-container class="pa-0" style="max-width: 1320px">
       <v-row align="center" no-gutters>
         <!-- Logo -->
         <v-col cols="auto" class="mr-8">
-          <h1 class="logo-text" style="color: #8B2865; font-size: 2rem; font-weight: bold; margin: 0;">
+          <h1
+            class="logo-text"
+            style="color: #8b2865; font-size: 2rem; font-weight: bold; margin: 0"
+          >
             takasimo
           </h1>
         </v-col>
@@ -26,7 +23,7 @@
             hide-details
             rounded="xl"
             class="search-field"
-            style="max-width: 500px;"
+            style="max-width: 500px"
           />
         </v-col>
 
@@ -46,10 +43,7 @@
 
           <!-- User Profile -->
           <div class="d-flex align-center ga-2">
-            <v-avatar
-              size="40"
-              color="#8B2865"
-            >
+            <v-avatar size="40" color="#8B2865">
               <v-icon color="white">mdi-account</v-icon>
             </v-avatar>
             <div class="d-flex align-center">
@@ -69,7 +63,7 @@
 
 <style scoped>
 .logo-text {
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
   letter-spacing: -0.5px;
 }
 
@@ -80,4 +74,4 @@
 .search-field :deep(.v-field__input) {
   padding: 12px 16px;
 }
-</style> 
+</style>

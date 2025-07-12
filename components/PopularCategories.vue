@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts" setup>
-import {getImageUrl} from "~/utils/getImageUrl"
+import { getImageUrl } from '~/utils/getImageUrl'
 
 // ✅ PROPS - Index.vue'den gelen veri
 interface Props {
@@ -75,14 +75,10 @@ const displayCategories = computed(() => {
   if (!props.categories || props.categories.length === 0) return []
 
   // Kısa isimleri tercih et
-  const shortCategories = props.categories.filter((cat: any) =>
-      cat.name && cat.name.length <= 15
-  )
+  const shortCategories = props.categories.filter((cat: any) => cat.name && cat.name.length <= 15)
 
   // Yeterli kısa kategori varsa onları kullan, yoksa tümünden al
-  const selectedCategories = shortCategories.length >= 5
-      ? shortCategories
-      : props.categories
+  const selectedCategories = shortCategories.length >= 5 ? shortCategories : props.categories
 
   return selectedCategories.slice(0, 5)
 })
@@ -118,7 +114,8 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Takasimo\'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası.'
+      content:
+        "Takasimo'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası."
     }
   ]
 })
@@ -126,7 +123,7 @@ useHead({
 
 <style scoped>
 .category-card {
-  background-color: #ffffff !important;
+  background-color: #fff !important;
   border: 1px solid #e9ecef;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -136,13 +133,13 @@ useHead({
   justify-content: center;
   align-items: center;
   border-radius: 16px !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 12px rgb(0 0 0 / 8%);
 }
 
 .category-card:hover {
-  border-color: #8B2865;
+  border-color: #8b2865;
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(139, 40, 101, 0.15) !important;
+  box-shadow: 0 8px 25px rgb(139 40 101 / 15%) !important;
 }
 
 .category-image-container {
@@ -151,7 +148,7 @@ useHead({
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 16px auto;
+  margin: 0 auto 16px;
   background-color: #f8f9fa;
   border-radius: 12px;
   overflow: hidden;
@@ -180,11 +177,11 @@ useHead({
 }
 
 .category-card:hover .category-title {
-  color: #8B2865;
+  color: #8b2865;
 }
 
 /* Mobile responsive adjustments */
-@media (max-width: 959px) {
+@media (width <= 959px) {
   .category-card {
     min-height: 140px;
   }
@@ -200,7 +197,7 @@ useHead({
   }
 }
 
-@media (max-width: 599px) {
+@media (width <= 599px) {
   .category-card {
     min-height: 120px;
   }
@@ -218,7 +215,7 @@ useHead({
 }
 
 /* Extra small screens */
-@media (max-width: 400px) {
+@media (width <= 400px) {
   .category-card {
     min-height: 100px;
     padding: 0.75rem !important;
@@ -234,4 +231,4 @@ useHead({
     font-size: 0.8rem !important;
   }
 }
-</style> 
+</style>

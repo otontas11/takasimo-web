@@ -118,4 +118,4 @@ export interface SEOData {
   keywords?: string
   image?: string
   url?: string
-} 
+}

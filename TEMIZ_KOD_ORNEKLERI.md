@@ -3,6 +3,7 @@
 ## 🎯 **Temel Prensip: Mevcut Composable Yapısını Kullan**
 
 ### ✅ **TEMİZ KOD (Önerilen)**
+
 ```vue
 <script setup>
 // Basit ve temiz - mevcut composable yapısını kullan
@@ -21,6 +22,7 @@ const { data: products } = await useLazyAsyncData(
 ```
 
 ### ❌ **KARMAŞIK KOD (Kaçının)**
+
 ```vue
 <script setup>
 // Gereksiz karmaşıklık - store güncellemeleri, watchers, computed
@@ -48,6 +50,7 @@ watch(categories, (newCategories) => {
 ## 📋 **Temiz Kod Örnekleri**
 
 ### 1. **Basit Sayfa (Ana Sayfa)**
+
 ```vue
 <!-- pages/index.vue -->
 <template>
@@ -75,30 +78,29 @@ const { data: products } = await useLazyAsyncData(
 // SEO
 useHead({
   title: 'Ana Sayfa - Takasimo',
-  meta: [
-    { name: 'description', content: 'Takasimo ana sayfası' }
-  ]
+  meta: [{ name: 'description', content: 'Takasimo ana sayfası' }]
 })
 </script>
 ```
 
 ### 2. **Dinamik Sayfa (Ürün Detay)**
+
 ```vue
 <!-- pages/products/[id].vue -->
 <template>
   <div>
     <!-- Loading -->
     <div v-if="pending">Yükleniyor...</div>
-    
+
     <!-- Error -->
     <div v-else-if="error">Hata oluştu</div>
-    
+
     <!-- Content -->
     <div v-else-if="product">
       <h1>{{ product.title }}</h1>
       <p>{{ product.description }}</p>
     </div>
-    
+
     <!-- Not Found -->
     <div v-else>Ürün bulunamadı</div>
   </div>
@@ -108,7 +110,11 @@ useHead({
 const route = useRoute()
 
 // ✅ Tek istek - temiz ve basit
-const { data: product, pending, error } = await useLazyAsyncData(
+const {
+  data: product,
+  pending,
+  error
+} = await useLazyAsyncData(
   `product-${route.params.id}`,
   () => useProductsApi().getProductById(route.params.id),
   { default: () => null, server: true }
@@ -119,9 +125,7 @@ watchEffect(() => {
   if (product.value) {
     useHead({
       title: `${product.value.title} - Takasimo`,
-      meta: [
-        { name: 'description', content: product.value.description }
-      ]
+      meta: [{ name: 'description', content: product.value.description }]
     })
   }
 })
@@ -129,6 +133,7 @@ watchEffect(() => {
 ```
 
 ### 3. **Bağımlı İstekler**
+
 ```vue
 <script setup>
 const route = useRoute()
@@ -147,7 +152,7 @@ const { data: products } = await useLazyAsyncData(
     if (!category.value?.code) return []
     return useProductsApi().getProductsByCategory(category.value.code)
   },
-  { 
+  {
     default: () => [],
     server: true,
     watch: [category] // category değiştiğinde yeniden çalışır
@@ -157,12 +162,13 @@ const { data: products } = await useLazyAsyncData(
 ```
 
 ### 4. **Arama Sayfası**
+
 ```vue
 <!-- pages/search.vue -->
 <template>
   <div>
     <input v-model="searchQuery" @input="search" placeholder="Ara..." />
-    
+
     <div v-if="pending">Aranıyor...</div>
     <div v-else-if="results?.length">
       <div v-for="product in results" :key="product.id">
@@ -186,7 +192,7 @@ const { data: results, pending } = await useLazyAsyncData(
     if (!searchQuery.value) return []
     return useProductsApi().searchProducts(searchQuery.value)
   },
-  { 
+  {
     default: () => [],
     server: true,
     watch: [searchQuery]
@@ -203,12 +209,13 @@ const search = useDebounceFn(() => {
 ## 🎯 **Composable Yapısı Kullanımı**
 
 ### ✅ **Mevcut Composables:**
+
 ```javascript
 // composables/useCategoriesApi.ts
 useCategoriesApi().getMainCategories()
 useCategoriesApi().getCategoryBySlug(slug)
 
-// composables/useProductsApi.ts  
+// composables/useProductsApi.ts
 useProductsApi().getFeaturedProducts(limit)
 useProductsApi().getProductsByCategory(categoryCode, limit)
 useProductsApi().getProductById(id)
@@ -230,6 +237,7 @@ useAuthApi().getCurrentUser()
 ## 🚀 **Faydalar:**
 
 ### ✅ **Temiz Kod Avantajları:**
+
 - **📖 Okunabilir**: Kod daha anlaşılır
 - **🔧 Maintainable**: Kolay bakım
 - **🚀 Performanslı**: Gereksiz işlemler yok
@@ -237,6 +245,7 @@ useAuthApi().getCurrentUser()
 - **🔄 Reusable**: Composable'lar tekrar kullanılabilir
 
 ### ❌ **Karmaşık Kod Dezavantajları:**
+
 - **🤯 Anlaşılmaz**: Çok fazla abstraction
 - **🐛 Hata Eğilimli**: Daha fazla hata riski
 - **⚡ Yavaş**: Gereksiz işlemler
@@ -251,4 +260,4 @@ useAuthApi().getCurrentUser()
 - ✅ `useLazyAsyncData` + `useProductsApi()`
 - ✅ `useLazyAsyncData` + `useAuthApi()`
 
-Bu yaklaşım hem performanslı hem de maintainable kod sağlar! 🎉 
+Bu yaklaşım hem performanslı hem de maintainable kod sağlar! 🎉

@@ -180,7 +180,11 @@ export const useProductsStore = defineStore('products', () => {
     return await fetchProducts(page)
   }
 
-  const sortProducts = async (sortByValue: string, sortOrderValue: string = 'desc', page: number = 1) => {
+  const sortProducts = async (
+    sortByValue: string,
+    sortOrderValue: string = 'desc',
+    page: number = 1
+  ) => {
     setSorting(sortByValue, sortOrderValue)
     return await fetchProducts(page)
   }
@@ -260,4 +264,4 @@ export const useProductsStore = defineStore('products', () => {
     clearError,
     clearProducts
   }
-}) 
+})

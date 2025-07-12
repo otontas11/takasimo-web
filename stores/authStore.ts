@@ -58,7 +58,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     try {
       const { login } = useAuth()
-      const response = await login(credentials) as any
+      const response = (await login(credentials)) as any
 
       if (response.token) {
         setToken(response.token)
@@ -81,7 +81,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     try {
       const { register } = useAuth()
-      const response = await register(userData) as any
+      const response = (await register(userData)) as any
 
       if (response.token) {
         setToken(response.token)
@@ -173,7 +173,10 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const changePassword = async (passwordData: { current_password: string; new_password: string }) => {
+  const changePassword = async (passwordData: {
+    current_password: string
+    new_password: string
+  }) => {
     setLoading(true)
     setError(null)
 

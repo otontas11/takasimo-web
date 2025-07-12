@@ -5,6 +5,7 @@ Bu proje için oluşturulan store yapısı ve kullanım örnekleri.
 ## 📁 Store Dosyaları
 
 ### 1. **authStore.ts** - Kimlik Doğrulama
+
 Kullanıcı girişi, çıkışı ve oturum yönetimi.
 
 ```typescript
@@ -22,6 +23,7 @@ authStore.logout()
 ```
 
 ### 2. **categoriesStore.ts** - Kategori Yönetimi
+
 Kategori verilerini yönetir.
 
 ```typescript
@@ -39,6 +41,7 @@ const subCategories = categoriesStore.getSubCategories(parentId)
 ```
 
 ### 3. **productsStore.ts** - Ürün Yönetimi
+
 Ürün listesi, arama, filtreleme ve pagination.
 
 ```typescript
@@ -66,6 +69,7 @@ await productsStore.prevPage()
 ```
 
 ### 4. **cartStore.ts** - Sepet Yönetimi
+
 Alışveriş sepeti işlemleri.
 
 ```typescript
@@ -90,6 +94,7 @@ await cartStore.checkout()
 ```
 
 ### 5. **appMainStore.ts** - Genel Uygulama Durumu
+
 Tema, dil, bildirimler ve UI durumu.
 
 ```typescript
@@ -120,7 +125,7 @@ appStore.toggleMobileMenu()
   <div>
     <!-- Loading durumu -->
     <div v-if="productsStore.isLoading">Yükleniyor...</div>
-    
+
     <!-- Ürün listesi -->
     <div v-else>
       <div v-for="product in products" :key="product.id">
@@ -128,11 +133,10 @@ appStore.toggleMobileMenu()
         <button @click="addToCart(product)">Sepete Ekle</button>
       </div>
     </div>
-    
+
     <!-- Sepet bilgisi -->
     <div class="cart-info">
-      Sepet: {{ cartStore.getItemCount }} ürün
-      Toplam: {{ cartStore.getTotalPrice }} TL
+      Sepet: {{ cartStore.getItemCount }} ürün Toplam: {{ cartStore.getTotalPrice }} TL
     </div>
   </div>
 </template>
@@ -155,11 +159,14 @@ const addToCart = (product) => {
 }
 
 // Watch
-watch(() => productsStore.getError, (error) => {
-  if (error) {
-    appStore.showErrorMessage(error)
+watch(
+  () => productsStore.getError,
+  (error) => {
+    if (error) {
+      appStore.showErrorMessage(error)
+    }
   }
-})
+)
 </script>
 ```
 
@@ -170,14 +177,10 @@ watch(() => productsStore.getError, (error) => {
 <template>
   <div>
     <h1>Ürünler</h1>
-    
+
     <!-- Filtreler -->
     <div class="filters">
-      <input 
-        v-model="searchQuery" 
-        @keyup.enter="search"
-        placeholder="Ürün ara..."
-      >
+      <input v-model="searchQuery" @keyup.enter="search" placeholder="Ürün ara..." />
       <select v-model="selectedCategory" @change="filterByCategory">
         <option value="">Tüm Kategoriler</option>
         <option v-for="cat in categories" :key="cat.id" :value="cat.code">
@@ -185,16 +188,12 @@ watch(() => productsStore.getError, (error) => {
         </option>
       </select>
     </div>
-    
+
     <!-- Ürün listesi -->
     <ProductList :products="products" />
-    
+
     <!-- Sayfalama -->
-    <Pagination 
-      :current-page="currentPage"
-      :total-pages="totalPages"
-      @page-change="goToPage"
-    />
+    <Pagination :current-page="currentPage" :total-pages="totalPages" @page-change="goToPage" />
   </div>
 </template>
 
@@ -227,18 +226,13 @@ const goToPage = async (page) => {
 
 // Initialize
 onMounted(async () => {
-  await Promise.all([
-    productsStore.fetchProducts(),
-    categoriesStore.fetchCategories()
-  ])
+  await Promise.all([productsStore.fetchProducts(), categoriesStore.fetchCategories()])
 })
 
 // SEO
 useHead({
   title: 'Ürünler - Takasimo',
-  meta: [
-    { name: 'description', content: 'Takasimo ürünlerini inceleyin' }
-  ]
+  meta: [{ name: 'description', content: 'Takasimo ürünlerini inceleyin' }]
 })
 </script>
 ```
@@ -260,4 +254,4 @@ useHead({
 - API çağrıları için composable'lar kullanılır
 - Persist özelliği ile veriler localStorage'da saklanır
 - Error handling ve loading states dahil
-- Responsive ve performanslı yapı 
+- Responsive ve performanslı yapı

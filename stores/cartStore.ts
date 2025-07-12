@@ -8,14 +8,12 @@ export const useCartStore = defineStore('cart', () => {
   const getItems = computed(() => items.value)
   const getItemCount = computed(() => items.value.length)
   const getTotalPrice = computed(() =>
-      items.value.reduce((total, item) => total + (item.price * item.quantity), 0)
+    items.value.reduce((total, item) => total + item.price * item.quantity, 0)
   )
   const isLoading = computed(() => loading.value)
   const getError = computed(() => error.value)
   const isEmpty = computed(() => items.value.length === 0)
-  const getItemById = computed(() => (id: string) =>
-      items.value.find(item => item.id === id)
-  )
+  const getItemById = computed(() => (id: string) => items.value.find((item) => item.id === id))
 
   // ✅ ACTIONS - Functions
   const setLoading = (value: boolean) => {
@@ -28,7 +26,7 @@ export const useCartStore = defineStore('cart', () => {
 
   const addItem = (product: any, quantity: number = 1) => {
     try {
-      const existingItem = items.value.find(item => item.id === product.id)
+      const existingItem = items.value.find((item) => item.id === product.id)
 
       if (existingItem) {
         existingItem.quantity += quantity
@@ -60,7 +58,7 @@ export const useCartStore = defineStore('cart', () => {
 
   const removeItem = (id: string) => {
     try {
-      const index = items.value.findIndex(item => item.id === id)
+      const index = items.value.findIndex((item) => item.id === id)
       if (index > -1) {
         items.value.splice(index, 1)
       }
@@ -80,7 +78,7 @@ export const useCartStore = defineStore('cart', () => {
 
   const updateQuantity = (id: string, quantity: number) => {
     try {
-      const item = items.value.find(item => item.id === id)
+      const item = items.value.find((item) => item.id === id)
       if (item) {
         if (quantity <= 0) {
           return removeItem(id)
@@ -155,7 +153,7 @@ export const useCartStore = defineStore('cart', () => {
     try {
       // Bu kısımda gerçek checkout API çağrısı yapılacak
       // Şimdilik mock response
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      await new Promise((resolve) => setTimeout(resolve, 2000))
 
       // Başarılı checkout sonrası sepeti temizle
       clearCart()
@@ -201,4 +199,4 @@ export const useCartStore = defineStore('cart', () => {
     checkout,
     clearError
   }
-}) 
+})

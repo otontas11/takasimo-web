@@ -1,4 +1,4 @@
-import {useCategoriesApi} from "~/composables/api/useCategoriesApi";
+import { useCategoriesApi } from '~/composables/api/useCategoriesApi'
 
 export const useCategoriesStore = defineStore('categories', () => {
   const { getMainCategories } = useCategoriesApi()
@@ -11,14 +11,12 @@ export const useCategoriesStore = defineStore('categories', () => {
 
   // ✅ GETTERS - Computed properties
   const getAllCategories = computed(() => categories.value)
-  const mainCategories = computed(() =>
-      categories.value.filter((cat: any) => !cat.parent_id)
+  const mainCategories = computed(() => categories.value.filter((cat: any) => !cat.parent_id))
+  const getSubCategories = computed(
+    () => (parentId: any) => categories.value.filter((cat: any) => cat.parent_id === parentId)
   )
-  const getSubCategories = computed(() => (parentId: any) =>
-      categories.value.filter((cat: any) => cat.parent_id === parentId)
-  )
-  const getCategoryById = computed(() => (id: any) =>
-      categories.value.find((cat: any) => cat.id === id)
+  const getCategoryById = computed(
+    () => (id: any) => categories.value.find((cat: any) => cat.id === id)
   )
   const isLoading = computed(() => loading.value)
   const getError = computed(() => error.value)
@@ -47,7 +45,7 @@ export const useCategoriesStore = defineStore('categories', () => {
     try {
       const response = await getMainCategories()
 
-       if (response) {
+      if (response) {
         const categoryData = Array.isArray(response) ? response : (response as any).data || []
         setCategories(categoryData)
       }
@@ -67,7 +65,7 @@ export const useCategoriesStore = defineStore('categories', () => {
     setError(null)
 
     try {
-      const { getCategoryById } = useCategories()
+      const { getCategoryById } = useCategoriesApi()
       const response = await getCategoryById(id)
 
       if (response) {
@@ -117,4 +115,4 @@ export const useCategoriesStore = defineStore('categories', () => {
     clearError,
     clearCategories
   }
-}) 
+})

@@ -25,7 +25,7 @@ v-main.home-page
 </template>
 
 <script setup lang="ts">
-import AppFooter from "~/components/AppFooter.vue";
+import AppFooter from '~/components/AppFooter.vue'
 
 // ✅ STORE YAKLAŞIMI - Store'lara istek at
 const categoriesStore = useCategoriesStore()
@@ -35,21 +35,17 @@ const categoriesStore = useCategoriesStore()
 const allCategories = computed(() => categoriesStore.getAllCategories)
 //const products = computed(() => productsStore.getFeaturedProducts)
 
-
 await useAsyncData('init-home', () => {
   return Promise.all([
-    categoriesStore.fetchCategories(),
+    categoriesStore.fetchCategories()
     //productsStore.fetchFeaturedProducts()
   ])
 })
-
 
 onMounted(async () => {
   if (!allCategories.value.length) await categoriesStore.fetchCategories()
   //if (!products.value.length) await productsStore.fetchFeaturedProducts()
 })
-
-
 </script>
 
 <style scoped>
@@ -81,12 +77,14 @@ onMounted(async () => {
 }
 
 .v-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .v-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 12%) !important;
 }
 
 .v-icon {

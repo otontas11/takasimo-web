@@ -3,12 +3,7 @@ export const useApi = () => {
   const baseUrl = config.public.apiBase || 'https://ap1.takasimo.com/api'
 
   const apiRequest = async (endpoint: string, options: any = {}) => {
-    const {
-      method = 'GET',
-      params = {},
-      body,
-      headers = {}
-    } = options
+    const { method = 'GET', params = {}, body, headers = {} } = options
 
     try {
       let url = `${baseUrl}/${endpoint.replace(/^\//, '')}`
@@ -17,8 +12,8 @@ export const useApi = () => {
         headers: {
           ...headers,
           ...(method !== 'GET' && !headers['Content-Type']
-              ? { 'Content-Type': 'application/json' }
-              : {})
+            ? { 'Content-Type': 'application/json' }
+            : {})
         }
       }
 
@@ -28,7 +23,7 @@ export const useApi = () => {
         Object.entries(params).forEach(([key, value]) => {
           if (Array.isArray(value)) {
             // Array parametreleri için key[] formatını kullan
-            value.forEach(item => searchParams.append(`${key}[]`, item))
+            value.forEach((item) => searchParams.append(`${key}[]`, item))
           } else if (value !== undefined && value !== null) {
             searchParams.append(key, String(value))
           }
@@ -54,11 +49,14 @@ export const useApi = () => {
   }
 
   const api = {
-    get: (endpoint: string, params?: any, headers?: any) => apiRequest(endpoint, { method: 'GET', params, headers }),
-    post: (endpoint: string, body?: any, headers?: any) => apiRequest(endpoint, { method: 'POST', body, headers }),
-    put: (endpoint: string, body?: any, headers?: any) => apiRequest(endpoint, { method: 'PUT', body, headers }),
+    get: (endpoint: string, params?: any, headers?: any) =>
+      apiRequest(endpoint, { method: 'GET', params, headers }),
+    post: (endpoint: string, body?: any, headers?: any) =>
+      apiRequest(endpoint, { method: 'POST', body, headers }),
+    put: (endpoint: string, body?: any, headers?: any) =>
+      apiRequest(endpoint, { method: 'PUT', body, headers }),
     delete: (endpoint: string, headers?: any) => apiRequest(endpoint, { method: 'DELETE', headers })
   }
 
   return { api, baseUrl }
-} 
+}

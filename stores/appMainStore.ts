@@ -6,25 +6,25 @@ export const useAppStore = defineStore('app', {
     theme: 'light' as 'light' | 'dark',
     sidebarOpen: false,
     mobileMenuOpen: false,
-    
+
     // Language & Localization
     locale: 'tr' as string,
     currency: 'TRY' as string,
-    
+
     // Notifications
     notifications: [] as any[],
-    
+
     // Loading states
     globalLoading: false,
-    
+
     // Search
     searchQuery: '',
     searchHistory: [] as string[],
-    
+
     // Page meta
     pageTitle: 'Takasimo',
     pageDescription: '',
-    
+
     // App settings
     settings: {
       showWelcomeMessage: true,
@@ -41,8 +41,8 @@ export const useAppStore = defineStore('app', {
     getLocale: (state) => state.locale,
     getCurrency: (state) => state.currency,
     getNotifications: (state) => state.notifications,
-    getUnreadNotifications: (state) => state.notifications.filter(n => !n.read),
-    getNotificationCount: (state) => state.notifications.filter(n => !n.read).length,
+    getUnreadNotifications: (state) => state.notifications.filter((n) => !n.read),
+    getNotificationCount: (state) => state.notifications.filter((n) => !n.read).length,
     isGlobalLoading: (state) => state.globalLoading,
     getSearchQuery: (state) => state.searchQuery,
     getSearchHistory: (state) => state.searchHistory,
@@ -103,18 +103,18 @@ export const useAppStore = defineStore('app', {
     },
 
     markNotificationAsRead(id: string) {
-      const notification = this.notifications.find(n => n.id === id)
+      const notification = this.notifications.find((n) => n.id === id)
       if (notification) {
         notification.read = true
       }
     },
 
     markAllNotificationsAsRead() {
-      this.notifications.forEach(n => n.read = true)
+      this.notifications.forEach((n) => (n.read = true))
     },
 
     removeNotification(id: string) {
-      const index = this.notifications.findIndex(n => n.id === id)
+      const index = this.notifications.findIndex((n) => n.id === id)
       if (index > -1) {
         this.notifications.splice(index, 1)
       }
@@ -231,4 +231,4 @@ export const useAppStore = defineStore('app', {
   },
 
   persist: true
-}) 
+})

@@ -1,9 +1,6 @@
 <template>
-  <div 
-    class="category-header"
-    :class="{ 'scrollable': isScrollable }"
-  >
-    <v-container class="pa-0" style="max-width: 1320px;">
+  <div class="category-header" :class="{ scrollable: isScrollable }">
+    <v-container class="pa-0" style="max-width: 1320px">
       <v-row align="center" no-gutters class="px-4 py-3">
         <v-col>
           <div class="d-flex align-center justify-space-between">
@@ -17,7 +14,7 @@
               <span class="category-item">Spor/Outdoor</span>
               <span class="category-item font-weight-bold">Kozmetik/Kişisel Bakım</span>
             </div>
-            
+
             <!-- See All Link -->
             <a href="#" class="see-all-link">
               Tümünü gör
@@ -86,11 +83,11 @@ onUnmounted(() => {
 }
 
 .category-item:hover {
-  color: #8B2865;
+  color: #8b2865;
 }
 
 .see-all-link {
-  color: #8B2865;
+  color: #8b2865;
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
@@ -106,25 +103,25 @@ onUnmounted(() => {
 }
 
 /* Responsive */
-@media (max-width: 960px) {
+@media (width <= 960px) {
   .category-list {
     gap: 1rem;
   }
-  
+
   .category-item {
     font-size: 0.9rem;
   }
 }
 
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .category-list {
     gap: 0.8rem;
     overflow-x: auto;
     padding-bottom: 4px;
   }
-  
+
   .category-item {
     font-size: 0.85rem;
   }
 }
-</style> 
+</style>

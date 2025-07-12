@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { getImageUrl } from "~/utils/getImageUrl";
+import { getImageUrl } from '~/utils/getImageUrl'
 
 // ✅ SETUP STORE VERİSİNİ KULLAN - Index.vue'den provide edilen veri
 const productsStore = useProductsStore()
@@ -66,7 +66,7 @@ const refresh = async () => {
 // Ürün normalize fonksiyonu
 const normalizeProduct = (product: any) => {
   if (!product) return null
-  
+
   return {
     id: product.id,
     title: product.name || product.title,
@@ -91,7 +91,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Takasimo\'da öne çıkan ürünleri keşfedin. En popüler takas ürünleri burada.'
+      content: "Takasimo'da öne çıkan ürünleri keşfedin. En popüler takas ürünleri burada."
     }
   ]
 })
@@ -109,25 +109,27 @@ useHead({
   width: 100%;
   height: 100%;
   min-height: 300px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .product-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 15%) !important;
 }
 
-@media (max-width: 959px) {
+@media (width <= 959px) {
   .featured-products {
     padding: 1.5rem;
     margin: 1rem 0;
   }
 }
 
-@media (max-width: 599px) {
+@media (width <= 599px) {
   .featured-products {
     padding: 1rem;
     border-radius: 12px;
   }
 }
-</style> 
+</style>

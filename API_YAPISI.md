@@ -8,7 +8,7 @@
 📁 composables/
 ├── useApi.ts          # Base API logic
 ├── useCategoriesApi.ts   # Categories API
-├── useProductsApi.ts     # Products API  
+├── useProductsApi.ts     # Products API
 ├── useAuthApi.ts         # Authentication API
 └── useUsers.ts        # Users API (gelecekte)
 ```
@@ -42,6 +42,7 @@
 ## 📋 **Mevcut Yapı:**
 
 ### ✅ **Tamamlanan Düzenlemeler:**
+
 - ✅ `composables/useApi.ts` - Base API logic
 - ✅ `composables/useCategoriesApi.ts` - Categories API
 - ✅ `composables/useProductsApi.ts` - Products API
@@ -53,6 +54,7 @@
 ## 🔧 **Kullanım Örnekleri:**
 
 ### 1. **Categories API:**
+
 ```typescript
 // composables/useCategoriesApi.ts
 export const useCategoriesApi = () => {
@@ -73,6 +75,7 @@ const categories = await getMainCategories()
 ```
 
 ### 2. **Products API:**
+
 ```typescript
 // composables/useProductsApi.ts
 export const useProductsApi = () => {
@@ -93,16 +96,17 @@ const products = await getFeaturedProducts()
 ```
 
 ### 3. **Auth API:**
+
 ```typescript
 // composables/useAuthApi.ts
 export const useAuthApi = () => {
-    const { api } = useApi()
+  const { api } = useApi()
 
-    const login = (credentials) => {
-        return api.post('auth/login', credentials)
-    }
+  const login = (credentials) => {
+    return api.post('auth/login', credentials)
+  }
 
-    return { login }
+  return { login }
 }
 
 // Kullanım - login component'te
@@ -120,19 +124,20 @@ const result = await login({ email, password })
 4. **🚀 Caching**: Server-side caching implementasyonu
 
 ### 📝 **Örnek Server API:**
+
 ```typescript
 // server/api/proxy-external.get.ts
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
-  
+
   // External API'ye istek at (secret key ile)
   const response = await $fetch('https://external-api.com/data', {
     headers: {
-      'Authorization': `Bearer ${process.env.SECRET_API_KEY}`
+      Authorization: `Bearer ${process.env.SECRET_API_KEY}`
     },
     query
   })
-  
+
   return response
 })
 ```
@@ -140,14 +145,16 @@ export default defineEventHandler(async (event) => {
 ## 🚀 **Sonuç:**
 
 ### ✅ **Önerilen Yaklaşım:**
+
 - **Composables**: Tüm API logic'i için
 - **Server API**: Sadece proxy/security gerektiren durumlar için
 
 ### 🎯 **Faydalar:**
+
 - ✅ Temiz kod yapısı
 - ✅ Kolay test edilebilir
 - ✅ SSR uyumlu
 - ✅ Type safe
 - ✅ Auto-import desteği
 
-Bu yapı ile API istekleriniz hem client hem server tarafında sorunsuz çalışacak! 🎉 
+Bu yapı ile API istekleriniz hem client hem server tarafında sorunsuz çalışacak! 🎉

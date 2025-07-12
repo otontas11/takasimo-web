@@ -1,5 +1,6 @@
 /* FOUC Prevention - Critical CSS */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -7,7 +8,9 @@ html, body {
   line-height: 1.5;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -51,7 +54,7 @@ html, body {
 }
 
 /* Responsive Grid Stabilization */
-@media (max-width: 959px) {
+@media (width <= 959px) {
   .app-footer .v-col {
     flex: 0 0 100% !important;
     max-width: 100% !important;
@@ -59,7 +62,7 @@ html, body {
   }
 }
 
-@media (min-width: 960px) {
+@media (width >= 960px) {
   .app-footer .v-col {
     flex: 0 0 33.333333% !important;
     max-width: 33.333333% !important;
@@ -80,7 +83,7 @@ html, body {
 /* Sticky Category Header */
 .category-header {
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 /* Prevent Layout Shift */
@@ -90,10 +93,15 @@ html, body {
 }
 
 /* Typography Stabilization */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 600;
   line-height: 1.2;
-  margin: 0 0 16px 0;
+  margin: 0 0 16px;
 }
 
 /* Link Stabilization */
@@ -131,4 +139,4 @@ a {
 /* Container Max Width */
 .v-container {
   max-width: 1320px !important;
-} 
+}

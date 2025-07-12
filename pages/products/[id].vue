@@ -9,13 +9,11 @@
 
       <!-- Error State -->
       <div v-else-if="error" class="text-center py-8">
-        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px;">
+        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px">
           <template v-slot:title>Hata Oluştu</template>
           Ürün bilgileri yüklenirken bir hata oluştu.
           <template v-slot:append>
-            <v-btn color="error" variant="text" @click="refresh">
-              Tekrar Dene
-            </v-btn>
+            <v-btn color="error" variant="text" @click="refresh"> Tekrar Dene </v-btn>
           </template>
         </v-alert>
       </div>
@@ -26,8 +24,8 @@
           <!-- Product Images -->
           <v-col cols="12" md="6">
             <v-card>
-              <v-img 
-                :src="product.showcase_image || '/images/placeholder.jpg'" 
+              <v-img
+                :src="product.showcase_image || '/images/placeholder.jpg'"
                 height="400"
                 cover
               />
@@ -38,7 +36,7 @@
           <v-col cols="12" md="6">
             <h1 class="text-h4 mb-4">{{ product.title }}</h1>
             <p class="text-body-1 mb-4">{{ product.description }}</p>
-            
+
             <div class="mb-4">
               <v-chip color="primary" variant="tonal" class="mr-2">
                 {{ product.category?.name }}
@@ -58,13 +56,7 @@
               </div>
             </div>
 
-            <v-btn 
-              color="primary" 
-              size="large" 
-              block 
-              rounded="xl"
-              class="mb-4"
-            >
+            <v-btn color="primary" size="large" block rounded="xl" class="mb-4">
               Takas Teklifi Ver
             </v-btn>
           </v-col>
@@ -75,10 +67,13 @@
           <v-col cols="12">
             <h2 class="text-h5 mb-4">Benzer Ürünler</h2>
             <v-row>
-              <v-col 
-                v-for="relatedProduct in relatedProducts" 
+              <v-col
+                v-for="relatedProduct in relatedProducts"
                 :key="relatedProduct.id"
-                cols="12" sm="6" md="4" lg="3"
+                cols="12"
+                sm="6"
+                md="4"
+                lg="3"
               >
                 <ProductCard :product="relatedProduct" />
               </v-col>
@@ -89,13 +84,11 @@
 
       <!-- Not Found -->
       <div v-else class="text-center py-8">
-        <v-alert type="warning" variant="tonal" class="mx-auto" style="max-width: 400px;">
+        <v-alert type="warning" variant="tonal" class="mx-auto" style="max-width: 400px">
           <template v-slot:title>Ürün Bulunamadı</template>
           Aradığınız ürün bulunamadı veya kaldırılmış olabilir.
           <template v-slot:append>
-            <v-btn color="warning" variant="text" to="/">
-              Ana Sayfaya Dön
-            </v-btn>
+            <v-btn color="warning" variant="text" to="/"> Ana Sayfaya Dön </v-btn>
           </template>
         </v-alert>
       </div>
@@ -108,19 +101,15 @@ const route = useRoute()
 const productId = route.params.id
 
 // ✅ TEMİZ VE BASİT - Mevcut composable yapısını kullan
-const { 
-  data: product, 
-  pending, 
+const {
+  data: product,
+  pending,
   error,
   refresh
-} = await useLazyAsyncData(
-  `product-${productId}`,
-  () => useProducts().getProductById(productId),
-  {
-    default: () => null,
-    server: true
-  }
-)
+} = await useLazyAsyncData(`product-${productId}`, () => useProducts().getProductById(productId), {
+  default: () => null,
+  server: true
+})
 
 // Benzer ürünler - sadece kategori kodu varsa
 const { data: relatedProducts } = await useLazyAsyncData(
@@ -173,4 +162,4 @@ if (process.server && !product.value && !pending.value) {
   min-height: 100vh;
   padding: 2rem 0;
 }
-</style> 
+</style>

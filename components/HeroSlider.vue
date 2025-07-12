@@ -15,7 +15,7 @@
       class="hero-slide"
     >
       <div class="hero-content">
-        <v-container class="fill-height" style="max-width: 1320px;">
+        <v-container class="fill-height" style="max-width: 1320px">
           <v-row align="center" justify="center" class="fill-height">
             <v-col cols="12" md="6" class="text-center text-md-left">
               <div class="hero-text">
@@ -38,11 +38,7 @@
             </v-col>
             <v-col cols="12" md="6" class="text-center" v-if="slide.image">
               <div class="hero-image">
-                <img
-                  :src="slide.image"
-                  :alt="slide.title"
-                  class="phone-mockup"
-                />
+                <img :src="slide.image" :alt="slide.title" class="phone-mockup" />
               </div>
             </v-col>
           </v-row>
@@ -64,26 +60,26 @@ interface Slide {
 
 const slides: Slide[] = [
   {
-    title: "İlanını öne çıkar, daha fazla kişiye ulaş!",
-    subtitle: "Daha geniş bir kitleye tanıtır ve hızla yeni sahipler bulmanıza yardımcı olur!",
-    buttonText: "Planları İncele",
-    buttonColor: "#8B2865",
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-    image: "/images/phone-mockup.svg"
+    title: 'İlanını öne çıkar, daha fazla kişiye ulaş!',
+    subtitle: 'Daha geniş bir kitleye tanıtır ve hızla yeni sahipler bulmanıza yardımcı olur!',
+    buttonText: 'Planları İncele',
+    buttonColor: '#8B2865',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    image: '/images/phone-mockup.svg'
   },
   {
-    title: "Güvenli Takas İmkanı",
-    subtitle: "Ürünlerinizi güvenle takas edin, yeni deneyimler yaşayın!",
-    buttonText: "Hemen Başla",
-    buttonColor: "#8B2865",
-    background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+    title: 'Güvenli Takas İmkanı',
+    subtitle: 'Ürünlerinizi güvenle takas edin, yeni deneyimler yaşayın!',
+    buttonText: 'Hemen Başla',
+    buttonColor: '#8B2865',
+    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
   },
   {
-    title: "Hızlı ve Kolay",
-    subtitle: "Sadece birkaç dakikada ürününüzü listeleyin ve takas tekliflerini alın!",
-    buttonText: "İlan Ver",
-    buttonColor: "#8B2865",
-    background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+    title: 'Hızlı ve Kolay',
+    subtitle: 'Sadece birkaç dakikada ürününüzü listeleyin ve takas tekliflerini alın!',
+    buttonText: 'İlan Ver',
+    buttonColor: '#8B2865',
+    background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
   }
 ]
 </script>
@@ -100,11 +96,8 @@ const slides: Slide[] = [
 
 .hero-content {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(139, 40, 101, 0.8) 0%, rgba(139, 40, 101, 0.6) 100%);
+  inset: 0;
+  background: linear-gradient(135deg, rgb(139 40 101 / 80%) 0%, rgb(139 40 101 / 60%) 100%);
   display: flex;
   align-items: center;
   z-index: 1;
@@ -119,7 +112,7 @@ const slides: Slide[] = [
   font-size: 2.5rem !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 4px rgb(0 0 0 / 30%);
 }
 
 .hero-subtitle {
@@ -127,7 +120,7 @@ const slides: Slide[] = [
   font-weight: 400 !important;
   line-height: 1.4 !important;
   opacity: 0.95;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 20%);
 }
 
 .hero-button {
@@ -140,7 +133,7 @@ const slides: Slide[] = [
 
 .hero-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(139, 40, 101, 0.4) !important;
+  box-shadow: 0 8px 25px rgb(139 40 101 / 40%) !important;
 }
 
 .hero-image {
@@ -154,48 +147,50 @@ const slides: Slide[] = [
   max-width: 250px;
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 10px 30px rgb(0 0 0 / 30%));
   animation: float 3s ease-in-out infinite;
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
+  0%,
+  100% {
+    transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
 }
 
 /* Responsive Design */
-@media (max-width: 959px) {
+@media (width <= 959px) {
   .hero-title {
     font-size: 2rem !important;
   }
-  
+
   .hero-subtitle {
     font-size: 1.1rem !important;
   }
-  
+
   .hero-text {
     text-align: center;
     margin-bottom: 1rem;
   }
-  
+
   .phone-mockup {
     max-width: 200px;
   }
 }
 
-@media (max-width: 599px) {
+@media (width <= 599px) {
   .hero-title {
     font-size: 1.75rem !important;
   }
-  
+
   .hero-subtitle {
     font-size: 1rem !important;
   }
-  
+
   .phone-mockup {
     max-width: 150px;
   }
@@ -203,27 +198,27 @@ const slides: Slide[] = [
 
 /* Carousel Navigation Styling */
 :deep(.v-carousel__controls) {
-  background: rgba(0, 0, 0, 0.1) !important;
+  background: rgb(0 0 0 / 10%) !important;
 }
 
 :deep(.v-carousel__controls .v-btn) {
-  background-color: rgba(255, 255, 255, 0.3) !important;
-  border: 2px solid rgba(255, 255, 255, 0.5) !important;
+  background-color: rgb(255 255 255 / 30%) !important;
+  border: 2px solid rgb(255 255 255 / 50%) !important;
 }
 
 :deep(.v-carousel__controls .v-btn--active) {
-  background-color: rgba(255, 255, 255, 0.9) !important;
-  border-color: rgba(255, 255, 255, 1) !important;
+  background-color: rgb(255 255 255 / 90%) !important;
+  border-color: rgb(255 255 255 / 100%) !important;
 }
 
 :deep(.v-carousel__prev),
 :deep(.v-carousel__next) {
-  background-color: rgba(255, 255, 255, 0.2) !important;
+  background-color: rgb(255 255 255 / 20%) !important;
   border-radius: 50% !important;
 }
 
 :deep(.v-carousel__prev:hover),
 :deep(.v-carousel__next:hover) {
-  background-color: rgba(255, 255, 255, 0.4) !important;
+  background-color: rgb(255 255 255 / 40%) !important;
 }
-</style> 
+</style>

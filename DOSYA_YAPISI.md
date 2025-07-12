@@ -3,6 +3,7 @@
 ## 🎯 **Mevcut Durum ve İyileştirmeler**
 
 ### ✅ **Tamamlanan İyileştirmeler:**
+
 - ❌ Gereksiz `server/api/categoriesApi.ts` silindi
 - ✅ `composables/useProductsApi.ts` oluşturuldu
 - ✅ `pages/404.vue` error sayfası eklendi
@@ -132,18 +133,21 @@ takasimo-web-nuxt3/
 ## 🚀 **Öncelikli Yapılacaklar:**
 
 ### 1. **Acil Öncelik (Bu Hafta)**
+
 - [ ] Components'i kategorilere ayır (ui/, layout/, product/, category/)
 - [ ] 500.vue error sayfası oluştur
 - [ ] Basic middleware'ler ekle (auth, guest)
 - [ ] Vuetify plugin'i düzenle
 
 ### 2. **Orta Öncelik (Gelecek Hafta)**
+
 - [ ] Auth sayfaları oluştur (login, register)
 - [ ] Product detail sayfası oluştur
 - [ ] Profile sayfaları oluştur
 - [ ] SEO optimizasyonları (robots.txt, sitemap)
 
 ### 3. **Düşük Öncelik (Gelecek Ay)**
+
 - [ ] Admin paneli oluştur
 - [ ] Advanced composables ekle
 - [ ] Utility functions genişlet
@@ -152,21 +156,25 @@ takasimo-web-nuxt3/
 ## 🎯 **Faydalar:**
 
 ### ✅ **Organizasyon**
+
 - Dosyalar kategorilere ayrılmış
 - Benzer fonksiyonlar bir arada
 - Kolay navigasyon
 
 ### ✅ **Ölçeklenebilirlik**
+
 - Yeni özellikler kolayca eklenebilir
 - Modüler yapı
 - Yeniden kullanılabilir bileşenler
 
 ### ✅ **Maintainability**
+
 - Kod tekrarı azaltılmış
 - Standart yapı
 - Kolay debug
 
 ### ✅ **Developer Experience**
+
 - Hızlı dosya bulma
 - Otomatik import'lar
 - TypeScript desteği
@@ -178,4 +186,4 @@ takasimo-web-nuxt3/
 - ❌ = Silinen/gereksiz dosya
 - 🔄 = Düzenlenmesi gereken dosya
 
-Bu yapı, modern Nuxt 3 projelerinin best practice'lerini takip eder ve projenin büyümesini destekler. 
+Bu yapı, modern Nuxt 3 projelerinin best practice'lerini takip eder ve projenin büyümesini destekler.
