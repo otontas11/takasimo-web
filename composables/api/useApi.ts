@@ -1,6 +1,6 @@
 export const useApi = () => {
   const config = useRuntimeConfig()
-  const baseUrl = config.public.apiBase || 'https://fallback.api.com/api'
+  const baseUrl = config.public.apiBase || 'https://ap1.takasimo.com/api'
 
   const apiRequest = async (endpoint: string, options: any = {}) => {
     const {
