@@ -4,7 +4,7 @@ export const useCategoriesApi = () => {
     const { api } = useApi()
 
     const getMainCategories = () => {
-        let filter = [
+        const filter = [
             '{"k": "is_deleted", "o": "=", "v": false}',
             '{"k": "parent_code", "o": "=", "v": null}'
         ];
