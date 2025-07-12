@@ -21,6 +21,21 @@ export default defineNuxtConfig({
     },
     ssr: {
       noExternal: ['vuetify']
+    },
+    vue: {
+      template: {
+        compilerOptions: {
+          // Pug desteği için
+          isCustomElement: (tag) => false
+        }
+      }
+    }
+  },
+
+  // Pug desteği
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) => false
     }
   },
 
