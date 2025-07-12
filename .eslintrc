@@ -6,6 +6,23 @@
   "rules": {
     "vue/multi-word-component-names": "off",
     "vue/no-multiple-template-root": "off",
-    "prettier/prettier": "error"
-  }
+    "prettier/prettier": "error",
+    "vue/script-setup-uses-vars": "error",
+    "vue/no-setup-props-destructure": "off",
+    "@typescript-eslint/no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_",
+      "ignoreRestSiblings": true,
+      "args": "after-used"
+    }]
+  },
+  "overrides": [
+    {
+      "files": ["*.vue"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-unused-vars": "off"
+      }
+    }
+  ]
 } 

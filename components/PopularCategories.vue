@@ -12,7 +12,7 @@
     v-row(v-else-if="displayCategories.length > 0" class="categories-grid")
       v-col(
         v-for="category in displayCategories"
-        :key="category.id"
+        :key="category.category_code"
         cols="6"
         sm="4"
         md="3"
@@ -25,7 +25,7 @@
         )
           .category-image-container
             img.category-image(
-              :src="getImageUrl({ path: category.image_url || '/images/categories/default-category.svg', provider: 'locale' })"
+              :src="getImageUrl({ path: category.image || '/images/categories/default-category.svg', provider: 'locale' })"
               :alt="category.name"
               @error="onImageError"
             )
@@ -54,13 +54,11 @@
 import { getImageUrl } from '~/utils/getImageUrl'
 
 // ✅ PROPS - Index.vue'den gelen veri
-interface Props {
+const props = withDefaults(defineProps<{
   categories?: any[]
   loading?: boolean
   error?: string | null
-}
-
-const props = withDefaults(defineProps<Props>(), {
+}>(), {
   categories: () => [],
   loading: false,
   error: null
@@ -85,7 +83,7 @@ const displayCategories = computed(() => {
 
 // Methods
 const navigateToCategory = (category: any) => {
-  const slug = category.slug || category.code || category.id.toString()
+  const slug = category.category_code || category.id?.toString()
   navigateTo(`/kategori/${slug}`)
 }
 
@@ -114,8 +112,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content:
-        "Takasimo'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası."
+      content: "Takasimo'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası."
     }
   ]
 })
