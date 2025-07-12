@@ -27,12 +27,14 @@ export const useApi = () => {
         const searchParams = new URLSearchParams()
         Object.entries(params).forEach(([key, value]) => {
           if (Array.isArray(value)) {
-            value.forEach(item => searchParams.append(key, item))
+            // Array parametreleri için key[] formatını kullan
+            value.forEach(item => searchParams.append(`${key}[]`, item))
           } else if (value !== undefined && value !== null) {
             searchParams.append(key, String(value))
           }
         })
         url += `?${searchParams.toString()}`
+        console.log('🔗 API Request URL:', url)
       }
 
       // Body

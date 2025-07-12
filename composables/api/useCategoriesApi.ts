@@ -26,6 +26,8 @@ export const useCategoriesApi = () => {
         }
     }
 
+
+
     const getAllCategories = async () => {
         try {
             const response = await api.get('categories', {
