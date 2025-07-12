@@ -78,27 +78,36 @@
 <script setup lang="ts">
 import { getImageUrl } from "~/utils/getImageUrl"
 
-// ✅ SETUP STORE VERİSİNİ KULLAN - Index.vue'den provide edilen veri
-const categoriesStore = useCategoriesStore()
+// ✅ PROPS - Index.vue'den gelen veri
+interface Props {
+  categories?: any[]
+  loading?: boolean
+  error?: string | null
+}
 
-// Store'dan veri al
-const categories = computed(() => categoriesStore.getAllCategories)
-const isLoading = computed(() => categoriesStore.isLoading)
-const hasError = computed(() => categoriesStore.getError)
+const props = withDefaults(defineProps<Props>(), {
+  categories: () => [],
+  loading: false,
+  error: null
+})
+
+// Computed properties for template
+const isLoading = computed(() => props.loading)
+const hasError = computed(() => !!props.error)
 
 // Computed properties
 const displayCategories = computed(() => {
-  if (!categories.value || categories.value.length === 0) return []
+  if (!props.categories || props.categories.length === 0) return []
   
   // Kısa isimleri tercih et
-  const shortCategories = categories.value.filter((cat: any) => 
+  const shortCategories = props.categories.filter((cat: any) => 
     cat.name && cat.name.length <= 15
   )
   
   // Yeterli kısa kategori varsa onları kullan, yoksa tümünden al
   const selectedCategories = shortCategories.length >= 5 
     ? shortCategories 
-    : categories.value
+    : props.categories
   
   return selectedCategories.slice(0, 5)
 })
@@ -118,8 +127,14 @@ const onImageError = (event: any) => {
   event.target.src = '/images/categories/default-category.svg'
 }
 
+// Emit events to parent
+const emit = defineEmits<{
+  refresh: []
+}>()
+
 const refresh = async () => {
-  await categoriesStore.fetchCategories()
+  // Parent component'e refresh event'i gönder
+  emit('refresh')
 }
 
 // SEO

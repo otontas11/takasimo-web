@@ -11,7 +11,12 @@
       
       <section class="categories-section">
         <v-container>
-          <PopularCategories />
+          <PopularCategories 
+            :categories="allCategories" 
+            :loading="categoriesStore.isLoading"
+            :error="categoriesStore.getError"
+            @refresh="categoriesStore.fetchCategories"
+          />
         </v-container>
       </section>
       
