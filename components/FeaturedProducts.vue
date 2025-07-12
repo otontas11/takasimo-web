@@ -30,7 +30,7 @@
         md="3"
         class="d-flex"
       >
-        <ProductCard :product="normalizeProduct(product)" />
+        <ProductCard :product="normalizeProduct(product)" v-if="normalizeProduct(product)" />
       </v-col>
     </v-row>
 
@@ -64,13 +64,13 @@
 <script setup lang="ts">
 import { getImageUrl } from "~/utils/getImageUrl";
 
-// ✅ STORE VERİSİNİ KULLAN - Index.vue'den provide edilen veri
-const products = inject('products', ref([])) as any
-const isLoading = inject('isLoading', ref(false))
-const hasError = inject('hasError', ref(false))
-
-// Store'a erişim (refresh için)
+// ✅ SETUP STORE VERİSİNİ KULLAN - Index.vue'den provide edilen veri
 const productsStore = useProductsStore()
+
+// Store'dan veri al
+const products = computed(() => productsStore.getFeaturedProducts)
+const isLoading = computed(() => productsStore.isLoading)
+const hasError = computed(() => productsStore.getError)
 
 // Refresh function
 const refresh = async () => {
@@ -96,7 +96,7 @@ const normalizeProduct = (product: any) => {
     },
     created_at: product.created_at,
     product_code: product.product_code
-  }
+  } as any
 }
 
 // SEO

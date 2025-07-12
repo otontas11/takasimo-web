@@ -1,145 +1,204 @@
-import { defineStore } from 'pinia'
+export const useCartStore = defineStore('cart', () => {
+  // ✅ STATE - Reactive references
+  const items = ref<any[]>([])
+  const loading = ref(false)
+  const error = ref<string | null>(null)
 
-export const useCartStore = defineStore('cart', {
-  state: () => ({
-    items: [] as any[],
-    loading: false,
-    error: null as string | null
-  }),
+  // ✅ GETTERS - Computed properties
+  const getItems = computed(() => items.value)
+  const getItemCount = computed(() => items.value.length)
+  const getTotalPrice = computed(() =>
+      items.value.reduce((total, item) => total + (item.price * item.quantity), 0)
+  )
+  const isLoading = computed(() => loading.value)
+  const getError = computed(() => error.value)
+  const isEmpty = computed(() => items.value.length === 0)
+  const getItemById = computed(() => (id: string) =>
+      items.value.find(item => item.id === id)
+  )
 
-  getters: {
-    getItems: (state) => state.items,
-    getItemCount: (state) => state.items.reduce((total, item) => total + item.quantity, 0),
-    getTotalPrice: (state) => state.items.reduce((total, item) => total + (item.price * item.quantity), 0),
-    getItemById: (state) => (productId: number) => 
-      state.items.find(item => item.product_id === productId),
-    isEmpty: (state) => state.items.length === 0,
-    isLoading: (state) => state.loading,
-    getError: (state) => state.error
-  },
+  // ✅ ACTIONS - Functions
+  const setLoading = (value: boolean) => {
+    loading.value = value
+  }
 
-  actions: {
-    setLoading(loading: boolean) {
-      this.loading = loading
-    },
+  const setError = (value: string | null) => {
+    error.value = value
+  }
 
-    setError(error: string | null) {
-      this.error = error
-    },
+  const addItem = (product: any, quantity: number = 1) => {
+    try {
+      const existingItem = items.value.find(item => item.id === product.id)
 
-    addItem(product: any, quantity: number = 1) {
-      const existingItem = this.getItemById(product.id)
-      
       if (existingItem) {
         existingItem.quantity += quantity
       } else {
-        this.items.push({
-          product_id: product.id,
-          product_name: product.name,
-          product_image: product.image,
+        items.value.push({
+          id: product.id,
+          name: product.name || product.title,
           price: product.price,
-          quantity: quantity,
-          product: product
+          image: product.image || product.showcase_image,
+          quantity,
+          product_code: product.product_code,
+          category: product.category,
+          user: product.user
         })
       }
-      
-      this.setError(null)
-    },
 
-    removeItem(productId: number) {
-      const index = this.items.findIndex(item => item.product_id === productId)
-      if (index > -1) {
-        this.items.splice(index, 1)
+      // Save to localStorage
+      if (process.client) {
+        localStorage.setItem('cart_items', JSON.stringify(items.value))
       }
-    },
 
-    updateQuantity(productId: number, quantity: number) {
-      const item = this.getItemById(productId)
+      return { success: true }
+    } catch (err: any) {
+      console.error('Add item error:', err)
+      setError('Ürün sepete eklenirken hata oluştu')
+      return { success: false, error: 'Ürün sepete eklenirken hata oluştu' }
+    }
+  }
+
+  const removeItem = (id: string) => {
+    try {
+      const index = items.value.findIndex(item => item.id === id)
+      if (index > -1) {
+        items.value.splice(index, 1)
+      }
+
+      // Save to localStorage
+      if (process.client) {
+        localStorage.setItem('cart_items', JSON.stringify(items.value))
+      }
+
+      return { success: true }
+    } catch (err: any) {
+      console.error('Remove item error:', err)
+      setError('Ürün sepetten çıkarılırken hata oluştu')
+      return { success: false, error: 'Ürün sepetten çıkarılırken hata oluştu' }
+    }
+  }
+
+  const updateQuantity = (id: string, quantity: number) => {
+    try {
+      const item = items.value.find(item => item.id === id)
       if (item) {
         if (quantity <= 0) {
-          this.removeItem(productId)
+          return removeItem(id)
         } else {
           item.quantity = quantity
         }
       }
-    },
 
-    increaseQuantity(productId: number) {
-      const item = this.getItemById(productId)
-      if (item) {
-        item.quantity += 1
+      // Save to localStorage
+      if (process.client) {
+        localStorage.setItem('cart_items', JSON.stringify(items.value))
       }
-    },
 
-    decreaseQuantity(productId: number) {
-      const item = this.getItemById(productId)
-      if (item) {
-        if (item.quantity > 1) {
-          item.quantity -= 1
-        } else {
-          this.removeItem(productId)
-        }
-      }
-    },
-
-    clearCart() {
-      this.items = []
-      this.setError(null)
-    },
-
-    async syncWithServer() {
-      // Server ile senkronizasyon için
-      this.setLoading(true)
-      this.setError(null)
-      
-      try {
-        // API call burada yapılacak
-        // const response = await $fetch('/api/cart/sync', {
-        //   method: 'POST',
-        //   body: { items: this.items }
-        // })
-        
-        return { success: true }
-      } catch (error) {
-        console.error('Cart sync error:', error)
-        this.setError('Sepet senkronizasyonunda hata oluştu')
-        return { success: false, error: 'Sepet senkronizasyonunda hata oluştu' }
-      } finally {
-        this.setLoading(false)
-      }
-    },
-
-    async checkout() {
-      this.setLoading(true)
-      this.setError(null)
-      
-      try {
-        // Checkout API call
-        // const response = await $fetch('/api/checkout', {
-        //   method: 'POST',
-        //   body: {
-        //     items: this.items,
-        //     total: this.getTotalPrice
-        //   }
-        // })
-        
-        // Başarılı checkout sonrası sepeti temizle
-        this.clearCart()
-        
-        return { success: true, message: 'Sipariş başarıyla oluşturuldu' }
-      } catch (error) {
-        console.error('Checkout error:', error)
-        this.setError('Sipariş oluşturulurken hata oluştu')
-        return { success: false, error: 'Sipariş oluşturulurken hata oluştu' }
-      } finally {
-        this.setLoading(false)
-      }
-    },
-
-    clearError() {
-      this.setError(null)
+      return { success: true }
+    } catch (err: any) {
+      console.error('Update quantity error:', err)
+      setError('Ürün miktarı güncellenirken hata oluştu')
+      return { success: false, error: 'Ürün miktarı güncellenirken hata oluştu' }
     }
-  },
+  }
 
-  persist: true
+  const clearCart = () => {
+    try {
+      items.value = []
+
+      // Clear localStorage
+      if (process.client) {
+        localStorage.removeItem('cart_items')
+      }
+
+      return { success: true }
+    } catch (err: any) {
+      console.error('Clear cart error:', err)
+      setError('Sepet temizlenirken hata oluştu')
+      return { success: false, error: 'Sepet temizlenirken hata oluştu' }
+    }
+  }
+
+  const loadFromLocalStorage = () => {
+    if (process.client) {
+      try {
+        const savedItems = localStorage.getItem('cart_items')
+        if (savedItems) {
+          items.value = JSON.parse(savedItems)
+        }
+      } catch (err) {
+        console.error('Load from localStorage error:', err)
+        // Clear corrupted data
+        localStorage.removeItem('cart_items')
+      }
+    }
+  }
+
+  const saveToLocalStorage = () => {
+    if (process.client) {
+      try {
+        localStorage.setItem('cart_items', JSON.stringify(items.value))
+      } catch (err) {
+        console.error('Save to localStorage error:', err)
+      }
+    }
+  }
+
+  const initializeCart = () => {
+    loadFromLocalStorage()
+  }
+
+  const checkout = async () => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      // Bu kısımda gerçek checkout API çağrısı yapılacak
+      // Şimdilik mock response
+      await new Promise(resolve => setTimeout(resolve, 2000))
+
+      // Başarılı checkout sonrası sepeti temizle
+      clearCart()
+
+      return { success: true, message: 'Sipariş başarıyla oluşturuldu' }
+    } catch (err: any) {
+      console.error('Checkout error:', err)
+      setError('Sipariş oluşturulurken hata oluştu')
+      return { success: false, error: 'Sipariş oluşturulurken hata oluştu' }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const clearError = () => {
+    setError(null)
+  }
+
+  // ✅ RETURN - Expose state, getters, and actions
+  return {
+    // State
+    items: readonly(items),
+    loading: readonly(loading),
+    error: readonly(error),
+
+    // Getters
+    getItems,
+    getItemCount,
+    getTotalPrice,
+    isLoading,
+    getError,
+    isEmpty,
+    getItemById,
+
+    // Actions
+    addItem,
+    removeItem,
+    updateQuantity,
+    clearCart,
+    loadFromLocalStorage,
+    saveToLocalStorage,
+    initializeCart,
+    checkout,
+    clearError
+  }
 }) 

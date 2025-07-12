@@ -52,10 +52,10 @@ export const useApi = () => {
   }
 
   const api = {
-    get: (endpoint: string, params?: any) => apiRequest(endpoint, { method: 'GET', params }),
+    get: (endpoint: string, params?: any, headers?: any) => apiRequest(endpoint, { method: 'GET', params, headers }),
     post: (endpoint: string, body?: any, headers?: any) => apiRequest(endpoint, { method: 'POST', body, headers }),
     put: (endpoint: string, body?: any, headers?: any) => apiRequest(endpoint, { method: 'PUT', body, headers }),
-    delete: (endpoint: string) => apiRequest(endpoint, { method: 'DELETE' })
+    delete: (endpoint: string, headers?: any) => apiRequest(endpoint, { method: 'DELETE', headers })
   }
 
   return { api, baseUrl }

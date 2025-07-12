@@ -78,13 +78,13 @@
 <script setup lang="ts">
 import { getImageUrl } from "~/utils/getImageUrl"
 
-// ✅ STORE VERİSİNİ KULLAN - Index.vue'den provide edilen veri
-const categories = inject('categories', ref([])) as any
-const isLoading = inject('isLoading', ref(false))
-const hasError = inject('hasError', ref(false))
-
-// Store'a erişim (refresh için)
+// ✅ SETUP STORE VERİSİNİ KULLAN - Index.vue'den provide edilen veri
 const categoriesStore = useCategoriesStore()
+
+// Store'dan veri al
+const categories = computed(() => categoriesStore.getAllCategories)
+const isLoading = computed(() => categoriesStore.isLoading)
+const hasError = computed(() => categoriesStore.getError)
 
 // Computed properties
 const displayCategories = computed(() => {

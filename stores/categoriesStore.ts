@@ -1,90 +1,117 @@
-import { defineStore } from 'pinia'
-import {useCategoriesApi} from "~/composables/api/useCategoriesApi";
+export const useCategoriesStore = defineStore('categories', () => {
+  // ✅ STATE - Reactive references
+  const categories = ref<any[]>([])
+  const selectedCategory = ref<any>(null)
+  const loading = ref(false)
+  const error = ref<string | null>(null)
 
-export const useCategoriesStore = defineStore('categories', {
-  state: () => ({
-    categories: [] as any[],
-    loading: false,
-    error: null as string | null,
-    selectedCategory: null as any
-  }),
+  // ✅ GETTERS - Computed properties
+  const getAllCategories = computed(() => categories.value)
+  const getMainCategories = computed(() =>
+      categories.value.filter((cat: any) => !cat.parent_id)
+  )
+  const getSubCategories = computed(() => (parentId: any) =>
+      categories.value.filter((cat: any) => cat.parent_id === parentId)
+  )
+  const getCategoryById = computed(() => (id: any) =>
+      categories.value.find((cat: any) => cat.id === id)
+  )
+  const isLoading = computed(() => loading.value)
+  const getError = computed(() => error.value)
 
-  getters: {
-    getAllCategories: (state) => state.categories,
-    getMainCategories: (state) => state.categories.filter((cat: any) => !cat.parent_id),
-    getSubCategories: (state) => (parentId: any) => 
-      state.categories.filter((cat: any) => cat.parent_id === parentId),
-    getCategoryById: (state) => (id: any) => 
-      state.categories.find((cat: any) => cat.id === id),
-    isLoading: (state) => state.loading,
-    getError: (state) => state.error
-  },
+  // ✅ ACTIONS - Functions
+  const setLoading = (value: boolean) => {
+    loading.value = value
+  }
 
-  actions: {
-    setLoading(loading: boolean) {
-      this.loading = loading
-    },
+  const setError = (value: string | null) => {
+    error.value = value
+  }
 
-    setError(error: string | null) {
-      this.error = error
-    },
+  const setCategories = (data: any[]) => {
+    categories.value = data
+  }
 
-    setCategories(categories: any[]) {
-      this.categories = categories
-    },
+  const setSelectedCategory = (category: any) => {
+    selectedCategory.value = category
+  }
 
-    setSelectedCategory(category: any) {
-      this.selectedCategory = category
-    },
+  const fetchCategories = async () => {
+    setLoading(true)
+    setError(null)
 
-    async fetchCategories() {
-      this.setLoading(true)
-      this.setError(null)
-      
-      try {
-        const { getMainCategories } = useCategoriesApi()
-        const response = await getMainCategories()
-        console.log("getMainCategories",response)
-        
-        if (response) {
-          const categories = Array.isArray(response) ? response : (response as any).data || []
-          this.setCategories(categories)
-        }
-        
-        return { success: true }
-      } catch (error) {
-        console.error('Categories fetch error:', error)
-        this.setError('Kategoriler yüklenirken hata oluştu')
-        return { success: false, error: 'Kategoriler yüklenirken hata oluştu' }
-      } finally {
-        this.setLoading(false)
+    try {
+      const { getMainCategories } = useCategories()
+      const response = await getMainCategories()
+
+      if (response) {
+        const categoryData = Array.isArray(response) ? response : (response as any).data || []
+        setCategories(categoryData)
       }
-    },
 
-    async fetchCategoryById(id: any) {
-      this.setLoading(true)
-      this.setError(null)
-      
-      try {
-        // API call burada yapılacak
-        const response = await $fetch(`/api/categories/${id}`)
-        
-        if (response) {
-          this.setSelectedCategory(response)
-        }
-        
-        return { success: true }
-      } catch (error) {
-        console.error('Category fetch error:', error)
-        this.setError('Kategori yüklenirken hata oluştu')
-        return { success: false, error: 'Kategori yüklenirken hata oluştu' }
-      } finally {
-        this.setLoading(false)
-      }
-    },
-
-    clearError() {
-      this.setError(null)
+      return { success: true }
+    } catch (err: any) {
+      console.error('Categories fetch error:', err)
+      setError('Kategoriler yüklenirken hata oluştu')
+      return { success: false, error: 'Kategoriler yüklenirken hata oluştu' }
+    } finally {
+      setLoading(false)
     }
+  }
+
+  const fetchCategoryById = async (id: any) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const { getCategoryById } = useCategories()
+      const response = await getCategoryById(id)
+
+      if (response) {
+        setSelectedCategory(response)
+      }
+
+      return { success: true }
+    } catch (err: any) {
+      console.error('Category fetch error:', err)
+      setError('Kategori yüklenirken hata oluştu')
+      return { success: false, error: 'Kategori yüklenirken hata oluştu' }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const clearError = () => {
+    setError(null)
+  }
+
+  const clearCategories = () => {
+    setCategories([])
+    setSelectedCategory(null)
+  }
+
+  // ✅ RETURN - Expose state, getters, and actions
+  return {
+    // State
+    categories: readonly(categories),
+    selectedCategory: readonly(selectedCategory),
+    loading: readonly(loading),
+    error: readonly(error),
+
+    // Getters
+    getAllCategories,
+    getMainCategories,
+    getSubCategories,
+    getCategoryById,
+    isLoading,
+    getError,
+
+    // Actions
+    fetchCategories,
+    fetchCategoryById,
+    setCategories,
+    setSelectedCategory,
+    clearError,
+    clearCategories
   }
 }) 
