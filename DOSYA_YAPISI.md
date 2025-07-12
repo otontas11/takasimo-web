@@ -57,7 +57,7 @@ takasimo-web-nuxt3/
 │   └── error.vue                 🆕 Önerilir
 │
 ├── 📁 middleware/
-│   ├── auth.ts                   🆕 Önerilir
+│   ├── authStore.ts                   🆕 Önerilir
 │   ├── guest.ts                  🆕 Önerilir
 │   └── admin.ts                  🆕 Önerilir
 │
@@ -99,17 +99,17 @@ takasimo-web-nuxt3/
 │       └── cors.ts
 │
 ├── 📁 stores/
-│   ├── categories.ts             ✅ Mevcut
-│   ├── products.ts               ✅ Mevcut
-│   ├── auth.ts                   ✅ Mevcut
-│   ├── cart.ts                   ✅ Mevcut
-│   ├── app.ts                    ✅ Mevcut
+│   ├── categoriesStore.ts             ✅ Mevcut
+│   ├── productsStore.ts               ✅ Mevcut
+│   ├── authStore.ts                   ✅ Mevcut
+│   ├── cartStore.ts                   ✅ Mevcut
+│   ├── appMainStore.ts                    ✅ Mevcut
 │   └── README.md                 ✅ Mevcut
 │
 ├── 📁 types/
 │   ├── index.ts                  ✅ Yeni eklendi
 │   ├── api.ts                    🆕 Önerilir
-│   ├── auth.ts                   🆕 Önerilir
+│   ├── authStore.ts                   🆕 Önerilir
 │   └── components.ts             🆕 Önerilir
 │
 ├── 📁 utils/

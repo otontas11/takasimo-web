@@ -4,7 +4,7 @@ Bu proje için oluşturulan store yapısı ve kullanım örnekleri.
 
 ## 📁 Store Dosyaları
 
-### 1. **auth.ts** - Kimlik Doğrulama
+### 1. **authStore.ts** - Kimlik Doğrulama
 Kullanıcı girişi, çıkışı ve oturum yönetimi.
 
 ```typescript
@@ -21,7 +21,7 @@ const isLoggedIn = authStore.isLoggedIn
 authStore.logout()
 ```
 
-### 2. **categories.ts** - Kategori Yönetimi
+### 2. **categoriesStore.ts** - Kategori Yönetimi
 Kategori verilerini yönetir.
 
 ```typescript
@@ -38,7 +38,7 @@ const mainCategories = categoriesStore.getMainCategories
 const subCategories = categoriesStore.getSubCategories(parentId)
 ```
 
-### 3. **products.ts** - Ürün Yönetimi
+### 3. **productsStore.ts** - Ürün Yönetimi
 Ürün listesi, arama, filtreleme ve pagination.
 
 ```typescript
@@ -65,7 +65,7 @@ await productsStore.nextPage()
 await productsStore.prevPage()
 ```
 
-### 4. **cart.ts** - Sepet Yönetimi
+### 4. **cartStore.ts** - Sepet Yönetimi
 Alışveriş sepeti işlemleri.
 
 ```typescript
@@ -89,7 +89,7 @@ const isEmpty = cartStore.isEmpty
 await cartStore.checkout()
 ```
 
-### 5. **app.ts** - Genel Uygulama Durumu
+### 5. **appMainStore.ts** - Genel Uygulama Durumu
 Tema, dil, bildirimler ve UI durumu.
 
 ```typescript
