@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import {useProductsApi} from "~/composables/api/useProductsApi";
 
 export const useProductsStore = defineStore('products', {
   state: () => ({
@@ -93,7 +94,7 @@ export const useProductsStore = defineStore('products', {
       this.setError(null)
       
       try {
-        const { searchProducts } = useProducts()
+        const { searchProducts } = useProductsApi()
         const params = {
           query: this.filters.search || '',
           filters: {

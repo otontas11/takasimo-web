@@ -41,14 +41,14 @@ const products = computed(() => productsStore.getFeaturedProducts)
 await useAsyncData('init-home', () => {
   return Promise.all([
     categoriesStore.fetchCategories(),
-    productsStore.fetchFeaturedProducts()
+    //productsStore.fetchFeaturedProducts()
   ])
 })
 
 
 onMounted(async () => {
   if (!categories.value.length) await categoriesStore.fetchCategories()
-  if (!products.value.length) await productsStore.fetchFeaturedProducts()
+  //if (!products.value.length) await productsStore.fetchFeaturedProducts()
 })
 
 

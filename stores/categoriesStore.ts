@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import {useCategoriesApi} from "~/composables/api/useCategoriesApi";
 
 export const useCategoriesStore = defineStore('categories', {
   state: () => ({
@@ -41,8 +42,9 @@ export const useCategoriesStore = defineStore('categories', {
       this.setError(null)
       
       try {
-        const { getMainCategories } = useCategories()
+        const { getMainCategories } = useCategoriesApi()
         const response = await getMainCategories()
+        console.log("getMainCategories",response)
         
         if (response) {
           const categories = Array.isArray(response) ? response : (response as any).data || []
