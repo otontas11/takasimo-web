@@ -163,7 +163,6 @@ export const useProductsStore = defineStore('products', () => {
 
     // Getters
     getAllProducts,
-    getFeaturedProducts,
     getSelectedProduct,
     isLoading,
     getError,
@@ -178,7 +177,6 @@ export const useProductsStore = defineStore('products', () => {
     fetchFeaturedProducts,
     searchProducts,
     setProducts,
-    setFeaturedProducts,
     setSelectedProduct,
     setFilters,
     setSorting,
