@@ -5,7 +5,7 @@
     <!-- Loading State -->
     <v-row v-if="isLoading" justify="center">
       <v-col class="text-center" cols="12">
-        <v-progress-circular color="primary" indeterminate size="64"/>
+        <v-progress-circular color="primary" indeterminate size="64" />
         <p class="mt-4">Kategoriler yükleniyor...</p>
       </v-col>
     </v-row>
@@ -13,30 +13,30 @@
     <!-- Categories Grid -->
     <v-row v-else-if="displayCategories.length > 0" class="categories-grid">
       <v-col
-          v-for="category in displayCategories"
-          :key="category.category_code"
-          class="d-flex"
-          cols="6"
-          lg="2"
-          md="3"
-          sm="4"
+        v-for="category in displayCategories"
+        :key="category.category_code"
+        class="d-flex"
+        cols="6"
+        lg="2"
+        md="3"
+        sm="4"
       >
         <v-card
-            class="category-card w-100 d-flex flex-column align-center justify-center pa-4"
-            hover
-            @click="navigateToCategory(category)"
+          class="category-card w-100 d-flex flex-column align-center justify-center pa-4"
+          hover
+          @click="navigateToCategory(category)"
         >
           <div class="category-image-container">
             <img
-                :alt="category.name"
-                :src="
+              :alt="category.name"
+              :src="
                 getImageUrl({
                   path: category.image || '/images/categories/default-category.svg',
                   provider: 'locale'
                 })
               "
-                class="category-image"
-                @error="onImageError"
+              class="category-image"
+              @error="onImageError"
             />
           </div>
           <h3 class="category-title">{{ truncateText(category.name, 15) }}</h3>
@@ -73,7 +73,7 @@
 </template>
 
 <script setup>
-import {getImageUrl} from '~/utils/getImageUrl'
+import { getImageUrl } from '~/utils/getImageUrl'
 
 // ✅ PROPS - Index.vue'den gelen veri
 const props = defineProps({
@@ -138,7 +138,7 @@ useHead({
     {
       name: 'description',
       content:
-          "Takasimo'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası."
+        "Takasimo'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası."
     }
   ]
 })
