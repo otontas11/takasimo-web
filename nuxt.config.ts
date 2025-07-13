@@ -42,5 +42,5 @@ export default defineNuxtConfig({
     }
   },
 
-  plugins: ['~/plugins/router.js']
+  plugins: ['~/router.js']
 })
