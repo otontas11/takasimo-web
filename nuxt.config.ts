@@ -42,5 +42,14 @@ export default defineNuxtConfig({
     }
   },
 
-  plugins: ['~/router.js']
+  plugins: ['~/router.js'],
+  
+  hooks: {
+    'pages:extend'(pages) {
+      pages.push({
+        path: '/login',
+        file: '~/pages/auth/login.vue'
+      })
+    }
+  }
 })
