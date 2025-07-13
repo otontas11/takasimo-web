@@ -17,7 +17,7 @@
 
       <section class="products-section">
         <v-container>
-          <FeaturedProducts :products="products" @loadMore="handleLoadMore" />
+          <FeaturedProducts :products="products" />
         </v-container>
       </section>
 
@@ -34,29 +34,24 @@ import PopularCategories from "~/components/populer-categories/PopularCategories
 const categoriesStore = useCategoriesStore()
 const productsStore = useProductsStore()
 
-const currentPage = computed(()=>productsStore.getCurrentPage)
+// ✅ SSR-SAFE - useAsyncData ile fetch yap ve store'a ata
+const { data: categoriesData } = await useAsyncData('categories', () => categoriesStore.fetchCategories(), {
+  server: true
+})
+
+const { data: productsData } = await useAsyncData('products', () => productsStore.fetchProducts(), {
+  server: true
+})
 
 // Store'lardan veri al
 const allCategories = computed(() => categoriesStore.getAllCategories)
 const products = computed(() => productsStore.getAllProducts)
 
-// ✅ SSR-SAFE - Sadece useAsyncData ile fetch yap
-await useAsyncData('init-home', () => {
-  return Promise.all([
-    categoriesStore.fetchCategories(),
-    productsStore.fetchProducts(currentPage.value)
-  ])
-})
-
-onMounted(async () => {
-  if (!allCategories.value.length) await categoriesStore.fetchCategories()
-  if (!products.value.length) await productsStore.fetchProducts(currentPage.value)
-})
-
-// ✅ LOAD MORE - 2. sayfa için ürün yükle
-const handleLoadMore = async () => {
-  await productsStore.fetchProducts(currentPage.value + 1)
-}
+// ❌ KALDIRILDI - onMounted fetch'leri hydration sorununa neden oluyor
+// onMounted(async () => {
+//   if (!allCategories.value.length) await categoriesStore.fetchCategories()
+//   if (!products.value.length) await productsStore.fetchProducts()
+// })
 </script>
 
 <style scoped>

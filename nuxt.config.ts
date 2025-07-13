@@ -5,7 +5,7 @@ export default defineNuxtConfig({
 
   modules: ['@nuxt/content', '@nuxt/eslint', '@nuxt/image', '@nuxt/scripts', '@pinia/nuxt'],
 
-  css: ['~/assets/css/main.css', 'vuetify/lib/styles/main.sass', '@mdi/font/css/materialdesignicons.min.css'],
+  css: ['vuetify/lib/styles/main.sass', '@mdi/font/css/materialdesignicons.min.css'],
 
   build: {
     transpile: ['vuetify']
@@ -40,5 +40,20 @@ export default defineNuxtConfig({
         target: 'es2020'
       }
     }
+  },
+
+  // Alias tanımları
+  alias: {
+    '@': '~/',
+    '~': '~/',
+    '~~': '~/',
+    '@@': '~/',
+    'assets': '~/assets',
+    'public': '~/public'
+  },
+
+  // Experimental features
+  experimental: {
+    payloadExtraction: false
   }
 })

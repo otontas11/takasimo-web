@@ -77,7 +77,7 @@ export const useProductsStore = defineStore('products', () => {
       const params = {
         query: filters.value.search || '',
         filters: {
-          page:page,
+          page,
           per_page: perPage.value,
           sort_by: sortBy.value,
           sort_order: sortOrder.value,
@@ -92,13 +92,7 @@ export const useProductsStore = defineStore('products', () => {
 
       if (response) {
         const productData = Array.isArray(response) ? response : (response as any).data || []
-        
-        // İlk sayfa ise verileri sıfırla, değilse mevcut listeye ekle
-        if (page === 1) {
-          setProducts(productData)
-        } else {
-          setProducts([...products.value, ...productData])
-        }
+        setProducts(productData)
 
         if ((response as any).meta) {
           setPagination((response as any).meta)
@@ -167,4 +161,4 @@ export const useProductsStore = defineStore('products', () => {
     clearFilters,
     clearError,
   }
-})
+}) 
