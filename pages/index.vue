@@ -2,7 +2,7 @@
 <template>
   <v-main class="home-page">
     <!-- Category Header (Sticky Navigation) -->
-    <CategoryHeader />
+    <CategoryHeader :categories="allCategories" />
 
     <div class="page-content">
       <section class="hero-section">
@@ -11,7 +11,7 @@
 
       <section class="categories-section">
         <v-container>
-          <PopularCategories  :categories="allCategories" :loading="categoriesStore.isLoading" />
+          <PopularCategories :categories="allCategories" :loading="categoriesStore.isLoading" />
         </v-container>
       </section>
 
