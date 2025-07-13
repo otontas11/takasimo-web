@@ -1,16 +1,18 @@
-<template lang="pug">
-  .popular-categories
-    h2.text-h5.mb-6.text-center.font-weight-bold Popüler Kategoriler
+<template>
+  <div class="popular-categories">
+    <h2 class="text-h5 mb-6 text-center font-weight-bold">Popüler Kategoriler</h2>
 
-    //- Loading State
-    v-row(v-if="isLoading" justify="center")
-      v-col(cols="12" class="text-center")
-        v-progress-circular(indeterminate size="64" color="primary")
-        p.mt-4 Kategoriler yükleniyor...
+    <!-- Loading State -->
+    <v-row v-if="isLoading" justify="center">
+      <v-col cols="12" class="text-center">
+        <v-progress-circular indeterminate size="64" color="primary" />
+        <p class="mt-4">Kategoriler yükleniyor...</p>
+      </v-col>
+    </v-row>
 
-    //- Categories Grid
-    v-row(v-else-if="displayCategories.length > 0" class="categories-grid")
-      v-col(
+    <!-- Categories Grid -->
+    <v-row v-else-if="displayCategories.length > 0" class="categories-grid">
+      <v-col
         v-for="category in displayCategories"
         :key="category.category_code"
         cols="6"
@@ -18,36 +20,51 @@
         md="3"
         lg="2"
         class="d-flex"
-      )
-        v-card.category-card.w-100.d-flex.flex-column.align-center.justify-center.pa-4(
+      >
+        <v-card
+          class="category-card w-100 d-flex flex-column align-center justify-center pa-4"
           @click="navigateToCategory(category)"
           hover
-        )
-          .category-image-container
-            img.category-image(
+        >
+          <div class="category-image-container">
+            <img
+              class="category-image"
               :src="getImageUrl({ path: category.image || '/images/categories/default-category.svg', provider: 'locale' })"
               :alt="category.name"
               @error="onImageError"
-            )
-          h3.category-title {{ truncateText(category.name, 15) }}
+            />
+          </div>
+          <h3 class="category-title">{{ truncateText(category.name, 15) }}</h3>
+        </v-card>
+      </v-col>
+    </v-row>
 
-    //- Error State
-    v-row(v-else-if="hasError" justify="center")
-      v-col(cols="12" class="text-center")
-        v-alert(type="error" variant="tonal" class="mx-auto" style="max-width: 400px;")
-          template(#title) Kategoriler Yüklenemedi
-          | Kategoriler yüklenirken bir hata oluştu.
-          template(#append)
-            v-btn(color="error" variant="text" @click="refresh") Tekrar Dene
+    <!-- Error State -->
+    <v-row v-else-if="hasError" justify="center">
+      <v-col cols="12" class="text-center">
+        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px;">
+          <template #title>Kategoriler Yüklenemedi</template>
+          Kategoriler yüklenirken bir hata oluştu.
+          <template #append>
+            <v-btn color="error" variant="text" @click="refresh">Tekrar Dene</v-btn>
+          </template>
+        </v-alert>
+      </v-col>
+    </v-row>
 
-    //- Empty State
-    v-row(v-else justify="center")
-      v-col(cols="12" class="text-center")
-        v-alert(type="info" variant="tonal" class="mx-auto" style="max-width: 400px;")
-          template(#title) Kategori Bulunamadı
-          | Şu anda görüntülenecek kategori bulunmuyor.
-          template(#append)
-            v-btn(color="info" variant="text" @click="refresh") Yenile
+    <!-- Empty State -->
+    <v-row v-else justify="center">
+      <v-col cols="12" class="text-center">
+        <v-alert type="info" variant="tonal" class="mx-auto" style="max-width: 400px;">
+          <template #title>Kategori Bulunamadı</template>
+          Şu anda görüntülenecek kategori bulunmuyor.
+          <template #append>
+            <v-btn color="info" variant="text" @click="refresh">Yenile</v-btn>
+          </template>
+        </v-alert>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script lang="ts" setup>

@@ -1,50 +1,63 @@
-<template lang="pug">
-.featured-products.py-8
-  h2.text-h5.mb-6.text-center.font-weight-bold Öne Çıkan Ürünler
+<template>
+  <div class="featured-products py-8">
+    <h2 class="text-h5 mb-6 text-center font-weight-bold">Öne Çıkan Ürünler</h2>
 
-  //- Loading State
-  v-row(v-if="isLoading && products.length === 0")
-    v-col(
-      v-for="n in 4"
-      :key="n"
-      cols="12"
-      sm="6"
-      md="3"
-      class="d-flex"
-    )
-      v-card.product-card(elevation="0" rounded="xl")
-        v-skeleton-loader(type="image, article")
+    <!-- Loading State -->
+    <v-row v-if="isLoading && products.length === 0">
+      <v-col
+        v-for="n in 4"
+        :key="n"
+        cols="12"
+        sm="6"
+        md="3"
+        class="d-flex"
+      >
+        <v-card class="product-card" elevation="0" rounded="xl">
+          <v-skeleton-loader type="image, article" />
+        </v-card>
+      </v-col>
+    </v-row>
 
-  //- Products
-  v-row(v-else-if="products.length > 0")
-    v-col(
-      v-for="product in products"
-      :key="product.id"
-      cols="12"
-      sm="6"
-      md="3"
-      class="d-flex"
-    )
-      ProductCard(
-        v-if="normalizeProduct(product)"
-        :product="normalizeProduct(product)"
-      )
+    <!-- Products -->
+    <v-row v-else-if="products.length > 0">
+      <v-col
+        v-for="product in products"
+        :key="product.id"
+        cols="12"
+        sm="6"
+        md="3"
+        class="d-flex"
+      >
+        <ProductCard
+          v-if="normalizeProduct(product)"
+          :product="normalizeProduct(product)"
+        />
+      </v-col>
+    </v-row>
 
-  //- Error State
-  v-row(v-else-if="hasError")
-    v-col(cols="12" class="text-center")
-      v-alert(type="error" variant="tonal" class="mx-auto" style="max-width: 400px;")
-        template(#title) Ürünler Yüklenemedi
-        | Ürünler yüklenirken bir hata oluştu.
-        template(#append)
-          v-btn(color="error" variant="text" @click="refresh") Tekrar Dene
+    <!-- Error State -->
+    <v-row v-else-if="hasError">
+      <v-col cols="12" class="text-center">
+        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px;">
+          <template #title>Ürünler Yüklenemedi</template>
+          Ürünler yüklenirken bir hata oluştu.
+          <template #append>
+            <v-btn color="error" variant="text" @click="refresh">Tekrar Dene</v-btn>
+          </template>
+        </v-alert>
+      </v-col>
+    </v-row>
 
-  //- Empty State
-  v-row(v-else)
-    v-col(cols="12" class="text-center")
-      v-alert(type="info" variant="tonal" class="mx-auto" style="max-width: 400px;")
-        template(#title) Ürün Bulunamadı
-        | Şu anda görüntülenecek ürün bulunmuyor.
+    <!-- Empty State -->
+    <v-row v-else>
+      <v-col cols="12" class="text-center">
+        <v-alert type="info" variant="tonal" class="mx-auto" style="max-width: 400px;">
+          <template #title>Ürün Bulunamadı</template>
+          Şu anda görüntülenecek ürün bulunmuyor.
+        </v-alert>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script setup lang="ts">

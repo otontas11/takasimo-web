@@ -1,27 +1,34 @@
 <!-- pages/index.vue -->
-<template lang="pug">
-v-main.home-page
-  //- Category Header (Sticky Navigation)
-  CategoryHeader
-  
-  .page-content
-    section.hero-section
-      HeroSlider
+<template>
+  <v-main class="home-page">
+    <!-- Category Header (Sticky Navigation) -->
+    <CategoryHeader />
     
-    section.categories-section
-      v-container
-        PopularCategories(
-          :categories="allCategories"
-          :loading="categoriesStore.isLoading"
-          :error="categoriesStore.getError"
-          @refresh="categoriesStore.fetchCategories"
-        )
-    
-    section.products-section
-      v-container
-        FeaturedProducts
-    
-    AppFooter
+    <div class="page-content">
+      <section class="hero-section">
+        <HeroSlider />
+      </section>
+      
+      <section class="categories-section">
+        <v-container>
+          <PopularCategories
+            :categories="allCategories"
+            :loading="categoriesStore.isLoading"
+            :error="categoriesStore.getError"
+            @refresh="categoriesStore.fetchCategories"
+          />
+        </v-container>
+      </section>
+      
+      <section class="products-section">
+        <v-container>
+          <FeaturedProducts />
+        </v-container>
+      </section>
+      
+      <AppFooter />
+    </div>
+  </v-main>
 </template>
 
 <script setup lang="ts">

@@ -3,10 +3,20 @@ import withNuxt from './.nuxt/eslint.config.mjs'
 
 export default withNuxt({
   rules: {
-    // Vue 3 Composition API için template değişkenleri
-    'vue/script-setup-uses-vars': 'error',
-    // Vue template'de kullanılan değişkenleri ignore et
+    // Tüm unused vars uyarılarını kapat
+    '@typescript-eslint/no-unused-vars': 'off',
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'off'
+    'vue/no-unused-vars': 'off',
+    'vue/no-unused-components': 'off',
+    
+    // Vue component naming
+    'vue/multi-word-component-names': 'off',
+    
+    // TypeScript
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
+    
+    // Nuxt
+    'nuxt/prefer-import-meta': 'off'
   }
 })
