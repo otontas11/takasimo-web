@@ -3,7 +3,7 @@
     <h2 class="text-h5 mb-6 text-center font-weight-bold">Öne Çıkan Ürünler</h2>
 
     <!-- Loading State -->
-    <v-row v-if="isLoading && props.products.length === 0">
+    <v-row v-if="shouldShowLoading">
       <v-col v-for="n in 4" :key="n" cols="12" sm="6" md="3" class="d-flex">
         <v-card class="product-card" elevation="0" rounded="xl">
           <v-skeleton-loader type="image, article" />
@@ -12,7 +12,7 @@
     </v-row>
 
     <!-- Products -->
-    <v-row v-else-if="props.products.length > 0">
+    <v-row v-else-if="hasProducts">
       <v-col v-for="product in props.products" :key="(product as any).id" cols="12" sm="6" md="3" class="d-flex">
         <ProductCard v-if="normalizeProduct(product)" :product="normalizeProduct(product)" />
       </v-col>
@@ -58,9 +58,20 @@ const props = defineProps({
 
 const isLoading = ref(false)
 const hasError = ref(false)
+const hasInitialData = ref(false)
 const currentPage = ref(1)
 const infiniteScrollTrigger = ref(null)
 let observer: IntersectionObserver | null = null
+
+// SSR-safe computed properties
+const hasProducts = computed(() => {
+  return Array.isArray(props.products) && props.products.length > 0
+})
+
+// SSR-safe loading state - only show loading if we have no data and are actually loading
+const shouldShowLoading = computed(() => {
+  return isLoading.value && !hasInitialData.value && !hasProducts.value
+})
 
 const refresh = async () => {
   // Parentten fetch fonksiyonu prop ile gelirse burada çağrılabilir
@@ -71,6 +82,9 @@ const loadMore = async () => {
 }
 
 onMounted(() => {
+  // Mark that we have initial data after mount
+  hasInitialData.value = true
+  
   observer = new window.IntersectionObserver((entries) => {
     if (entries[0].isIntersecting) {
       loadMore()

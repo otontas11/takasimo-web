@@ -1,7 +1,7 @@
 import {useProductsApi} from "~/composables/api/useProductsApi";
 
 export const useProductsStore = defineStore('products', () => {
-  const { getFeaturedProducts,getProductById , getProducts, searchProducts} = useProductsApi()
+  const { getProductById , getProducts, searchProducts: searchProductsApi} = useProductsApi()
 
   // ✅ STATE - Reactive references
   const products = ref<any[]>([])
@@ -65,6 +65,10 @@ export const useProductsStore = defineStore('products', () => {
     }
   }
 
+  const clearError = () => {
+    setError(null)
+  }
+
   const fetchProducts = async (page: number = 1) => {
     setLoading(true)
     setError(null)
@@ -84,7 +88,7 @@ export const useProductsStore = defineStore('products', () => {
         }
       }
 
-      const response = await getProducts(params.query, params.filters)
+      const response = await getProducts(params)
 
       if (response) {
         const productData = Array.isArray(response) ? response : (response as any).data || []
@@ -100,6 +104,28 @@ export const useProductsStore = defineStore('products', () => {
       console.error('Products fetch error:', err)
       setError('Ürünler yüklenirken hata oluştu')
       return { success: false, error: 'Ürünler yüklenirken hata oluştu' }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const searchProducts = async (query: string, filters: any = {}) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await searchProductsApi(query, filters)
+
+      if (response) {
+        const productData = Array.isArray(response) ? response : (response as any).data || []
+        setProducts(productData)
+      }
+
+      return { success: true }
+    } catch (err: any) {
+      console.error('Search products error:', err)
+      setError('Arama yapılırken hata oluştu')
+      return { success: false, error: 'Arama yapılırken hata oluştu' }
     } finally {
       setLoading(false)
     }

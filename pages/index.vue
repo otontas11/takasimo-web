@@ -38,6 +38,7 @@ const productsStore = useProductsStore()
 const allCategories = computed(() => categoriesStore.getAllCategories)
 const products = computed(() => productsStore.getAllProducts)
 
+// ✅ SSR-SAFE - Sadece useAsyncData ile fetch yap
 await useAsyncData('init-home', () => {
   return Promise.all([
     categoriesStore.fetchCategories(),
