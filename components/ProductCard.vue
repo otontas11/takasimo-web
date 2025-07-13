@@ -1,7 +1,7 @@
 <template>
   <v-card class="product-card" elevation="0" rounded="xl" hover @click="navigateToProduct">
     <div class="product-image-container">
-      <v-img :src="product.image" :alt="product.title" height="180" cover class="product-image">
+      <v-img :src="getImageUrl({path:product.image})" :alt="product.title" height="180" cover class="product-image">
         <template v-slot:placeholder>
           <div class="d-flex align-center justify-center fill-height">
             <v-progress-circular color="grey-lighten-4" indeterminate />
@@ -25,6 +25,8 @@
 </template>
 
 <script setup lang="ts">
+import { getImageUrl } from '~/utils/getImageUrl.js'
+
 interface Product {
   id: number
   title: string
