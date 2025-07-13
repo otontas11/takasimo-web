@@ -24,11 +24,7 @@
           <!-- Product Images -->
           <v-col cols="12" md="6">
             <v-card>
-              <v-img
-                :src="product.showcase_image || '/images/placeholder.jpg'"
-                height="400"
-                cover
-              />
+              <v-img :src="product.showcase_image || '/images/placeholder.jpg'" height="400" cover />
             </v-card>
           </v-col>
 
@@ -56,9 +52,7 @@
               </div>
             </div>
 
-            <v-btn color="primary" size="large" block rounded="xl" class="mb-4">
-              Takas Teklifi Ver
-            </v-btn>
+            <v-btn color="primary" size="large" block rounded="xl" class="mb-4"> Takas Teklifi Ver </v-btn>
           </v-col>
         </v-row>
 
@@ -67,14 +61,7 @@
           <v-col cols="12">
             <h2 class="text-h5 mb-4">Benzer Ürünler</h2>
             <v-row>
-              <v-col
-                v-for="relatedProduct in relatedProducts"
-                :key="relatedProduct.id"
-                cols="12"
-                sm="6"
-                md="4"
-                lg="3"
-              >
+              <v-col v-for="relatedProduct in relatedProducts" :key="relatedProduct.id" cols="12" sm="6" md="4" lg="3">
                 <ProductCard :product="relatedProduct" />
               </v-col>
             </v-row>

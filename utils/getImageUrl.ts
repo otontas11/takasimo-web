@@ -1,11 +1,5 @@
 // Assets altındaki resimleri yükle (logo, ikon vb.)
-export const getImageUrl = ({
-  path,
-  provider = 'cdn'
-}: {
-  path: string
-  provider?: string
-}): string => {
+export const getImageUrl = ({ path, provider = 'cdn' }: { path: string; provider?: string }): string => {
   try {
     // HTTP ile başlayan URL'leri doğrudan döndür
     if (path.includes('http')) {

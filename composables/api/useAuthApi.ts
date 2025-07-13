@@ -91,10 +91,7 @@ export const useAuthApi = () => {
     }
   }
 
-  const changePassword = async (passwordData: {
-    current_password: string
-    new_password: string
-  }) => {
+  const changePassword = async (passwordData: { current_password: string; new_password: string }) => {
     try {
       const token = localStorage.getItem('auth_token')
       if (!token) {

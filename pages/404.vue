@@ -7,16 +7,11 @@
             <h1 class="display-1 font-weight-bold mb-4" style="color: #8b2865">404</h1>
             <h2 class="text-h4 mb-4">Sayfa Bulunamadı</h2>
             <p class="text-body-1 mb-6">
-              Aradığınız sayfa bulunamadı. Sayfa taşınmış, silinmiş olabilir veya yanlış bir adres
-              girmiş olabilirsiniz.
+              Aradığınız sayfa bulunamadı. Sayfa taşınmış, silinmiş olabilir veya yanlış bir adres girmiş olabilirsiniz.
             </p>
             <div class="d-flex justify-center ga-4">
-              <v-btn color="#8B2865" variant="flat" size="large" to="/" rounded="xl">
-                Ana Sayfaya Dön
-              </v-btn>
-              <v-btn variant="outlined" size="large" @click="$router.go(-1)" rounded="xl">
-                Geri Dön
-              </v-btn>
+              <v-btn color="#8B2865" variant="flat" size="large" to="/" rounded="xl"> Ana Sayfaya Dön </v-btn>
+              <v-btn variant="outlined" size="large" @click="$router.go(-1)" rounded="xl"> Geri Dön </v-btn>
             </div>
           </div>
         </v-col>

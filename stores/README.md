@@ -135,9 +135,7 @@ appStore.toggleMobileMenu()
     </div>
 
     <!-- Sepet bilgisi -->
-    <div class="cart-info">
-      Sepet: {{ cartStore.getItemCount }} ürün Toplam: {{ cartStore.getTotalPrice }} TL
-    </div>
+    <div class="cart-info">Sepet: {{ cartStore.getItemCount }} ürün Toplam: {{ cartStore.getTotalPrice }} TL</div>
   </div>
 </template>
 

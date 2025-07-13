@@ -1,19 +1,6 @@
 <template>
-  <v-carousel
-    height="200"
-    hide-delimiter-background
-    show-arrows="hover"
-    cycle
-    interval="5000"
-    class="hero-slider"
-  >
-    <v-carousel-item
-      v-for="(slide, i) in slides"
-      :key="i"
-      :src="slide.background"
-      cover
-      class="hero-slide"
-    >
+  <v-carousel height="200" hide-delimiter-background show-arrows="hover" cycle interval="5000" class="hero-slider">
+    <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="slide.background" cover class="hero-slide">
       <div class="hero-content">
         <v-container class="fill-height" style="max-width: 1320px">
           <v-row align="center" justify="center" class="fill-height">
@@ -25,13 +12,7 @@
                 <p class="hero-subtitle mb-6">
                   {{ slide.subtitle }}
                 </p>
-                <v-btn
-                  :color="slide.buttonColor || 'primary'"
-                  size="large"
-                  rounded
-                  class="hero-button px-8 py-3"
-                  elevation="2"
-                >
+                <v-btn :color="slide.buttonColor || 'primary'" size="large" rounded class="hero-button px-8 py-3" elevation="2">
                   {{ slide.buttonText }}
                 </v-btn>
               </div>

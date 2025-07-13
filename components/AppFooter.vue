@@ -1,29 +1,15 @@
 <template>
-  <div
-    class="app-footer py-8"
-    style="min-height: 200px; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef"
-  >
+  <div class="app-footer py-8" style="min-height: 200px; width: 100%; background-color: #f8f9fa; border-top: 1px solid #e9ecef">
     <v-container style="max-width: 100%">
       <v-row style="width: 100%">
         <!-- Kurumsal Section -->
         <v-col cols="12" md="4" style="min-width: 0; flex: 0 0 auto" class="d-flex flex-column">
-          <h3
-            class="text-h6 font-weight-bold mb-4"
-            style="color: #333; margin-bottom: 16px; font-size: 1.125rem; line-height: 1.5"
-          >
+          <h3 class="text-h6 font-weight-bold mb-4" style="color: #333; margin-bottom: 16px; font-size: 1.125rem; line-height: 1.5">
             Kurumsal
           </h3>
           <div style="display: flex; flex-direction: column; gap: 8px">
-            <a
-              href="#"
-              class="footer-link"
-              style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6"
-              >Hakkımızda</a
-            >
-            <a
-              href="#"
-              class="footer-link"
-              style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6"
+            <a href="#" class="footer-link" style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6">Hakkımızda</a>
+            <a href="#" class="footer-link" style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6"
               >Takasimo Destek</a
             >
           </div>
@@ -31,35 +17,20 @@
 
         <!-- Gizlilik ve Kullanım Section -->
         <v-col cols="12" md="4" style="min-width: 0; flex: 0 0 auto" class="d-flex flex-column">
-          <h3
-            class="text-h6 font-weight-bold mb-4"
-            style="color: #333; margin-bottom: 16px; font-size: 1.125rem; line-height: 1.5"
-          >
+          <h3 class="text-h6 font-weight-bold mb-4" style="color: #333; margin-bottom: 16px; font-size: 1.125rem; line-height: 1.5">
             Gizlilik ve Kullanım
           </h3>
           <div style="display: flex; flex-direction: column; gap: 8px">
-            <a
-              href="#"
-              class="footer-link"
-              style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6"
+            <a href="#" class="footer-link" style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6"
               >Güvenliğinizi önemsiyoruz</a
             >
-            <a
-              href="#"
-              class="footer-link"
-              style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6"
+            <a href="#" class="footer-link" style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6"
               >Sözleşmeler ve kurallar</a
             >
-            <a
-              href="#"
-              class="footer-link"
-              style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6"
+            <a href="#" class="footer-link" style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6"
               >Kişisel verilerin korunması</a
             >
-            <a
-              href="#"
-              class="footer-link"
-              style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6"
+            <a href="#" class="footer-link" style="color: #666; text-decoration: none; font-size: 0.95rem; line-height: 1.6"
               >Nasıl çalışır</a
             >
           </div>
@@ -67,10 +38,7 @@
 
         <!-- Bizi Takip Et Section -->
         <v-col cols="12" md="4" style="min-width: 0; flex: 0 0 auto" class="d-flex flex-column">
-          <h3
-            class="text-h6 font-weight-bold mb-4"
-            style="color: #333; margin-bottom: 16px; font-size: 1.125rem; line-height: 1.5"
-          >
+          <h3 class="text-h6 font-weight-bold mb-4" style="color: #333; margin-bottom: 16px; font-size: 1.125rem; line-height: 1.5">
             Bizi Takip Et
           </h3>
           <div style="display: flex; gap: 12px; align-items: center">

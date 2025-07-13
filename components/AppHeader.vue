@@ -5,12 +5,7 @@
       <v-row align="center" no-gutters>
         <!-- Logo -->
         <v-col cols="auto" class="mr-8">
-          <h1
-            class="logo-text"
-            style="color: #8b2865; font-size: 2rem; font-weight: bold; margin: 0"
-          >
-            takasimo
-          </h1>
+          <h1 class="logo-text" style="color: #8b2865; font-size: 2rem; font-weight: bold; margin: 0">takasimo</h1>
         </v-col>
 
         <!-- Search Bar -->

@@ -5,10 +5,7 @@ export const useCategoriesApi = () => {
 
   const getMainCategories = async () => {
     try {
-      const filter = [
-        '{"k": "is_deleted", "o": "=", "v": false}',
-        '{"k": "parent_code", "o": "=", "v": null}'
-      ]
+      const filter = ['{"k": "is_deleted", "o": "=", "v": false}', '{"k": "parent_code", "o": "=", "v": null}']
 
       const response = await api.get('categories', {
         filter: filter,
@@ -49,10 +46,7 @@ export const useCategoriesApi = () => {
   const getSubCategories = async (parentId: string) => {
     try {
       const response = await api.get('categories', {
-        filter: [
-          '{"k": "is_deleted", "o": "=", "v": false}',
-          `{"k": "parent_code", "o": "=", "v": "${parentId}"}`
-        ]
+        filter: ['{"k": "is_deleted", "o": "=", "v": false}', `{"k": "parent_code", "o": "=", "v": "${parentId}"}`]
       })
 
       return response

@@ -4,11 +4,7 @@
       <v-row class="align-center py-4" no-gutters>
         <!-- Logo -->
         <v-col cols="2" class="d-flex align-center">
-          <span
-            class="logo font-weight-bold"
-            style="font-size: 2.2rem; color: #8d2065; font-family: sans-serif"
-            >takasimo</span
-          >
+          <span class="logo font-weight-bold" style="font-size: 2.2rem; color: #8d2065; font-family: sans-serif">takasimo</span>
         </v-col>
         <!-- Search -->
         <v-col cols="6">
@@ -52,11 +48,7 @@
             <span class="font-weight-bold">Anne/Bebek</span>
             <span>Spor/Outdoor</span>
             <span class="font-weight-bold">Kozmetik/Kişisel Bakım</span>
-            <span
-              class="see-all"
-              style="color: #8d2065; font-weight: 400; margin-left: auto; cursor: pointer"
-              >Tümünü gör&gt;</span
-            >
+            <span class="see-all" style="color: #8d2065; font-weight: 400; margin-left: auto; cursor: pointer">Tümünü gör&gt;</span>
           </div>
         </v-col>
       </v-row>

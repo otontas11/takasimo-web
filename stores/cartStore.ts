@@ -7,9 +7,7 @@ export const useCartStore = defineStore('cart', () => {
   // ✅ GETTERS - Computed properties
   const getItems = computed(() => items.value)
   const getItemCount = computed(() => items.value.length)
-  const getTotalPrice = computed(() =>
-    items.value.reduce((total, item) => total + item.price * item.quantity, 0)
-  )
+  const getTotalPrice = computed(() => items.value.reduce((total, item) => total + item.price * item.quantity, 0))
   const isLoading = computed(() => loading.value)
   const getError = computed(() => error.value)
   const isEmpty = computed(() => items.value.length === 0)

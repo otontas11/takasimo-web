@@ -7,17 +7,15 @@
 ```vue
 <script setup>
 // Basit ve temiz - mevcut composable yapısını kullan
-const { data: categories } = await useLazyAsyncData(
-  'categories',
-  () => useCategoriesApi().getMainCategories(),
-  { default: () => [], server: true }
-)
+const { data: categories } = await useLazyAsyncData('categories', () => useCategoriesApi().getMainCategories(), {
+  default: () => [],
+  server: true
+})
 
-const { data: products } = await useLazyAsyncData(
-  'products',
-  () => useProductsApi().getFeaturedProducts(),
-  { default: () => [], server: true }
-)
+const { data: products } = await useLazyAsyncData('products', () => useProductsApi().getFeaturedProducts(), {
+  default: () => [],
+  server: true
+})
 </script>
 ```
 
@@ -63,17 +61,15 @@ watch(categories, (newCategories) => {
 
 <script setup>
 // ✅ Minimal ve temiz
-const { data: categories } = await useLazyAsyncData(
-  'categories',
-  () => useCategoriesApi().getMainCategories(),
-  { default: () => [], server: true }
-)
+const { data: categories } = await useLazyAsyncData('categories', () => useCategoriesApi().getMainCategories(), {
+  default: () => [],
+  server: true
+})
 
-const { data: products } = await useLazyAsyncData(
-  'products',
-  () => useProductsApi().getFeaturedProducts(),
-  { default: () => [], server: true }
-)
+const { data: products } = await useLazyAsyncData('products', () => useProductsApi().getFeaturedProducts(), {
+  default: () => [],
+  server: true
+})
 
 // SEO
 useHead({
@@ -114,11 +110,10 @@ const {
   data: product,
   pending,
   error
-} = await useLazyAsyncData(
-  `product-${route.params.id}`,
-  () => useProductsApi().getProductById(route.params.id),
-  { default: () => null, server: true }
-)
+} = await useLazyAsyncData(`product-${route.params.id}`, () => useProductsApi().getProductById(route.params.id), {
+  default: () => null,
+  server: true
+})
 
 // Dinamik SEO
 watchEffect(() => {

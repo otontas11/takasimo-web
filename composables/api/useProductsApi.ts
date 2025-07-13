@@ -7,10 +7,7 @@ export const useProductsApi = () => {
     try {
       const response = await api.get('products', {
         limit,
-        filter: [
-          '{"k": "is_deleted", "o": "=", "v": false}',
-          '{"k": "status", "o": "=", "v": true}'
-        ],
+        filter: ['{"k": "is_deleted", "o": "=", "v": false}', '{"k": "status", "o": "=", "v": true}'],
         with: ['city', 'district', 'category', 'user'],
         orderBy: '{"k": "created_at", "v": "desc"}'
       })
@@ -25,10 +22,7 @@ export const useProductsApi = () => {
   const getProducts = async (params: any = {}) => {
     try {
       const defaultParams = {
-        filter: [
-          '{"k": "is_deleted", "o": "=", "v": false}',
-          '{"k": "status", "o": "=", "v": true}'
-        ],
+        filter: ['{"k": "is_deleted", "o": "=", "v": false}', '{"k": "status", "o": "=", "v": true}'],
         with: ['city', 'district', 'category', 'user'],
         orderBy: '{"k": "created_at", "v": "desc"}',
         ...params
@@ -59,10 +53,7 @@ export const useProductsApi = () => {
     try {
       const searchParams = {
         search: query,
-        filter: [
-          '{"k": "is_deleted", "o": "=", "v": false}',
-          '{"k": "status", "o": "=", "v": true}'
-        ],
+        filter: ['{"k": "is_deleted", "o": "=", "v": false}', '{"k": "status", "o": "=", "v": true}'],
         with: ['city', 'district', 'category', 'user'],
         ...filters
       }

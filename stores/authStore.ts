@@ -173,10 +173,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const changePassword = async (passwordData: {
-    current_password: string
-    new_password: string
-  }) => {
+  const changePassword = async (passwordData: { current_password: string; new_password: string }) => {
     setLoading(true)
     setError(null)
 

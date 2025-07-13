@@ -12,12 +12,8 @@ export const useCategoriesStore = defineStore('categories', () => {
   // ✅ GETTERS - Computed properties
   const getAllCategories = computed(() => categories.value)
   const mainCategories = computed(() => categories.value.filter((cat: any) => !cat.parent_id))
-  const getSubCategories = computed(
-    () => (parentId: any) => categories.value.filter((cat: any) => cat.parent_id === parentId)
-  )
-  const getCategoryById = computed(
-    () => (id: any) => categories.value.find((cat: any) => cat.id === id)
-  )
+  const getSubCategories = computed(() => (parentId: any) => categories.value.filter((cat: any) => cat.parent_id === parentId))
+  const getCategoryById = computed(() => (id: any) => categories.value.find((cat: any) => cat.id === id))
   const isLoading = computed(() => loading.value)
   const getError = computed(() => error.value)
 

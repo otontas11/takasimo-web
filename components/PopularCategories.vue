@@ -12,20 +12,8 @@
 
     <!-- Categories Grid -->
     <v-row v-else-if="displayCategories.length > 0" class="categories-grid">
-      <v-col
-        v-for="category in displayCategories"
-        :key="category.category_code"
-        class="d-flex"
-        cols="6"
-        lg="2"
-        md="3"
-        sm="4"
-      >
-        <v-card
-          class="category-card w-100 d-flex flex-column align-center justify-center pa-4"
-          hover
-          @click="navigateToCategory(category)"
-        >
+      <v-col v-for="category in displayCategories" :key="category.category_code" class="d-flex" cols="6" lg="2" md="3" sm="4">
+        <v-card class="category-card w-100 d-flex flex-column align-center justify-center pa-4" hover @click="navigateToCategory(category)">
           <div class="category-image-container">
             <img
               :alt="category.name"
@@ -137,8 +125,7 @@ useHead({
   meta: [
     {
       name: 'description',
-      content:
-        "Takasimo'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası."
+      content: "Takasimo'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası."
     }
   ]
 })
