@@ -47,7 +47,7 @@ await useAsyncData('init-home', () => {
 
 onMounted(async () => {
   if (!allCategories.value.length) await categoriesStore.fetchCategories()
-  if (!products.value.length) await productsStore.fetchFeaturedProducts()
+  if (!products.value.length) await productsStore.fetchProducts()
 })
 </script>
 
