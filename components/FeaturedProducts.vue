@@ -29,8 +29,23 @@
       </v-col>
     </v-row>
 
-    <!-- Infinite Scroll Trigger -->
-    <div ref="infiniteScrollTrigger" style="height: 1px;"></div>
+    <!-- Infinite Scroll Loading -->
+    <div ref="infiniteScrollTrigger" class="infinite-scroll-loading">
+      <v-row v-if="isLoading">
+        <v-col cols="12" class="text-center">
+          <v-progress-circular
+            indeterminate
+            color="primary"
+            size="40"
+            width="4"
+            class="mb-4"
+          />
+          <div class="text-body-2 text-medium-emphasis">
+            Daha fazla ürün yükleniyor...
+          </div>
+        </v-col>
+      </v-row>
+    </div>
   </div>
 </template>
 
@@ -46,8 +61,9 @@ const props = defineProps({
 
 const emit = defineEmits(['loadMore'])
 
-const isLoading = ref(false)
 const hasInitialData = ref(false)
+const productsStore = useProductsStore()
+const isLoading = computed(() => productsStore.isLoading)
 const currentPage = ref(1)
 const infiniteScrollTrigger = ref(null)
 let observer: IntersectionObserver | null = null
@@ -79,7 +95,7 @@ onMounted(() => {
     if (entries[0].isIntersecting) {
       loadMore()
     }
-  }, { root: null, threshold: 1 })
+  }, { root: null, threshold: 0.1, rootMargin: '100px' })
   if (infiniteScrollTrigger.value) {
     observer.observe(infiniteScrollTrigger.value)
   }
@@ -156,5 +172,13 @@ useHead({
     padding: 1rem;
     border-radius: 12px;
   }
+}
+
+.infinite-scroll-loading {
+  padding: 2rem 0;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
