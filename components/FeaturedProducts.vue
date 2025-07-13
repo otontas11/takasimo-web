@@ -4,14 +4,7 @@
 
     <!-- Loading State -->
     <v-row v-if="isLoading && products.length === 0">
-      <v-col
-        v-for="n in 4"
-        :key="n"
-        cols="12"
-        sm="6"
-        md="3"
-        class="d-flex"
-      >
+      <v-col v-for="n in 4" :key="n" cols="12" sm="6" md="3" class="d-flex">
         <v-card class="product-card" elevation="0" rounded="xl">
           <v-skeleton-loader type="image, article" />
         </v-card>
@@ -20,25 +13,15 @@
 
     <!-- Products -->
     <v-row v-else-if="products.length > 0">
-      <v-col
-        v-for="product in products"
-        :key="product.id"
-        cols="12"
-        sm="6"
-        md="3"
-        class="d-flex"
-      >
-        <ProductCard
-          v-if="normalizeProduct(product)"
-          :product="normalizeProduct(product)"
-        />
+      <v-col v-for="product in products" :key="product.id" cols="12" sm="6" md="3" class="d-flex">
+        <ProductCard v-if="normalizeProduct(product)" :product="normalizeProduct(product)" />
       </v-col>
     </v-row>
 
     <!-- Error State -->
     <v-row v-else-if="hasError">
       <v-col cols="12" class="text-center">
-        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px;">
+        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px">
           <template #title>Ürünler Yüklenemedi</template>
           Ürünler yüklenirken bir hata oluştu.
           <template #append>
@@ -51,7 +34,7 @@
     <!-- Empty State -->
     <v-row v-else>
       <v-col cols="12" class="text-center">
-        <v-alert type="info" variant="tonal" class="mx-auto" style="max-width: 400px;">
+        <v-alert type="info" variant="tonal" class="mx-auto" style="max-width: 400px">
           <template #title>Ürün Bulunamadı</template>
           Şu anda görüntülenecek ürün bulunmuyor.
         </v-alert>

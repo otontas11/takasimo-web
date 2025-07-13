@@ -29,7 +29,12 @@
           <div class="category-image-container">
             <img
               class="category-image"
-              :src="getImageUrl({ path: category.image || '/images/categories/default-category.svg', provider: 'locale' })"
+              :src="
+                getImageUrl({
+                  path: category.image || '/images/categories/default-category.svg',
+                  provider: 'locale'
+                })
+              "
               :alt="category.name"
               @error="onImageError"
             />
@@ -42,7 +47,7 @@
     <!-- Error State -->
     <v-row v-else-if="hasError" justify="center">
       <v-col cols="12" class="text-center">
-        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px;">
+        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px">
           <template #title>Kategoriler Yüklenemedi</template>
           Kategoriler yüklenirken bir hata oluştu.
           <template #append>
@@ -55,7 +60,7 @@
     <!-- Empty State -->
     <v-row v-else justify="center">
       <v-col cols="12" class="text-center">
-        <v-alert type="info" variant="tonal" class="mx-auto" style="max-width: 400px;">
+        <v-alert type="info" variant="tonal" class="mx-auto" style="max-width: 400px">
           <template #title>Kategori Bulunamadı</template>
           Şu anda görüntülenecek kategori bulunmuyor.
           <template #append>
@@ -71,15 +76,18 @@
 import { getImageUrl } from '~/utils/getImageUrl'
 
 // ✅ PROPS - Index.vue'den gelen veri
-const props = withDefaults(defineProps<{
-  categories?: any[]
-  loading?: boolean
-  error?: string | null
-}>(), {
-  categories: () => [],
-  loading: false,
-  error: null
-})
+const props = withDefaults(
+  defineProps<{
+    categories?: any[]
+    loading?: boolean
+    error?: string | null
+  }>(),
+  {
+    categories: () => [],
+    loading: false,
+    error: null
+  }
+)
 
 // Computed properties for template
 const isLoading = computed(() => props.loading)
@@ -129,7 +137,8 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: "Takasimo'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası."
+      content:
+        "Takasimo'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası."
     }
   ]
 })

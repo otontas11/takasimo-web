@@ -8,14 +8,14 @@ export default withNuxt({
     'no-unused-vars': 'off',
     'vue/no-unused-vars': 'off',
     'vue/no-unused-components': 'off',
-    
+
     // Vue component naming
     'vue/multi-word-component-names': 'off',
-    
+
     // TypeScript
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
-    
+
     // Nuxt
     'nuxt/prefer-import-meta': 'off'
   }

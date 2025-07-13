@@ -3,12 +3,12 @@
   <v-main class="home-page">
     <!-- Category Header (Sticky Navigation) -->
     <CategoryHeader />
-    
+
     <div class="page-content">
       <section class="hero-section">
         <HeroSlider />
       </section>
-      
+
       <section class="categories-section">
         <v-container>
           <PopularCategories
@@ -19,13 +19,13 @@
           />
         </v-container>
       </section>
-      
+
       <section class="products-section">
         <v-container>
           <FeaturedProducts />
         </v-container>
       </section>
-      
+
       <AppFooter />
     </div>
   </v-main>
