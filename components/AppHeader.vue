@@ -1,15 +1,21 @@
 <template>
-  <!-- Main Header -->
   <v-app-bar app color="white" elevation="1" height="80" class="px-4">
     <v-container class="pa-0" style="max-width: 1320px">
       <v-row align="center" no-gutters>
-        <!-- Logo -->
-        <v-col cols="auto" class="mr-8">
-          <h1 class="logo-text" style="color: #8b2865; font-size: 2rem; font-weight: bold; margin: 0">takasimo</h1>
+        <!-- Hamburger (Mobile) -->
+        <v-col cols="auto" class="d-flex align-center">
+          <v-btn icon v-if="isMobile" @click="drawer = true" aria-label="Menüyü Aç">
+            <v-icon>mdi-menu</v-icon>
+          </v-btn>
         </v-col>
 
-        <!-- Search Bar -->
-        <v-col>
+        <!-- Logo (Ortada mobilde, solda masaüstünde) -->
+        <v-col cols="auto" class="logo-col ml-auto">
+          <h1 class="logo-text">takasimo</h1>
+        </v-col>
+
+        <!-- Arama (Sadece masaüstü) -->
+        <v-col v-if="!isMobile" class="search-col">
           <v-text-field
             variant="outlined"
             placeholder="marka, ürün adı, kategori arayın"
@@ -22,9 +28,8 @@
           />
         </v-col>
 
-        <!-- Actions -->
-        <v-col cols="auto" class="d-flex align-center ga-4">
-          <!-- İlan Ver Button -->
+        <!-- Sağ Alan (Sadece masaüstü) -->
+        <v-col v-if="!isMobile" cols="auto" class="d-flex align-center ga-4 right-col">
           <v-btn
             color="#8B2865"
             variant="flat"
@@ -35,9 +40,7 @@
           >
             İlan Ver
           </v-btn>
-
-          <!-- User Profile -->
-          <div class="d-flex align-center ga-2">
+          <div class="d-flex align-center ga-2 user-profile">
             <v-avatar size="40" color="#8B2865">
               <v-icon color="white">mdi-account</v-icon>
             </v-avatar>
@@ -50,23 +53,96 @@
       </v-row>
     </v-container>
   </v-app-bar>
+
+  <!-- Drawer (Mobile) -->
+  <v-navigation-drawer
+    v-model="drawer"
+    temporary
+    left
+    class="mobile-drawer"
+    style="z-index: 2000"
+  >
+    <div class="pa-4">
+      <!-- User Profile -->
+      <div class="d-flex align-center ga-2 mb-6">
+        <v-avatar size="40" color="#8B2865">
+          <v-icon color="white">mdi-account</v-icon>
+        </v-avatar>
+        <div class="d-flex align-center">
+          <span class="text-body-1 font-weight-medium mr-1">Zeynep Tektaş</span>
+          <v-icon size="20" color="#8B2865">mdi-chevron-down</v-icon>
+        </div>
+      </div>
+      <!-- Menü Linkleri (örnek) -->
+      <v-list nav dense>
+        <v-list-item link>
+          <v-list-item-icon><v-icon>mdi-home</v-icon></v-list-item-icon>
+          <v-list-item-title>Ana Sayfa</v-list-item-title>
+        </v-list-item>
+        <v-list-item link>
+          <v-list-item-icon><v-icon>mdi-format-list-bulleted</v-icon></v-list-item-icon>
+          <v-list-item-title>İlanlarım</v-list-item-title>
+        </v-list-item>
+        <v-list-item link>
+          <v-list-item-icon><v-icon>mdi-logout</v-icon></v-list-item-icon>
+          <v-list-item-title>Çıkış Yap</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </div>
+  </v-navigation-drawer>
 </template>
 
-<script setup lang="ts">
-// Header component logic
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+const drawer = ref(false)
+const isMobile = ref(false)
+const checkMobile = () => { isMobile.value = window.innerWidth < 960 }
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
 </script>
 
 <style scoped>
 .logo-text {
   font-family: Roboto, sans-serif;
   letter-spacing: -0.5px;
+  color: #8b2865;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+  text-align: left;
 }
-
+.logo-col {
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 960px) {
+  .logo-col {
+    justify-content: flex-end !important;
+    text-align: right !important;
+    margin-right: 0 !important;
+    margin-left: auto !important;
+  }
+  .search-col, .right-col {
+    display: none !important;
+  }
+}
 .search-field :deep(.v-field) {
   background-color: #f5f5f5;
 }
-
 .search-field :deep(.v-field__input) {
   padding: 12px 16px;
+}
+.mobile-drawer {
+  height: 100% !important;
+  max-height: 100vh !important;
+  top: 0 !important;
+}
+.user-profile {
+  cursor: pointer;
 }
 </style>
