@@ -55,13 +55,11 @@ const visibleCategories = computed(() => {
   if (!props.categories || props.categories.length === 0) {
     return []
   }
-  // Masaüstü: 8 kategori, mobil: alan kadar
   if (windowWidth.value > 600) {
     return props.categories.slice(0, 8)
   }
-  // Mobilde mevcut algoritma
-  const maxCategories = calculateMaxCategories()
-  return props.categories.slice(0, maxCategories)
+  // Mobilde sadece 4 kategori
+  return props.categories.slice(0, 4)
 })
 
 // Methods
@@ -185,26 +183,36 @@ watch(containerWidth, () => {
 }
 @media (max-width: 600px) {
   .category-container {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
     gap: 0.5rem;
+    width: 100%;
   }
   .category-list {
-    gap: 0.6rem;
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
     overflow-x: auto;
+    overflow-y: hidden;
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 0.6rem;
     padding-bottom: 4px;
     -webkit-overflow-scrolling: touch;
-    width: 100%;
-    max-width: 100%;
-    flex-wrap: nowrap;
+    white-space: nowrap;
   }
   .category-item {
     font-size: 0.8rem;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .see-all-link {
     min-width: auto;
-    align-self: flex-end;
-    margin-left: 0;
+    flex-shrink: 0;
+    margin-left: 1rem;
+    margin-top: 0;
+    font-size: 0.9rem;
+    align-self: auto;
   }
 }
 </style>
