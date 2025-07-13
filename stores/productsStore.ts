@@ -77,7 +77,7 @@ export const useProductsStore = defineStore('products', () => {
       const params = {
         query: filters.value.search || '',
         filters: {
-          page,
+          page:page,
           per_page: perPage.value,
           sort_by: sortBy.value,
           sort_order: sortOrder.value,

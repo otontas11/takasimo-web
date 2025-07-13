@@ -17,7 +17,7 @@
 
       <section class="products-section">
         <v-container>
-          <FeaturedProducts :products="products" />
+          <FeaturedProducts :products="products" @loadMore="handleLoadMore" />
         </v-container>
       </section>
 
@@ -34,6 +34,8 @@ import PopularCategories from "~/components/populer-categories/PopularCategories
 const categoriesStore = useCategoriesStore()
 const productsStore = useProductsStore()
 
+const currentPage = computed(()=>productsStore.getCurrentPage)
+
 // Store'lardan veri al
 const allCategories = computed(() => categoriesStore.getAllCategories)
 const products = computed(() => productsStore.getAllProducts)
@@ -42,14 +44,19 @@ const products = computed(() => productsStore.getAllProducts)
 await useAsyncData('init-home', () => {
   return Promise.all([
     categoriesStore.fetchCategories(),
-    productsStore.fetchProducts()
+    productsStore.fetchProducts(currentPage.value)
   ])
 })
 
 onMounted(async () => {
   if (!allCategories.value.length) await categoriesStore.fetchCategories()
-  if (!products.value.length) await productsStore.fetchProducts()
+  if (!products.value.length) await productsStore.fetchProducts(currentPage.value)
 })
+
+// ✅ LOAD MORE - 2. sayfa için ürün yükle
+const handleLoadMore = async () => {
+  await productsStore.fetchProducts(currentPage.value + 1)
+}
 </script>
 
 <style scoped>

@@ -44,6 +44,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['loadMore'])
+
 const isLoading = ref(false)
 const hasInitialData = ref(false)
 const currentPage = ref(1)
@@ -65,7 +67,8 @@ const refresh = async () => {
 }
 
 const loadMore = async () => {
-  // Parentten fetch fonksiyonu prop ile gelirse burada çağrılabilir
+  console.log("loadMore")
+  emit('loadMore')
 }
 
 onMounted(() => {
