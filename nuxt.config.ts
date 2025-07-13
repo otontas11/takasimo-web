@@ -40,5 +40,7 @@ export default defineNuxtConfig({
         target: 'es2020'
       }
     }
-  }
+  },
+
+  plugins: ['~/plugins/router.js']
 })
