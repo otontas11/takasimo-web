@@ -52,24 +52,11 @@ export const useProductsStore = defineStore('products', () => {
     products.value = data
   }
 
-  const setSelectedProduct = (product: any) => {
-    selectedProduct.value = product
-  }
-
   const setPagination = (data: any) => {
     currentPage.value = data.current_page || 1
     totalPages.value = data.last_page || 1
     totalItems.value = data.total || 0
     perPage.value = data.per_page || 12
-  }
-
-  const setFilters = (newFilters: any) => {
-    filters.value = { ...filters.value, ...newFilters }
-  }
-
-  const setSorting = (sortByValue: string, sortOrderValue: string = 'desc') => {
-    sortBy.value = sortByValue
-    sortOrder.value = sortOrderValue
   }
 
   const clearFilters = () => {
@@ -122,29 +109,6 @@ export const useProductsStore = defineStore('products', () => {
     }
   }
 
-  const fetchFeaturedProducts = async () => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      const response = await getFeaturedProducts()
-
-      if (response) {
-        console.log("fetchFeaturedProducts",response)
-        const productData = Array.isArray(response) ? response : (response as any).data || []
-        setProducts(productData)
-      }
-
-      return { success: true }
-    } catch (err: any) {
-      console.error('Featured products fetch error:', err)
-      setError('Öne çıkan ürünler yüklenirken hata oluştu')
-      return { success: false, error: 'Öne çıkan ürünler yüklenirken hata oluştu' }
-    } finally {
-      setLoading(false)
-    }
-  }
-
 
   // ✅ RETURN - Expose state, getters, and actions
   return {
@@ -174,12 +138,8 @@ export const useProductsStore = defineStore('products', () => {
 
     // Actions
     fetchProducts,
-    fetchFeaturedProducts,
     searchProducts,
     setProducts,
-    setSelectedProduct,
-    setFilters,
-    setSorting,
     clearFilters,
     clearError,
   }
