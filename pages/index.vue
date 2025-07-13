@@ -17,7 +17,7 @@
 
       <section class="products-section">
         <v-container>
-          <FeaturedProducts />
+          <FeaturedProducts :products="allCategories" />
         </v-container>
       </section>
 
@@ -32,11 +32,11 @@ import PopularCategories from "~/components/populer-categories/PopularCategories
 
 // ✅ STORE YAKLAŞIMI - Store'lara istek at
 const categoriesStore = useCategoriesStore()
-//const productsStore = useProductsStore()
+const productsStore = useProductsStore()
 
 // Store'lardan veri al
 const allCategories = computed(() => categoriesStore.getAllCategories)
-//const products = computed(() => productsStore.getFeaturedProducts)
+const products = computed(() => productsStore.getAllProducts)
 
 await useAsyncData('init-home', () => {
   return Promise.all([
@@ -47,7 +47,7 @@ await useAsyncData('init-home', () => {
 
 onMounted(async () => {
   if (!allCategories.value.length) await categoriesStore.fetchCategories()
-  //if (!products.value.length) await productsStore.fetchFeaturedProducts()
+  if (!products.value.length) await productsStore.fetchFeaturedProducts()
 })
 </script>
 

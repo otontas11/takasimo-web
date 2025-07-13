@@ -1,7 +1,10 @@
+import {useProductsApi} from "~/composables/api/useProductsApi";
+
 export const useProductsStore = defineStore('products', () => {
+  const { getFeaturedProducts } = useProductsApi()
+
   // ✅ STATE - Reactive references
   const products = ref<any[]>([])
-  const featuredProducts = ref<any[]>([])
   const selectedProduct = ref<any>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -27,7 +30,6 @@ export const useProductsStore = defineStore('products', () => {
 
   // ✅ GETTERS - Computed properties
   const getAllProducts = computed(() => products.value)
-  const getFeaturedProducts = computed(() => featuredProducts.value)
   const getSelectedProduct = computed(() => selectedProduct.value)
   const isLoading = computed(() => loading.value)
   const getError = computed(() => error.value)
@@ -130,12 +132,11 @@ export const useProductsStore = defineStore('products', () => {
     setError(null)
 
     try {
-      const { getFeaturedProducts } = useProducts()
       const response = await getFeaturedProducts()
 
       if (response) {
         const productData = Array.isArray(response) ? response : (response as any).data || []
-        setFeaturedProducts(productData)
+        setProducts(productData)
       }
 
       return { success: true }
