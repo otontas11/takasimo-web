@@ -2,11 +2,13 @@
   <div class="popular-categories">
     <h2 class="text-h5 mb-6 text-center font-weight-bold">Popüler Kategoriler</h2>
 
-    <!-- Loading State -->
-    <v-row v-if="isLoading" justify="center">
-      <v-col class="text-center" cols="12">
-        <v-progress-circular color="primary" indeterminate size="64" />
-        <p class="mt-4">Kategoriler yükleniyor...</p>
+    <!-- Skeleton Loading State -->
+    <v-row v-if="isLoading" class="categories-grid">
+      <v-col v-for="i in 5" :key="i" class="d-flex" cols="6" lg="2" md="3" sm="4">
+        <v-card class="category-card category-card-skeleton w-100 d-flex flex-column align-center justify-center pa-4">
+          <v-skeleton-loader type="image" width="120" height="90" class="mb-4" />
+          <v-skeleton-loader type="text" width="100" />
+        </v-card>
       </v-col>
     </v-row>
 
@@ -31,32 +33,6 @@
         </v-card>
       </v-col>
     </v-row>
-
-    <!-- Error State -->
-    <v-row v-else-if="hasError" justify="center">
-      <v-col class="text-center" cols="12">
-        <v-alert class="mx-auto" style="max-width: 400px" type="error" variant="tonal">
-          <template #title>Kategoriler Yüklenemedi</template>
-          Kategoriler yüklenirken bir hata oluştu.
-          <template #append>
-            <v-btn color="error" variant="text" @click="refresh">Tekrar Dene</v-btn>
-          </template>
-        </v-alert>
-      </v-col>
-    </v-row>
-
-    <!-- Empty State -->
-    <v-row v-else justify="center">
-      <v-col class="text-center" cols="12">
-        <v-alert class="mx-auto" style="max-width: 400px" type="info" variant="tonal">
-          <template #title>Kategori Bulunamadı</template>
-          Şu anda görüntülenecek kategori bulunmuyor.
-          <template #append>
-            <v-btn color="info" variant="text" @click="refresh">Yenile</v-btn>
-          </template>
-        </v-alert>
-      </v-col>
-    </v-row>
   </div>
 </template>
 
@@ -72,16 +48,11 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: false
-  },
-  error: {
-    type: [String, null],
-    default: null
   }
 })
 
 // Computed properties for template
 const isLoading = computed(() => props.loading)
-const hasError = computed(() => !!props.error)
 
 // Computed properties
 const displayCategories = computed(() => {
@@ -109,14 +80,6 @@ const truncateText = (text, maxLength = 15) => {
 
 const onImageError = (event) => {
   event.target.src = '/images/categories/default-category.svg'
-}
-
-// Emit events to parent
-const emit = defineEmits(['refresh'])
-
-const refresh = async () => {
-  // Parent component'e refresh event'i gönder
-  emit('refresh')
 }
 
 // SEO
@@ -190,10 +153,23 @@ useHead({
   color: #8b2865;
 }
 
+.category-card-skeleton {
+  height: 160px !important;
+}
+
 /* Mobile responsive adjustments */
 @media (width <= 959px) {
   .category-card {
     min-height: 140px;
+  }
+
+  .category-card-skeleton {
+    min-height: 140px !important;
+  }
+
+  .category-card-skeleton .v-skeleton-loader:first-child {
+    width: 100px !important;
+    height: 75px !important;
   }
 
   .category-image-container {
@@ -210,6 +186,15 @@ useHead({
 @media (width <= 599px) {
   .category-card {
     min-height: 120px;
+  }
+
+  .category-card-skeleton {
+    min-height: 120px !important;
+  }
+
+  .category-card-skeleton .v-skeleton-loader:first-child {
+    width: 80px !important;
+    height: 60px !important;
   }
 
   .category-image-container {
@@ -229,6 +214,16 @@ useHead({
   .category-card {
     min-height: 100px;
     padding: 0.75rem !important;
+  }
+
+  .category-card-skeleton {
+    min-height: 100px !important;
+    padding: 0.75rem !important;
+  }
+
+  .category-card-skeleton .v-skeleton-loader:first-child {
+    width: 70px !important;
+    height: 50px !important;
   }
 
   .category-image-container {
