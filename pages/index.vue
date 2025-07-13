@@ -41,7 +41,7 @@ const products = computed(() => productsStore.getAllProducts)
 await useAsyncData('init-home', () => {
   return Promise.all([
     categoriesStore.fetchCategories(),
-    productsStore.fetchFeaturedProducts()
+    productsStore.fetchProducts()
   ])
 })
 

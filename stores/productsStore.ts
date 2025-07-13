@@ -34,10 +34,6 @@ export const useProductsStore = defineStore('products', () => {
   const isLoading = computed(() => loading.value)
   const getError = computed(() => error.value)
   const getCurrentPage = computed(() => currentPage.value)
-  const getTotalPages = computed(() => totalPages.value)
-  const getFilters = computed(() => filters.value)
-  const hasNextPage = computed(() => currentPage.value < totalPages.value)
-  const hasPrevPage = computed(() => currentPage.value > 1)
 
   // ✅ ACTIONS - Functions
   const setLoading = (value: boolean) => {
@@ -88,7 +84,7 @@ export const useProductsStore = defineStore('products', () => {
         }
       }
 
-      const response = await searchProducts(params.query, params.filters)
+      const response = await getProducts(params.query, params.filters)
 
       if (response) {
         const productData = Array.isArray(response) ? response : (response as any).data || []
@@ -131,10 +127,6 @@ export const useProductsStore = defineStore('products', () => {
     isLoading,
     getError,
     getCurrentPage,
-    getTotalPages,
-    getFilters,
-    hasNextPage,
-    hasPrevPage,
 
     // Actions
     fetchProducts,
