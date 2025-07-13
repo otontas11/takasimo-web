@@ -3,7 +3,7 @@
     <h2 class="text-h5 mb-6 text-center font-weight-bold">Öne Çıkan Ürünler</h2>
 
     <!-- Loading State -->
-    <v-row v-if="isLoading && products.length === 0">
+    <v-row v-if="isLoading && props.products.length === 0">
       <v-col v-for="n in 4" :key="n" cols="12" sm="6" md="3" class="d-flex">
         <v-card class="product-card" elevation="0" rounded="xl">
           <v-skeleton-loader type="image, article" />
@@ -12,8 +12,8 @@
     </v-row>
 
     <!-- Products -->
-    <v-row v-else-if="products.length > 0">
-      <v-col v-for="product in products" :key="product.id" cols="12" sm="6" md="3" class="d-flex">
+    <v-row v-else-if="props.products.length > 0">
+      <v-col v-for="product in props.products" :key="(product as any).id" cols="12" sm="6" md="3" class="d-flex">
         <ProductCard v-if="normalizeProduct(product)" :product="normalizeProduct(product)" />
       </v-col>
     </v-row>
@@ -40,29 +40,56 @@
         </v-alert>
       </v-col>
     </v-row>
+
+    <!-- Infinite Scroll Trigger -->
+    <div ref="infiniteScrollTrigger" style="height: 1px;"></div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { getImageUrl } from '~/utils/getImageUrl'
 
-// ✅ SETUP STORE VERİSİNİ KULLAN - Index.vue'den provide edilen veri
-const productsStore = useProductsStore()
+const props = defineProps({
+  products: {
+    type: Array,
+    default: () => []
+  }
+})
 
-// Store'dan veri al
-const products = computed(() => productsStore.getFeaturedProducts)
-const isLoading = computed(() => productsStore.isLoading)
-const hasError = computed(() => productsStore.getError)
+const isLoading = ref(false)
+const hasError = ref(false)
+const currentPage = ref(1)
+const infiniteScrollTrigger = ref(null)
+let observer: IntersectionObserver | null = null
 
-// Refresh function
 const refresh = async () => {
-  await productsStore.fetchFeaturedProducts()
+  // Parentten fetch fonksiyonu prop ile gelirse burada çağrılabilir
 }
 
-// Ürün normalize fonksiyonu
+const loadMore = async () => {
+  // Parentten fetch fonksiyonu prop ile gelirse burada çağrılabilir
+}
+
+onMounted(() => {
+  observer = new window.IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      loadMore()
+    }
+  }, { root: null, threshold: 1 })
+  if (infiniteScrollTrigger.value) {
+    observer.observe(infiniteScrollTrigger.value)
+  }
+})
+
+onUnmounted(() => {
+  if (observer && infiniteScrollTrigger.value) {
+    observer.unobserve(infiniteScrollTrigger.value)
+  }
+})
+
 const normalizeProduct = (product: any) => {
   if (!product) return null
-
   return {
     id: product.id,
     title: product.name || product.title,
@@ -81,7 +108,6 @@ const normalizeProduct = (product: any) => {
   } as any
 }
 
-// SEO
 useHead({
   title: 'Öne Çıkan Ürünler - Takasimo',
   meta: [

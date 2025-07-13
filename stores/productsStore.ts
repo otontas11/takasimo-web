@@ -1,7 +1,7 @@
 import {useProductsApi} from "~/composables/api/useProductsApi";
 
 export const useProductsStore = defineStore('products', () => {
-  const { getFeaturedProducts } = useProductsApi()
+  const { getFeaturedProducts,getProductById , getProducts, searchProducts} = useProductsApi()
 
   // ✅ STATE - Reactive references
   const products = ref<any[]>([])
@@ -52,10 +52,6 @@ export const useProductsStore = defineStore('products', () => {
     products.value = data
   }
 
-  const setFeaturedProducts = (data: any[]) => {
-    featuredProducts.value = data
-  }
-
   const setSelectedProduct = (product: any) => {
     selectedProduct.value = product
   }
@@ -91,7 +87,6 @@ export const useProductsStore = defineStore('products', () => {
     setError(null)
 
     try {
-      const { searchProducts } = useProducts()
       const params = {
         query: filters.value.search || '',
         filters: {
@@ -135,6 +130,7 @@ export const useProductsStore = defineStore('products', () => {
       const response = await getFeaturedProducts()
 
       if (response) {
+        console.log("fetchFeaturedProducts",response)
         const productData = Array.isArray(response) ? response : (response as any).data || []
         setProducts(productData)
       }
@@ -149,76 +145,11 @@ export const useProductsStore = defineStore('products', () => {
     }
   }
 
-  const fetchProductById = async (id: number) => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      const { getProductById } = useProducts()
-      const response = await getProductById(id.toString())
-
-      if (response) {
-        setSelectedProduct(response)
-      }
-
-      return { success: true }
-    } catch (err: any) {
-      console.error('Product fetch error:', err)
-      setError('Ürün yüklenirken hata oluştu')
-      return { success: false, error: 'Ürün yüklenirken hata oluştu' }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const searchProducts = async (query: string, page: number = 1) => {
-    setFilters({ search: query })
-    return await fetchProducts(page)
-  }
-
-  const filterProducts = async (newFilters: any, page: number = 1) => {
-    setFilters(newFilters)
-    return await fetchProducts(page)
-  }
-
-  const sortProducts = async (sortByValue: string, sortOrderValue: string = 'desc', page: number = 1) => {
-    setSorting(sortByValue, sortOrderValue)
-    return await fetchProducts(page)
-  }
-
-  const nextPage = () => {
-    if (hasNextPage.value) {
-      return fetchProducts(currentPage.value + 1)
-    }
-  }
-
-  const prevPage = () => {
-    if (hasPrevPage.value) {
-      return fetchProducts(currentPage.value - 1)
-    }
-  }
-
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages.value) {
-      return fetchProducts(page)
-    }
-  }
-
-  const clearError = () => {
-    setError(null)
-  }
-
-  const clearProducts = () => {
-    setProducts([])
-    setFeaturedProducts([])
-    setSelectedProduct(null)
-  }
 
   // ✅ RETURN - Expose state, getters, and actions
   return {
     // State
     products: readonly(products),
-    featuredProducts: readonly(featuredProducts),
     selectedProduct: readonly(selectedProduct),
     loading: readonly(loading),
     error: readonly(error),
@@ -245,13 +176,7 @@ export const useProductsStore = defineStore('products', () => {
     // Actions
     fetchProducts,
     fetchFeaturedProducts,
-    fetchProductById,
     searchProducts,
-    filterProducts,
-    sortProducts,
-    nextPage,
-    prevPage,
-    goToPage,
     setProducts,
     setFeaturedProducts,
     setSelectedProduct,
@@ -259,6 +184,5 @@ export const useProductsStore = defineStore('products', () => {
     setSorting,
     clearFilters,
     clearError,
-    clearProducts
   }
 })

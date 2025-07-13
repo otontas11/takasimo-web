@@ -17,7 +17,7 @@
 
       <section class="products-section">
         <v-container>
-          <FeaturedProducts :products="allCategories" />
+          <FeaturedProducts :products="products" />
         </v-container>
       </section>
 
@@ -40,8 +40,8 @@ const products = computed(() => productsStore.getAllProducts)
 
 await useAsyncData('init-home', () => {
   return Promise.all([
-    categoriesStore.fetchCategories()
-    //productsStore.fetchFeaturedProducts()
+    categoriesStore.fetchCategories(),
+    productsStore.fetchFeaturedProducts()
   ])
 })
 
