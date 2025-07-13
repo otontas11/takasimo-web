@@ -4,8 +4,8 @@
 
     <!-- Loading State -->
     <v-row v-if="isLoading" justify="center">
-      <v-col cols="12" class="text-center">
-        <v-progress-circular indeterminate size="64" color="primary" />
+      <v-col class="text-center" cols="12">
+        <v-progress-circular color="primary" indeterminate size="64"/>
         <p class="mt-4">Kategoriler yükleniyor...</p>
       </v-col>
     </v-row>
@@ -13,30 +13,30 @@
     <!-- Categories Grid -->
     <v-row v-else-if="displayCategories.length > 0" class="categories-grid">
       <v-col
-        v-for="category in displayCategories"
-        :key="category.category_code"
-        cols="6"
-        sm="4"
-        md="3"
-        lg="2"
-        class="d-flex"
+          v-for="category in displayCategories"
+          :key="category.category_code"
+          class="d-flex"
+          cols="6"
+          lg="2"
+          md="3"
+          sm="4"
       >
         <v-card
-          class="category-card w-100 d-flex flex-column align-center justify-center pa-4"
-          @click="navigateToCategory(category)"
-          hover
+            class="category-card w-100 d-flex flex-column align-center justify-center pa-4"
+            hover
+            @click="navigateToCategory(category)"
         >
           <div class="category-image-container">
             <img
-              class="category-image"
-              :src="
+                :alt="category.name"
+                :src="
                 getImageUrl({
                   path: category.image || '/images/categories/default-category.svg',
                   provider: 'locale'
                 })
               "
-              :alt="category.name"
-              @error="onImageError"
+                class="category-image"
+                @error="onImageError"
             />
           </div>
           <h3 class="category-title">{{ truncateText(category.name, 15) }}</h3>
@@ -46,8 +46,8 @@
 
     <!-- Error State -->
     <v-row v-else-if="hasError" justify="center">
-      <v-col cols="12" class="text-center">
-        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px">
+      <v-col class="text-center" cols="12">
+        <v-alert class="mx-auto" style="max-width: 400px" type="error" variant="tonal">
           <template #title>Kategoriler Yüklenemedi</template>
           Kategoriler yüklenirken bir hata oluştu.
           <template #append>
@@ -59,8 +59,8 @@
 
     <!-- Empty State -->
     <v-row v-else justify="center">
-      <v-col cols="12" class="text-center">
-        <v-alert type="info" variant="tonal" class="mx-auto" style="max-width: 400px">
+      <v-col class="text-center" cols="12">
+        <v-alert class="mx-auto" style="max-width: 400px" type="info" variant="tonal">
           <template #title>Kategori Bulunamadı</template>
           Şu anda görüntülenecek kategori bulunmuyor.
           <template #append>
@@ -72,22 +72,24 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { getImageUrl } from '~/utils/getImageUrl'
+<script setup>
+import {getImageUrl} from '~/utils/getImageUrl'
 
 // ✅ PROPS - Index.vue'den gelen veri
-const props = withDefaults(
-  defineProps<{
-    categories?: any[]
-    loading?: boolean
-    error?: string | null
-  }>(),
-  {
-    categories: () => [],
-    loading: false,
-    error: null
+const props = defineProps({
+  categories: {
+    type: Array,
+    default: () => []
+  },
+  loading: {
+    type: Boolean,
+    default: false
+  },
+  error: {
+    type: [String, null],
+    default: null
   }
-)
+})
 
 // Computed properties for template
 const isLoading = computed(() => props.loading)
@@ -98,7 +100,7 @@ const displayCategories = computed(() => {
   if (!props.categories || props.categories.length === 0) return []
 
   // Kısa isimleri tercih et
-  const shortCategories = props.categories.filter((cat: any) => cat.name && cat.name.length <= 15)
+  const shortCategories = props.categories.filter((cat) => cat.name && cat.name.length <= 15)
 
   // Yeterli kısa kategori varsa onları kullan, yoksa tümünden al
   const selectedCategories = shortCategories.length >= 5 ? shortCategories : props.categories
@@ -107,24 +109,22 @@ const displayCategories = computed(() => {
 })
 
 // Methods
-const navigateToCategory = (category: any) => {
+const navigateToCategory = (category) => {
   const slug = category.category_code || category.id?.toString()
   navigateTo(`/kategori/${slug}`)
 }
 
-const truncateText = (text: string, maxLength: number = 15) => {
+const truncateText = (text, maxLength = 15) => {
   if (!text) return ''
   return text.length <= maxLength ? text : text.substring(0, maxLength) + '...'
 }
 
-const onImageError = (event: any) => {
+const onImageError = (event) => {
   event.target.src = '/images/categories/default-category.svg'
 }
 
 // Emit events to parent
-const emit = defineEmits<{
-  refresh: []
-}>()
+const emit = defineEmits(['refresh'])
 
 const refresh = async () => {
   // Parent component'e refresh event'i gönder
@@ -138,7 +138,7 @@ useHead({
     {
       name: 'description',
       content:
-        "Takasimo'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası."
+          "Takasimo'da en popüler kategorileri keşfedin. Elektronik, moda, ev yaşam ve daha fazlası."
     }
   ]
 })
