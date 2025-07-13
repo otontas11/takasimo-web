@@ -1,219 +1,138 @@
 <template>
-  <div class="category-header" :class="{ scrollable: isScrollable }">
-    <v-container class="pa-0" style="max-width: 1320px">
-      <v-row align="center" no-gutters class="px-4 py-3">
-        <v-col>
-          <div class="d-flex align-center justify-space-between category-container">
-            <!-- Categories -->
-            <div ref="categoryListRef" class="category-list">
-              <span
-                v-for="(category, index) in visibleCategories"
-                :key="category.id || category.category_code || index"
-                class="category-item"
-                :class="{ 'font-weight-bold': index % 2 === 0 }"
-                @click="navigateToCategory(category)"
-              >
-                {{ category.name }}
-              </span>
-            </div>
-
-            <!-- See All Link -->
-            <a href="#" class="see-all-link">
-              Tümünü gör
-              <v-icon size="16" class="ml-1">mdi-chevron-right</v-icon>
-            </a>
+  <v-dialog :model-value="modelValue" @update:model-value="val => $emit('update:modelValue', val)" max-width="400" persistent>
+    <v-card class="login-modal-card">
+      <v-card-text>
+        <div class="text-center mb-2">
+          <span class="login-logo">takasimo</span>
+          <div class="login-title">Giriş Yap</div>
+        </div>
+        <v-form>
+          <v-text-field
+            label="E-Mail"
+            prepend-inner-icon="mdi-email"
+            variant="underlined"
+            class="mb-2"
+            color="#8B2865"
+          />
+          <v-text-field
+            label="Şifre"
+            type="password"
+            prepend-inner-icon="mdi-lock"
+            append-inner-icon="mdi-eye-off"
+            variant="underlined"
+            class="mb-1"
+            color="#8B2865"
+          />
+          <div class="d-flex justify-space-between align-center mb-2">
+            <v-checkbox
+              label="Beni hatırla"
+              hide-details
+              density="compact"
+              class="remember-checkbox"
+              color="#8B2865"
+            />
+            <a href="#" class="forgot-link">Şifremi unuttum</a>
           </div>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+          <v-btn block color="#8B2865" class="login-btn mb-2" size="large" rounded="xl">
+            Giriş yap
+          </v-btn>
+        </v-form>
+        <div class="text-center mb-2">
+          <span>Hesabın yok mu? <a href="#" class="register-link">Hesap oluştur</a></span>
+        </div>
+        <div class="divider-row">
+          <div class="divider"></div>
+          <span class="divider-text">veya</span>
+          <div class="divider"></div>
+        </div>
+        <v-btn block variant="outlined" class="google-btn mb-2" color="#8B2865">
+          <v-avatar size="24" class="mr-2" color="#eee">
+            <v-icon color="#8B2865">mdi-account</v-icon>
+          </v-avatar>
+          <span>Continue as oktay</span>
+          <v-icon class="ml-2" color="#8B2865">mdi-google</v-icon>
+        </v-btn>
+        <div class="login-terms mt-2">
+          Bir hesap oluşturarak veya giriş yaparak,
+          <a href="#" class="terms-link">Kullanım Koşullarını</a> ve
+          <a href="#" class="terms-link">Gizlilik Politikasını</a> kabul etmiş olursunuz.
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
-
-// Props
-const props = defineProps({
-  categories: {
-    type: Array,
-    default: () => []
-  }
-})
-
-const isScrollable = ref(false)
-const scrollThreshold = 300 // 300px scroll sonrası scrollable olur
-const categoryListRef = ref(null)
-const containerWidth = ref(0)
-const windowWidth = ref(1024) // Default desktop width
-
-const updateWindowWidth = () => {
-  windowWidth.value = window.innerWidth
-}
-
-// Computed properties
-const visibleCategories = computed(() => {
-  if (!props.categories || props.categories.length === 0) {
-    return []
-  }
-  if (windowWidth.value > 600) {
-    return props.categories.slice(0, 8)
-  }
-  // Mobilde sadece 4 kategori
-  return props.categories.slice(0, 4)
-})
-
-// Methods
-const handleScroll = () => {
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-  isScrollable.value = scrollTop > scrollThreshold
-}
-
-const calculateMaxCategories = () => {
-  if (!containerWidth.value) return props.categories?.length || 0
-
-  // Base calculations for different screen sizes
-  const baseCategoryWidth = 120 // Estimated width per category including gap
-  const reservedSpace = 140 // Reserved space for "Tümünü gör" link + gap
-  const containerPadding = 32 // Container padding
-  
-  const availableWidth = containerWidth.value - reservedSpace - containerPadding
-  const maxCategories = Math.floor(availableWidth / baseCategoryWidth)
-  
-  // Ensure minimum and maximum bounds
-  return Math.max(3, Math.min(maxCategories, props.categories?.length || 0))
-}
-
-const updateContainerWidth = () => {
-  if (categoryListRef.value) {
-    const container = categoryListRef.value.closest('.v-container')
-    if (container) {
-      // Get the actual container width
-      containerWidth.value = container.offsetWidth
-    } else {
-      // Fallback to window width if container not found
-      containerWidth.value = window.innerWidth
-    }
-  }
-}
-
-const navigateToCategory = (category) => {
-  const slug = category.category_code || category.code || category.id?.toString()
-  if (slug) {
-    navigateTo(`/kategori/${slug}`)
-  }
-}
-
-// Lifecycle
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-  window.addEventListener('resize', updateContainerWidth)
-  window.addEventListener('resize', updateWindowWidth)
-  updateWindowWidth()
-  // Initial width calculation
-  nextTick(() => {
-    updateContainerWidth()
-  })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-  window.removeEventListener('resize', updateContainerWidth)
-  window.removeEventListener('resize', updateWindowWidth)
-})
-
-// Watch for container width changes
-watch(containerWidth, () => {
-  // Trigger reactive update when width changes
-}, { immediate: true })
+const props = defineProps<{ modelValue: boolean }>()
+defineEmits(['close', 'update:modelValue'])
 </script>
 
 <style scoped>
-.category-header {
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
-  position: sticky;
-  top: 80px;
-  z-index: 999;
-  width: 100%;
-  transition: all 0.3s ease;
+.login-modal-card {
+  border-radius: 2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  background: #fff;
+  padding: 2.5rem 2rem 2rem 2rem;
 }
-.category-container {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.login-logo {
+  font-family: inherit;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #8B2865;
+  letter-spacing: -1px;
+  display: block;
+  margin-bottom: 0.2rem;
 }
-.category-list {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  flex: 1 1 auto;
-  min-width: 0;
-  max-width: 100%;
-  flex-wrap: nowrap;
-  overflow: hidden;
+.login-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
 }
-.category-item {
-  color: #333;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: color 0.2s;
-  white-space: nowrap;
-  flex-shrink: 0;
+.login-btn {
+  font-weight: 600;
+  font-size: 1.1rem;
+  background: #8B2865 !important;
+  color: #fff !important;
+  box-shadow: none;
 }
-.category-item:hover {
-  color: #8b2865;
-}
-.see-all-link {
-  color: #8b2865;
-  text-decoration: none;
-  font-size: 0.95rem;
+.google-btn {
+  border-radius: 1.5rem;
   font-weight: 500;
+  text-transform: none;
+  background: #fff;
+  border: 1px solid #8B2865;
+}
+.divider-row {
   display: flex;
   align-items: center;
-  white-space: nowrap;
-  transition: color 0.2s;
-  flex-shrink: 0;
-  min-width: 120px;
-  margin-left: 1.5rem;
+  margin: 1rem 0 1rem 0;
 }
-.see-all-link:hover {
-  color: #6d1e4f;
+.divider {
+  flex: 1;
+  height: 1px;
+  background: #e0c6d8;
+}
+.divider-text {
+  margin: 0 1rem;
+  color: #8B2865;
+  font-size: 0.95rem;
+}
+.forgot-link, .register-link, .terms-link {
+  color: #8B2865;
   text-decoration: none;
+  font-weight: 500;
+  font-size: 0.97rem;
 }
-@media (max-width: 600px) {
-  .category-container {
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    width: 100%;
-  }
-  .category-list {
-    display: flex !important;
-    flex-direction: row;
-    align-items: center;
-    overflow-x: auto;
-    overflow-y: hidden;
-    flex: 1 1 0;
-    min-width: 0;
-    gap: 0.6rem;
-    padding-bottom: 4px;
-    -webkit-overflow-scrolling: touch;
-    white-space: nowrap;
-  }
-  .category-item {
-    font-size: 0.8rem;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .see-all-link {
-    min-width: auto;
-    flex-shrink: 0;
-    margin-left: 1rem;
-    margin-top: 0;
-    font-size: 0.9rem;
-    align-self: auto;
-  }
+.forgot-link:hover, .register-link:hover, .terms-link:hover {
+  text-decoration: underline;
+}
+.login-terms {
+  color: #8B2865;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 1.2rem;
+}
+.remember-checkbox {
+  margin-left: -8px;
 }
 </style>
- 

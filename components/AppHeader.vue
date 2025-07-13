@@ -40,13 +40,12 @@
           >
             İlan Ver
           </v-btn>
-          <div class="d-flex align-center ga-2 user-profile">
+          <div class="d-flex align-center ga-2 user-profile" @click="showLoginModal = true">
             <v-avatar size="40" color="#8B2865">
               <v-icon color="white">mdi-account</v-icon>
             </v-avatar>
             <div class="d-flex align-center">
-              <span class="text-body-1 font-weight-medium mr-1">Zeynep Tektaş</span>
-              <v-icon size="20" color="#8B2865">mdi-chevron-down</v-icon>
+              <span class="text-body-1 font-weight-medium mr-1">Giriş tapın</span>
             </div>
           </div>
         </v-col>
@@ -90,12 +89,15 @@
       </v-list>
     </div>
   </v-navigation-drawer>
+  <LoginModal :modelValue="showLoginModal" @close="showLoginModal = false" />
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import LoginModal from '~/components/LoginModal.vue'
 const drawer = ref(false)
 const isMobile = ref(false)
+const showLoginModal = ref(false)
 const checkMobile = () => { isMobile.value = window.innerWidth < 960 }
 onMounted(() => {
   checkMobile()

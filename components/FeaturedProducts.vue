@@ -18,38 +18,34 @@
       </v-col>
     </v-row>
 
-    <!-- Error State -->
-    <v-row v-else-if="hasError">
-      <v-col cols="12" class="text-center">
-        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px">
-          <template #title>Ürünler Yüklenemedi</template>
-          Ürünler yüklenirken bir hata oluştu.
-          <template #append>
-            <v-btn color="error" variant="text" @click="refresh">Tekrar Dene</v-btn>
-          </template>
-        </v-alert>
-      </v-col>
-    </v-row>
 
-    <!-- Empty State -->
-    <v-row v-else-if="shouldShowEmpty">
-      <v-col cols="12" class="text-center">
-        <v-alert type="info" variant="tonal" class="mx-auto" style="max-width: 400px">
-          <template #title>Ürün Bulunamadı</template>
-          Şu anda görüntülenecek ürün bulunmuyor.
-        </v-alert>
-      </v-col>
-    </v-row>
 
-    <!-- Fallback State (for SSR) -->
+    <!-- Empty State - Skeleton Loading -->
     <v-row v-else>
-      <v-col cols="12" class="text-center">
-        <v-progress-circular indeterminate color="primary" />
+      <v-col v-for="n in 4" :key="n" cols="12" sm="6" md="3" class="d-flex">
+        <v-card class="product-card" elevation="0" rounded="xl">
+          <v-skeleton-loader type="image, article" />
+        </v-card>
       </v-col>
     </v-row>
 
-    <!-- Infinite Scroll Trigger -->
-    <div ref="infiniteScrollTrigger" style="height: 1px;"></div>
+    <!-- Infinite Scroll Loading -->
+    <div ref="infiniteScrollTrigger" class="infinite-scroll-loading">
+      <v-row v-if="isLoading">
+        <v-col cols="12" class="text-center">
+          <v-progress-circular
+            indeterminate
+            color="primary"
+            size="40"
+            width="4"
+            class="mb-4"
+          />
+          <div class="text-body-2 text-medium-emphasis">
+            Daha fazla ürün yükleniyor...
+          </div>
+        </v-col>
+      </v-row>
+    </div>
   </div>
 </template>
 
@@ -63,9 +59,11 @@ const props = defineProps({
   }
 })
 
-const isLoading = ref(false)
-const hasError = ref(false)
+const emit = defineEmits(['loadMore'])
+
 const hasInitialData = ref(false)
+const productsStore = useProductsStore()
+const isLoading = computed(() => productsStore.isLoading)
 const currentPage = ref(1)
 const infiniteScrollTrigger = ref(null)
 let observer: IntersectionObserver | null = null
@@ -80,17 +78,13 @@ const shouldShowLoading = computed(() => {
   return isLoading.value && !hasInitialData.value && !hasProducts.value
 })
 
-// SSR-safe empty state - only show empty if we have initial data and no products
-const shouldShowEmpty = computed(() => {
-  return hasInitialData.value && !hasProducts.value && !isLoading.value && !hasError.value
-})
-
 const refresh = async () => {
   // Parentten fetch fonksiyonu prop ile gelirse burada çağrılabilir
 }
 
 const loadMore = async () => {
-  // Parentten fetch fonksiyonu prop ile gelirse burada çağrılabilir
+  console.log("loadMore")
+  emit('loadMore')
 }
 
 onMounted(() => {
@@ -101,7 +95,7 @@ onMounted(() => {
     if (entries[0].isIntersecting) {
       loadMore()
     }
-  }, { root: null, threshold: 1 })
+  }, { root: null, threshold: 0.1, rootMargin: '100px' })
   if (infiniteScrollTrigger.value) {
     observer.observe(infiniteScrollTrigger.value)
   }
@@ -178,5 +172,13 @@ useHead({
     padding: 1rem;
     border-radius: 12px;
   }
+}
+
+.infinite-scroll-loading {
+  padding: 2rem 0;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
