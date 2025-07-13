@@ -18,26 +18,14 @@
       </v-col>
     </v-row>
 
-    <!-- Error State -->
-    <v-row v-else-if="hasError">
-      <v-col cols="12" class="text-center">
-        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px">
-          <template #title>Ürünler Yüklenemedi</template>
-          Ürünler yüklenirken bir hata oluştu.
-          <template #append>
-            <v-btn color="error" variant="text" @click="refresh">Tekrar Dene</v-btn>
-          </template>
-        </v-alert>
-      </v-col>
-    </v-row>
 
-    <!-- Empty State -->
+
+    <!-- Empty State - Skeleton Loading -->
     <v-row v-else>
-      <v-col cols="12" class="text-center">
-        <v-alert type="info" variant="tonal" class="mx-auto" style="max-width: 400px">
-          <template #title>Ürün Bulunamadı</template>
-          Şu anda görüntülenecek ürün bulunmuyor.
-        </v-alert>
+      <v-col v-for="n in 4" :key="n" cols="12" sm="6" md="3" class="d-flex">
+        <v-card class="product-card" elevation="0" rounded="xl">
+          <v-skeleton-loader type="image, article" />
+        </v-card>
       </v-col>
     </v-row>
 
@@ -57,7 +45,6 @@ const props = defineProps({
 })
 
 const isLoading = ref(false)
-const hasError = ref(false)
 const hasInitialData = ref(false)
 const currentPage = ref(1)
 const infiniteScrollTrigger = ref(null)
