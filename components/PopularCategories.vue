@@ -20,7 +20,7 @@
               :src="
                 getImageUrl({
                   path: category.image || '/images/categories/default-category.svg',
-                  provider: 'locale'
+                  provider: 'cdn'
                 })
               "
               class="category-image"
