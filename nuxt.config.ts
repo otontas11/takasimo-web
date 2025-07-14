@@ -42,8 +42,6 @@ export default defineNuxtConfig({
     }
   },
 
-  plugins: ['~/router.js'],
-  
   hooks: {
     'pages:extend'(pages) {
       pages.push({
