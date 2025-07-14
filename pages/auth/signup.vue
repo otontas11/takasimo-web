@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 // Sadece görsel amaçlı, işlevsellik eklenmedi
+import {navigateTo} from "nuxt/app";
 </script>
 
 <template>
@@ -64,7 +65,7 @@
           <v-btn block class="signup-btn mb-2" color="#8B2865" rounded="xl" size="large"> Hesap Aç </v-btn>
         </v-form>
         <div class="text-center mb-2" @click="navigateTo('login')">
-          <span>Hesabın var mı? <a class="login-link" href="#">Giriş Yap ff</a></span>
+          <span>Hesabın var mı? <a class="login-link" href="#"  @click.prevent="navigateTo('/login')">Giriş Yap ff</a></span>
         </div>
         <div class="divider-row">
           <div class="divider"></div>
@@ -100,7 +101,7 @@
 }
 
 .signup-modal-card {
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
   border-radius: 2rem;
   box-shadow: 0 4px 16px rgb(0 0 0 / 8%);

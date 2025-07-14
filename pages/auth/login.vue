@@ -34,8 +34,8 @@
           </div>
           <v-btn block color="#8B2865" class="login-btn mb-2" size="large" rounded="xl"> Giriş yap </v-btn>
         </v-form>
-        <div class="text-center mb-2" @click="navigateTo('signup')">
-          <span>Hesabın yok mu? <a href="#" class="register-link">Hesap oluştur</a></span>
+        <div class="text-center mb-2">
+          <span>Hesabın yok mu? <a href="#" class="register-link" @click.prevent="navigateTo('/signup')">Hesap oluştur</a></span>
         </div>
         <div class="divider-row">
           <div class="divider"></div>
@@ -61,6 +61,7 @@
 
 <script setup lang="ts">
 const router = useRouter()
+import { navigateTo } from 'nuxt/app'
 
 const handleClose = () => {
   if (window.history.length > 1) {
@@ -81,7 +82,7 @@ const handleClose = () => {
 }
 
 .login-modal-card {
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
   border-radius: 1rem;
   box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
