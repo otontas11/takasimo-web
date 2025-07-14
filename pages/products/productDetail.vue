@@ -13,7 +13,7 @@
         <!-- Sol Kısım: Ürün Görseli ve Bilgiler -->
         <v-col cols="12" md="6" class="left-section">
           <v-img
-            :src="product.images?.[0]?.image_url || product.showcase_image || '/images/placeholder.jpg'"
+            :src="product.images?.[0]?.image || product.showcase_image || '/images/placeholder.jpg'"
             aspect-ratio="16/10"
             class="rounded-lg"
           >
@@ -24,17 +24,17 @@
             </template>
             <div class="like-info">
               <v-icon color="deep-purple-accent-400">mdi-heart</v-icon>
-              <span>{{ product.like_count || 0 }}</span>
+              <span>{{ product.favorite_count || 0 }}</span>
             </div>
           </v-img>
           <div class="meta-info d-flex align-center mt-2">
             <v-icon size="18" class="mr-1" color="grey">mdi-clock-outline</v-icon>
-            <span class="mr-4 text-grey">{{ product.updated_at ? $dayjs(product.updated_at).fromNow() : '' }}</span>
+            <span class="mr-4 text-grey">{{ timeAgo(product.updated_at) }}</span>
             <v-icon size="18" class="mr-1" color="grey">mdi-calendar-outline</v-icon>
-            <span class="text-grey">{{ product.created_at ? $dayjs(product.created_at).format('DD.MM.YYYY') : '' }}</span>
+            <span class="text-grey">{{ formatDate(product.created_at) }}</span>
           </div>
           <div class="mt-4">
-            <h3 class="product-title">{{ product.title }}</h3>
+            <h3 class="product-title">{{ product.name }}</h3>
             <div class="product-location">{{ product.city?.name || '' }} / {{ product.district?.name || '' }}</div>
           </div>
           <div class="mt-6 d-flex justify-space-between">
@@ -48,19 +48,21 @@
             <v-avatar size="48" color="deep-purple-accent-400">
               <v-icon size="32">mdi-account</v-icon>
             </v-avatar>
-            <span class="ml-3 user-name">{{ product.owner?.name || product.user?.name || 'Kullanıcı' }}</span>
+            <span class="ml-3 user-name">{{ product.owner?.name || 'Kullanıcı' }}</span>
           </div>
-          <div class="price mb-4">{{ product.price ? product.price.toLocaleString('tr-TR') + ' TL' : '' }}</div>
+          <div class="price mb-4">
+            {{ product.price ? product.price.toLocaleString('tr-TR') + ' ' + (product.currency || 'TL') : '' }}
+          </div>
           <v-divider class="mb-2"></v-divider>
-          <div class="detail-row"><span class="label">İlan no</span><span class="value">{{ product.id }}</span></div>
+          <div class="detail-row"><span class="label">İlan no</span><span class="value">{{ product.ad_no }}</span></div>
           <v-divider></v-divider>
           <div class="detail-row"><span class="label">Konum</span><span class="value">{{ product.city?.name || '' }} / {{ product.district?.name || '' }}</span></div>
           <v-divider></v-divider>
           <div class="detail-row"><span class="label">İletişim</span><span class="value">{{ product.owner?.phone || '-' }}</span></div>
           <v-divider></v-divider>
-          <div class="detail-row"><span class="label">Marka</span><span class="value">{{ product.brand || '-' }}</span></div>
+          <div class="detail-row"><span class="label">Kategori</span><span class="value">{{ product.categories?.[0]?.name || '-' }}</span></div>
           <v-divider></v-divider>
-          <div class="detail-row"><span class="label">Model</span><span class="value">{{ product.model || '-' }}</span></div>
+          <div class="detail-row"><span class="label">Durum</span><span class="value">{{ product.condition === 'new' ? 'Yeni' : 'İkinci El' }}</span></div>
           <v-divider></v-divider>
           <div class="detail-row align-start">
             <span class="label">Açıklama</span>
@@ -81,12 +83,29 @@ const product = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
+function formatDate(dateStr) {
+  if (!dateStr) return ''
+  const date = new Date(dateStr)
+  return date.toLocaleDateString('tr-TR')
+}
+
+function timeAgo(dateStr) {
+  if (!dateStr) return ''
+  const date = new Date(dateStr)
+  const now = new Date()
+  const diff = Math.floor((now - date) / 1000)
+  if (diff < 60) return 'az önce'
+  if (diff < 3600) return `${Math.floor(diff / 60)} dakika önce`
+  if (diff < 86400) return `${Math.floor(diff / 3600)} saat önce`
+  if (diff < 2592000) return `${Math.floor(diff / 86400)} gün önce`
+  return formatDate(dateStr)
+}
+
 onMounted(async () => {
   loading.value = true
   error.value = null
   try {
     const res = await getProductById(route.params.id)
-    console.log(  "res,",res)
     product.value = res
   } catch (err) {
     error.value = 'Ürün bulunamadı.'
