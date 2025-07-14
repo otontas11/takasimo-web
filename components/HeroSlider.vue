@@ -29,40 +29,36 @@
   </v-carousel>
 </template>
 
-<script setup lang="ts">
-interface Slide {
-  title: string
-  subtitle: string
-  buttonText: string
-  buttonColor?: string
-  background: string
-  image?: string
-}
-
-const slides: Slide[] = [
-  {
-    title: 'İlanını öne çıkar, daha fazla kişiye ulaş!',
-    subtitle: 'Daha geniş bir kitleye tanıtır ve hızla yeni sahipler bulmanıza yardımcı olur!',
-    buttonText: 'Planları İncele',
-    buttonColor: '#8B2865',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    image: '/images/phone-mockup.svg'
-  },
-  {
-    title: 'Güvenli Takas İmkanı',
-    subtitle: 'Ürünlerinizi güvenle takas edin, yeni deneyimler yaşayın!',
-    buttonText: 'Hemen Başla',
-    buttonColor: '#8B2865',
-    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
-  },
-  {
-    title: 'Hızlı ve Kolay',
-    subtitle: 'Sadece birkaç dakikada ürününüzü listeleyin ve takas tekliflerini alın!',
-    buttonText: 'İlan Ver',
-    buttonColor: '#8B2865',
-    background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+<script setup>
+const props = defineProps({
+  slides: {
+    type: Array,
+    default: () => [
+      {
+        title: 'İlanını öne çıkar, daha fazla kişiye ulaş!',
+        subtitle: 'Daha geniş bir kitleye tanıtır ve hızla yeni sahipler bulmanıza yardımcı olur!',
+        buttonText: 'Planları İncele',
+        buttonColor: '#8B2865',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        image: '/images/phone-mockup.svg'
+      },
+      {
+        title: 'Güvenli Takas İmkanı',
+        subtitle: 'Ürünlerinizi güvenle takas edin, yeni deneyimler yaşayın!',
+        buttonText: 'Hemen Başla',
+        buttonColor: '#8B2865',
+        background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+      },
+      {
+        title: 'Hızlı ve Kolay',
+        subtitle: 'Sadece birkaç dakikada ürününüzü listeleyin ve takas tekliflerini alın!',
+        buttonText: 'İlan Ver',
+        buttonColor: '#8B2865',
+        background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+      }
+    ]
   }
-]
+})
 </script>
 
 <style scoped>
