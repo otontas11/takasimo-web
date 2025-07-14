@@ -11,7 +11,7 @@
 
         <!-- Logo (Ortada mobilde, solda masaüstünde) -->
         <v-col cols="auto" class="logo-col ml-auto">
-          <h1 class="logo-text">takasimo</h1>
+          <h1 @click="navigateTo('/')" class="logo-text">takasimo</h1>
         </v-col>
 
         <!-- Arama (Sadece masaüstü) -->

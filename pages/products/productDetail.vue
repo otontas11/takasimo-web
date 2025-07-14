@@ -12,21 +12,7 @@
       <v-row v-if="!loading && !error && product">
         <!-- Sol Kısım: Ürün Görseli ve Bilgiler -->
         <v-col cols="12" md="6" class="left-section">
-          <v-img
-            :src="product.images?.[0]?.image || product.showcase_image || '/images/placeholder.jpg'"
-            aspect-ratio="16/10"
-            class="rounded-lg"
-          >
-            <template #placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="primary"></v-progress-circular>
-              </v-row>
-            </template>
-            <div class="like-info">
-              <v-icon color="deep-purple-accent-400">mdi-heart</v-icon>
-              <span>{{ product.favorite_count || 0 }}</span>
-            </div>
-          </v-img>
+          <ImageCarousel :images="product.images" :showcase="product.showcase_image" />
           <div class="meta-info d-flex align-center mt-2">
             <v-icon size="18" class="mr-1" color="grey">mdi-clock-outline</v-icon>
             <span class="mr-4 text-grey">{{ timeAgo(product.updated_at) }}</span>
