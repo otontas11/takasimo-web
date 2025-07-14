@@ -10,7 +10,7 @@
 import AppHeader from '~/components/AppHeader.vue'
 
 const route = useRoute()
-const isLoginPage = computed(() => route.path === '/login')
+const isLoginPage = computed(() => ['/login','/signup'].includes(route.path))
 </script>
 
 <style scoped>

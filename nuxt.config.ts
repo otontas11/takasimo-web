@@ -47,7 +47,11 @@ export default defineNuxtConfig({
       pages.push({
         path: '/login',
         file: '~/pages/auth/login.vue'
-      })
+      },{
+        path: '/signup',
+        file: '~/pages/auth/signup.vue'
+      }
+      )
     }
   }
 })

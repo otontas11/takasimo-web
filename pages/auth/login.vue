@@ -42,7 +42,7 @@
             Giriş yap
           </v-btn>
         </v-form>
-        <div class="text-center mb-2">
+        <div class="text-center mb-2" @click="navigateTo('signup')">
           <span>Hesabın yok mu? <a href="#" class="register-link">Hesap oluştur</a></span>
         </div>
         <div class="divider-row">
