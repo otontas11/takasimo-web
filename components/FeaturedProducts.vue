@@ -18,8 +18,6 @@
       </v-col>
     </v-row>
 
-
-
     <!-- Empty State - Skeleton Loading -->
     <v-row v-else>
       <v-col v-for="n in 4" :key="n" cols="12" sm="6" md="3" class="d-flex">
@@ -33,16 +31,8 @@
     <div ref="infiniteScrollTrigger" class="infinite-scroll-loading">
       <v-row v-if="isLoading">
         <v-col cols="12" class="text-center">
-          <v-progress-circular
-            indeterminate
-            color="primary"
-            size="40"
-            width="4"
-            class="mb-4"
-          />
-          <div class="text-body-2 text-medium-emphasis">
-            Daha fazla ürün yükleniyor...
-          </div>
+          <v-progress-circular indeterminate color="primary" size="40" width="4" class="mb-4" />
+          <div class="text-body-2 text-medium-emphasis">Daha fazla ürün yükleniyor...</div>
         </v-col>
       </v-row>
     </div>
@@ -83,19 +73,22 @@ const refresh = async () => {
 }
 
 const loadMore = async () => {
-  console.log("loadMore")
+  console.log('loadMore')
   emit('loadMore')
 }
 
 onMounted(() => {
   // Mark that we have initial data after mount
   hasInitialData.value = true
-  
-  observer = new window.IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      loadMore()
-    }
-  }, { root: null, threshold: 0.1, rootMargin: '100px' })
+
+  observer = new window.IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        loadMore()
+      }
+    },
+    { root: null, threshold: 0.1, rootMargin: '100px' }
+  )
   if (infiniteScrollTrigger.value) {
     observer.observe(infiniteScrollTrigger.value)
   }

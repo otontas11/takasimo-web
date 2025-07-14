@@ -54,13 +54,7 @@
   </v-app-bar>
 
   <!-- Drawer (Mobile) -->
-  <v-navigation-drawer
-    v-model="drawer"
-    temporary
-    left
-    class="mobile-drawer"
-    style="z-index: 2000"
-  >
+  <v-navigation-drawer v-model="drawer" temporary left class="mobile-drawer" style="z-index: 2000">
     <div class="pa-4">
       <!-- User Profile -->
       <div class="d-flex align-center ga-2 mb-6">
@@ -95,9 +89,11 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 const drawer = ref(false)
 const isMobile = ref(false)
-const {router}=useRouter()
+const { router } = useRouter()
 
-const checkMobile = () => { isMobile.value = window.innerWidth < 960 }
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 960
+}
 onMounted(() => {
   checkMobile()
   window.addEventListener('resize', checkMobile)
@@ -117,32 +113,40 @@ onUnmounted(() => {
   margin: 0;
   text-align: left;
 }
+
 .logo-col {
   display: flex;
   align-items: center;
 }
-@media (max-width: 960px) {
+
+@media (width <= 960px) {
   .logo-col {
     justify-content: flex-end !important;
     text-align: right !important;
     margin-right: 0 !important;
     margin-left: auto !important;
   }
-  .search-col, .right-col {
+
+  .search-col,
+  .right-col {
     display: none !important;
   }
 }
+
 .search-field :deep(.v-field) {
   background-color: #f5f5f5;
 }
+
 .search-field :deep(.v-field__input) {
   padding: 12px 16px;
 }
+
 .mobile-drawer {
   height: 100% !important;
   max-height: 100vh !important;
   top: 0 !important;
 }
+
 .user-profile {
   cursor: pointer;
 }

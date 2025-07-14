@@ -11,59 +11,57 @@
         </div>
         <v-form>
           <v-text-field
-              autocomplete="off"
-              class="mb-2"
-              color="#8B2865"
-              label="E-posta adresi"
-              prepend-inner-icon="mdi-email"
-              variant="underlined"
+            autocomplete="off"
+            class="mb-2"
+            color="#8B2865"
+            label="E-posta adresi"
+            prepend-inner-icon="mdi-email"
+            variant="underlined"
           />
           <v-text-field
-              autocomplete="off"
-              class="mb-2"
-              color="#8B2865"
-              label="Ad Soyad"
-              prepend-inner-icon="mdi-account"
-              variant="underlined"
+            autocomplete="off"
+            class="mb-2"
+            color="#8B2865"
+            label="Ad Soyad"
+            prepend-inner-icon="mdi-account"
+            variant="underlined"
           />
           <v-text-field
-              append-inner-icon="mdi-eye-off"
-              autocomplete="off"
-              class="mb-2"
-              color="#8B2865"
-              label="Parola"
-              prepend-inner-icon="mdi-lock"
-              type="password"
-              variant="underlined"
+            append-inner-icon="mdi-eye-off"
+            autocomplete="off"
+            class="mb-2"
+            color="#8B2865"
+            label="Parola"
+            prepend-inner-icon="mdi-lock"
+            type="password"
+            variant="underlined"
           />
           <v-text-field
-              append-inner-icon="mdi-eye-off"
-              autocomplete="off"
-              class="mb-2"
-              color="#8B2865"
-              label="Parola doğrula"
-              prepend-inner-icon="mdi-lock"
-              type="password"
-              variant="underlined"
+            append-inner-icon="mdi-eye-off"
+            autocomplete="off"
+            class="mb-2"
+            color="#8B2865"
+            label="Parola doğrula"
+            prepend-inner-icon="mdi-lock"
+            type="password"
+            variant="underlined"
           />
           <v-checkbox
-              class="mb-1 agreement-checkbox"
-              color="#8B2865"
-              density="compact"
-              hide-details
-              label='Üyelik Sözleşmesi ve <a href="#" class="terms-link">Eklerini</a> Kabul Ediyorum'
-              required
+            class="mb-1 agreement-checkbox"
+            color="#8B2865"
+            density="compact"
+            hide-details
+            label='Üyelik Sözleşmesi ve <a href="#" class="terms-link">Eklerini</a> Kabul Ediyorum'
+            required
           />
           <v-checkbox
-              class="mb-4"
-              color="#8B2865"
-              density="compact"
-              hide-details
-              label="İletişim bilgilerimi takasimo tarafından düzenlenen kampanyalar, özel teklifler, promosyonlar ve diğer pazarlama içerikleri hakkında bilgilendirilmek üzere kullanılmasına izin veriyorum"
+            class="mb-4"
+            color="#8B2865"
+            density="compact"
+            hide-details
+            label="İletişim bilgilerimi takasimo tarafından düzenlenen kampanyalar, özel teklifler, promosyonlar ve diğer pazarlama içerikleri hakkında bilgilendirilmek üzere kullanılmasına izin veriyorum"
           />
-          <v-btn block class="signup-btn mb-2" color="#8B2865" rounded="xl" size="large">
-            Hesap Aç
-          </v-btn>
+          <v-btn block class="signup-btn mb-2" color="#8B2865" rounded="xl" size="large"> Hesap Aç </v-btn>
         </v-form>
         <div class="text-center mb-2" @click="navigateTo('login')">
           <span>Hesabın var mı? <a class="login-link" href="#">Giriş Yap ff</a></span>
@@ -84,8 +82,8 @@
         </div>
         <div class="signup-terms mt-2">
           Bir hesap oluşturarak veya giriş yaparak,
-          <a class="terms-link" href="#">Kullanım Koşullarını</a> ve
-          <a class="terms-link" href="#">Gizlilik Politikasını</a> kabul etmiş olursunuz.
+          <a class="terms-link" href="#">Kullanım Koşullarını</a> ve <a class="terms-link" href="#">Gizlilik Politikasını</a> kabul etmiş
+          olursunuz.
         </div>
       </v-card-text>
     </v-card>
@@ -105,9 +103,9 @@
   max-width: 400px;
   width: 100%;
   border-radius: 2rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 8%);
   background: #fff;
-  padding: 2.5rem 2rem 2rem 2rem;
+  padding: 2.5rem 2rem 2rem;
   position: relative;
 }
 
@@ -121,7 +119,7 @@
 .signup-btn {
   font-weight: 600;
   font-size: 1rem;
-  background: #8B2865 !important;
+  background: #8b2865 !important;
   color: #fff !important;
   box-shadow: none;
   transition: background-color 0.3s ease;
@@ -136,8 +134,10 @@
   font-weight: 500;
   text-transform: none;
   background: #fff;
-  border: 1px solid #8B2865;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  border: 1px solid #8b2865;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .google-btn:hover {
@@ -148,7 +148,7 @@
 .divider-row {
   display: flex;
   align-items: center;
-  margin: 1.2rem 0 1rem 0;
+  margin: 1.2rem 0 1rem;
 }
 
 .divider {
@@ -159,25 +159,27 @@
 
 .divider-text {
   margin: 0 1rem;
-  color: #8B2865;
+  color: #8b2865;
   font-size: 0.95rem;
 }
 
-.login-link, .terms-link {
-  color: #8B2865;
+.login-link,
+.terms-link {
+  color: #8b2865;
   text-decoration: none;
   font-weight: 500;
   font-size: 0.97rem;
   transition: color 0.3s ease;
 }
 
-.login-link:hover, .terms-link:hover {
+.login-link:hover,
+.terms-link:hover {
   text-decoration: underline;
   color: #7a245b;
 }
 
 .signup-terms {
-  color: #8B2865;
+  color: #8b2865;
   font-size: 0.85rem;
   text-align: center;
   margin-top: 1.2rem;

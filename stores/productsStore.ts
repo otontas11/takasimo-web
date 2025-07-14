@@ -1,7 +1,7 @@
-import {useProductsApi} from "~/composables/api/useProductsApi";
+import { useProductsApi } from '~/composables/api/useProductsApi'
 
 export const useProductsStore = defineStore('products', () => {
-  const { getProductById , getProducts, searchProducts: searchProductsApi} = useProductsApi()
+  const { getProductById, getProducts, searchProducts: searchProductsApi } = useProductsApi()
 
   // ✅ STATE - Reactive references
   const products = ref<any[]>([])
@@ -77,7 +77,7 @@ export const useProductsStore = defineStore('products', () => {
       const params = {
         query: filters.value.search || '',
         filters: {
-          page:page,
+          page: page,
           per_page: perPage.value,
           sort_by: sortBy.value,
           sort_order: sortOrder.value,
@@ -92,7 +92,7 @@ export const useProductsStore = defineStore('products', () => {
 
       if (response) {
         const productData = Array.isArray(response) ? response : (response as any).data || []
-        
+
         // İlk sayfa ise verileri sıfırla, değilse mevcut listeye ekle
         if (page === 1) {
           setProducts(productData)
@@ -137,7 +137,6 @@ export const useProductsStore = defineStore('products', () => {
     }
   }
 
-
   // ✅ RETURN - Expose state, getters, and actions
   return {
     // State
@@ -165,6 +164,6 @@ export const useProductsStore = defineStore('products', () => {
     searchProducts,
     setProducts,
     clearFilters,
-    clearError,
+    clearError
   }
 })

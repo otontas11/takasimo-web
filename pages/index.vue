@@ -28,13 +28,13 @@
 
 <script setup lang="ts">
 import AppFooter from '~/components/AppFooter.vue'
-import PopularCategories from "~/components/populer-categories/PopularCategories.vue";
+import PopularCategories from '~/components/populer-categories/PopularCategories.vue'
 
 // ✅ STORE YAKLAŞIMI - Store'lara istek at
 const categoriesStore = useCategoriesStore()
 const productsStore = useProductsStore()
 
-const currentPage = computed(()=>productsStore.getCurrentPage)
+const currentPage = computed(() => productsStore.getCurrentPage)
 
 // Store'lardan veri al
 const allCategories = computed(() => categoriesStore.getAllCategories)
@@ -42,10 +42,7 @@ const products = computed(() => productsStore.getAllProducts)
 
 // ✅ SSR-SAFE - Sadece useAsyncData ile fetch yap
 await useAsyncData('init-home', () => {
-  return Promise.all([
-    categoriesStore.fetchCategories(),
-    productsStore.fetchProducts(currentPage.value)
-  ])
+  return Promise.all([categoriesStore.fetchCategories(), productsStore.fetchProducts(currentPage.value)])
 })
 
 onMounted(async () => {

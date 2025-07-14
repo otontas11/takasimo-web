@@ -44,13 +44,15 @@ export default defineNuxtConfig({
 
   hooks: {
     'pages:extend'(pages) {
-      pages.push({
-        path: '/login',
-        file: '~/pages/auth/login.vue'
-      },{
-        path: '/signup',
-        file: '~/pages/auth/signup.vue'
-      }
+      pages.push(
+        {
+          path: '/login',
+          file: '~/pages/auth/login.vue'
+        },
+        {
+          path: '/signup',
+          file: '~/pages/auth/signup.vue'
+        }
       )
     }
   }

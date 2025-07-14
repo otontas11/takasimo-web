@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :model-value="modelValue" @update:model-value="val => $emit('update:modelValue', val)" max-width="400" persistent>
+  <v-dialog :model-value="modelValue" @update:model-value="(val) => $emit('update:modelValue', val)" max-width="400" persistent>
     <v-card class="login-modal-card">
       <v-card-text>
         <div class="text-center mb-2">
@@ -7,13 +7,7 @@
           <div class="login-title">Giriş Yap</div>
         </div>
         <v-form>
-          <v-text-field
-            label="E-Mail"
-            prepend-inner-icon="mdi-email"
-            variant="underlined"
-            class="mb-2"
-            color="#8B2865"
-          />
+          <v-text-field label="E-Mail" prepend-inner-icon="mdi-email" variant="underlined" class="mb-2" color="#8B2865" />
           <v-text-field
             label="Şifre"
             type="password"
@@ -24,18 +18,10 @@
             color="#8B2865"
           />
           <div class="d-flex justify-space-between align-center mb-2">
-            <v-checkbox
-              label="Beni hatırla"
-              hide-details
-              density="compact"
-              class="remember-checkbox"
-              color="#8B2865"
-            />
+            <v-checkbox label="Beni hatırla" hide-details density="compact" class="remember-checkbox" color="#8B2865" />
             <a href="#" class="forgot-link">Şifremi unuttum</a>
           </div>
-          <v-btn block color="#8B2865" class="login-btn mb-2" size="large" rounded="xl">
-            Giriş yap
-          </v-btn>
+          <v-btn block color="#8B2865" class="login-btn mb-2" size="large" rounded="xl"> Giriş yap </v-btn>
         </v-form>
         <div class="text-center mb-2">
           <span>Hesabın yok mu? <a href="#" class="register-link">Hesap oluştur</a></span>
@@ -54,8 +40,8 @@
         </v-btn>
         <div class="login-terms mt-2">
           Bir hesap oluşturarak veya giriş yaparak,
-          <a href="#" class="terms-link">Kullanım Koşullarını</a> ve
-          <a href="#" class="terms-link">Gizlilik Politikasını</a> kabul etmiş olursunuz.
+          <a href="#" class="terms-link">Kullanım Koşullarını</a> ve <a href="#" class="terms-link">Gizlilik Politikasını</a> kabul etmiş
+          olursunuz.
         </div>
       </v-card-text>
     </v-card>
@@ -70,68 +56,83 @@ defineEmits(['close', 'update:modelValue'])
 <style scoped>
 .login-modal-card {
   border-radius: 2rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 32px rgb(0 0 0 / 12%);
   background: #fff;
-  padding: 2.5rem 2rem 2rem 2rem;
+  padding: 2.5rem 2rem 2rem;
 }
+
 .login-logo {
   font-family: inherit;
   font-size: 2.2rem;
   font-weight: bold;
-  color: #8B2865;
+  color: #8b2865;
   letter-spacing: -1px;
   display: block;
   margin-bottom: 0.2rem;
 }
+
 .login-title {
   font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 1.2rem;
 }
+
 .login-btn {
   font-weight: 600;
   font-size: 1.1rem;
-  background: #8B2865 !important;
+  background: #8b2865 !important;
   color: #fff !important;
   box-shadow: none;
 }
+
 .google-btn {
   border-radius: 1.5rem;
   font-weight: 500;
   text-transform: none;
   background: #fff;
-  border: 1px solid #8B2865;
+  border: 1px solid #8b2865;
 }
+
 .divider-row {
   display: flex;
   align-items: center;
-  margin: 1rem 0 1rem 0;
+  margin: 1rem 0;
 }
+
 .divider {
   flex: 1;
   height: 1px;
   background: #e0c6d8;
 }
+
 .divider-text {
   margin: 0 1rem;
-  color: #8B2865;
+  color: #8b2865;
   font-size: 0.95rem;
 }
-.forgot-link, .register-link, .terms-link {
-  color: #8B2865;
+
+.forgot-link,
+.register-link,
+.terms-link {
+  color: #8b2865;
   text-decoration: none;
   font-weight: 500;
   font-size: 0.97rem;
 }
-.forgot-link:hover, .register-link:hover, .terms-link:hover {
+
+.forgot-link:hover,
+.register-link:hover,
+.terms-link:hover {
   text-decoration: underline;
 }
+
 .login-terms {
-  color: #8B2865;
+  color: #8b2865;
   font-size: 0.85rem;
   text-align: center;
   margin-top: 1.2rem;
 }
+
 .remember-checkbox {
   margin-left: -8px;
 }

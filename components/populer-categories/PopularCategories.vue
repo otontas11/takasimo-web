@@ -94,4 +94,4 @@ useHead({
 })
 </script>
 
-<style lang="scss" scoped src="./PopularCategories.scss"/>
+<style lang="scss" scoped src="./PopularCategories.scss" />
