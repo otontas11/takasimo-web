@@ -64,11 +64,7 @@ const router = useRouter()
 import { navigateTo } from 'nuxt/app'
 
 const handleClose = () => {
-  if (window.history.length > 1) {
-    router.back()
-  } else {
-    router.push('/')
-  }
+  router.push('/')
 }
 </script>
 

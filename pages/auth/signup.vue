@@ -1,11 +1,19 @@
 <script lang="ts" setup>
 // Sadece görsel amaçlı, işlevsellik eklenmedi
 import {navigateTo} from "nuxt/app";
+const router = useRouter()
+
+const handleClose = () => {
+  router.push('/')
+}
 </script>
 
 <template>
   <v-main class="signup-page">
     <v-card class="signup-modal-card">
+      <v-btn icon class="close-btn" @click="handleClose">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
       <v-card-text>
         <div class="text-center mb-4">
           <div class="signup-title">Hesap Aç</div>
@@ -108,6 +116,14 @@ import {navigateTo} from "nuxt/app";
   background: #fff;
   padding: 2.5rem 2rem 2rem;
   position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  color: #8b2865;
 }
 
 .signup-title {
