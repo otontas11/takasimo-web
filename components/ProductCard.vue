@@ -47,8 +47,9 @@ const formatPrice = (price: number): string => {
 }
 
 const navigateToProduct = () => {
-  const slug = props.product.slug || props.product.id.toString()
-  navigateTo(`/urun/${slug}`)
+  console.log(" props.product", props.product)
+  const slug = props.product.product_code.toString()
+  navigateTo(`/product-detail/${slug}`)
 }
 </script>
 

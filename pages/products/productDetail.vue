@@ -2,10 +2,18 @@
   <v-main class="product-detail-page">
     <v-container>
       <v-row>
+        <v-col cols="12">
+          <div v-if="loading" class="text-center py-10">
+            <v-progress-circular indeterminate color="primary" size="48" />
+          </div>
+          <div v-else-if="error" class="text-center py-10 text-error">{{ error }}</div>
+        </v-col>
+      </v-row>
+      <v-row v-if="!loading && !error && product">
         <!-- Sol Kısım: Ürün Görseli ve Bilgiler -->
         <v-col cols="12" md="6" class="left-section">
           <v-img
-            src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8"
+            :src="product.images?.[0]?.image_url || product.showcase_image || '/images/placeholder.jpg'"
             aspect-ratio="16/10"
             class="rounded-lg"
           >
@@ -16,50 +24,47 @@
             </template>
             <div class="like-info">
               <v-icon color="deep-purple-accent-400">mdi-heart</v-icon>
-              <span>52</span>
+              <span>{{ product.like_count || 0 }}</span>
             </div>
           </v-img>
           <div class="meta-info d-flex align-center mt-2">
             <v-icon size="18" class="mr-1" color="grey">mdi-clock-outline</v-icon>
-            <span class="mr-4 text-grey">2 gün önce güncellendi</span>
+            <span class="mr-4 text-grey">{{ product.updated_at ? $dayjs(product.updated_at).fromNow() : '' }}</span>
             <v-icon size="18" class="mr-1" color="grey">mdi-calendar-outline</v-icon>
-            <span class="text-grey">10.01.2023</span>
+            <span class="text-grey">{{ product.created_at ? $dayjs(product.created_at).format('DD.MM.YYYY') : '' }}</span>
           </div>
           <div class="mt-4">
-            <h3 class="product-title">Dizüstü Bilgisayar</h3>
-            <div class="product-location">Maltepe / İstanbul</div>
+            <h3 class="product-title">{{ product.title }}</h3>
+            <div class="product-location">{{ product.city?.name || '' }} / {{ product.district?.name || '' }}</div>
           </div>
           <div class="mt-6 d-flex justify-space-between">
             <v-btn color="primary" class="action-btn" variant="flat">Düzenle</v-btn>
             <v-btn color="primary" class="action-btn" variant="flat">Yayından kaldır</v-btn>
           </div>
         </v-col>
-
         <!-- Sağ Kısım: Kullanıcı ve Detaylar -->
         <v-col cols="12" md="6" class="right-section">
           <div class="user-info d-flex align-center mb-4">
             <v-avatar size="48" color="deep-purple-accent-400">
               <v-icon size="32">mdi-account</v-icon>
             </v-avatar>
-            <span class="ml-3 user-name">Zeynep Tektaş</span>
+            <span class="ml-3 user-name">{{ product.owner?.name || product.user?.name || 'Kullanıcı' }}</span>
           </div>
-          <div class="price mb-4">12.000 TL</div>
+          <div class="price mb-4">{{ product.price ? product.price.toLocaleString('tr-TR') + ' TL' : '' }}</div>
           <v-divider class="mb-2"></v-divider>
-          <div class="detail-row"><span class="label">İlan no</span><span class="value">145878</span></div>
+          <div class="detail-row"><span class="label">İlan no</span><span class="value">{{ product.id }}</span></div>
           <v-divider></v-divider>
-          <div class="detail-row"><span class="label">Konum</span><span class="value">Üsküdar / İstanbul</span></div>
+          <div class="detail-row"><span class="label">Konum</span><span class="value">{{ product.city?.name || '' }} / {{ product.district?.name || '' }}</span></div>
           <v-divider></v-divider>
-          <div class="detail-row"><span class="label">İletişim</span><span class="value">0532 000 0000</span></div>
+          <div class="detail-row"><span class="label">İletişim</span><span class="value">{{ product.owner?.phone || '-' }}</span></div>
           <v-divider></v-divider>
-          <div class="detail-row"><span class="label">Marka</span><span class="value">Asus</span></div>
+          <div class="detail-row"><span class="label">Marka</span><span class="value">{{ product.brand || '-' }}</span></div>
           <v-divider></v-divider>
-          <div class="detail-row"><span class="label">Model</span><span class="value">Vivobook</span></div>
+          <div class="detail-row"><span class="label">Model</span><span class="value">{{ product.model || '-' }}</span></div>
           <v-divider></v-divider>
           <div class="detail-row align-start">
             <span class="label">Açıklama</span>
-            <span class="value">
-              Cihaz çiziksiz, hatasızdır. Ekran koruyucu ve şarj aleti bulunmaktadır. 30.10.2025 tarihine kadar garantisi devam etmektedir.
-            </span>
+            <span class="value">{{ product.description }}</span>
           </div>
         </v-col>
       </v-row>
@@ -68,7 +73,27 @@
 </template>
 
 <script setup>
-// Burada ileride dinamik veri çekmek için route parametreleri ve API entegrasyonu eklenebilir.
+import { useProductsApi } from '~/composables/api/useProductsApi'
+const route = useRoute()
+const { getProductById } = useProductsApi()
+
+const product = ref(null)
+const loading = ref(true)
+const error = ref(null)
+
+onMounted(async () => {
+  loading.value = true
+  error.value = null
+  try {
+    const res = await getProductById(route.params.id)
+    console.log(  "res,",res)
+    product.value = res
+  } catch (err) {
+    error.value = 'Ürün bulunamadı.'
+  } finally {
+    loading.value = false
+  }
+})
 </script>
 
 <style scoped>
