@@ -4,13 +4,36 @@
       <button class="carousel-arrow left" @click="prev" aria-label="Önceki">
         <svg width="24" height="24" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
       </button>
-      <img :src="getImageUrl({ path: imageList[current] })" class="carousel-image" />
+      <v-img
+        :src="getImageUrl({ path: imageList[current] })"
+        class="carousel-image"
+        :transition="false"
+        cover
+      >
+        <template #placeholder>
+          <div class="d-flex align-center justify-center fill-height">
+            <v-progress-circular indeterminate color="primary" />
+          </div>
+        </template>
+      </v-img>
       <button class="carousel-arrow right" @click="next" aria-label="Sonraki">
         <svg width="24" height="24" viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
       </button>
     </div>
     <div v-else class="carousel-placeholder">
-      <img :src="getImageUrl({ path: '/images/placeholder.jpg' })" alt="placeholder" class="carousel-image" />
+      <v-img
+        :src="getImageUrl({ path: '/images/placeholder.jpg' })"
+        alt="placeholder"
+        class="carousel-image"
+        :transition="false"
+        cover
+      >
+        <template #placeholder>
+          <div class="d-flex align-center justify-center fill-height">
+            <v-progress-circular indeterminate color="primary" />
+          </div>
+        </template>
+      </v-img>
     </div>
     <div class="carousel-dots" v-if="imageList.length > 1">
       <span v-for="(img, i) in imageList" :key="i" :class="['dot', { active: i === current }]" @click="goTo(i)"></span>

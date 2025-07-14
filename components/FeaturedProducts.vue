@@ -4,7 +4,7 @@
 
     <!-- Loading State -->
     <v-row v-if="shouldShowLoading">
-      <v-col v-for="n in 4" :key="n" cols="12" sm="6" md="3" class="d-flex">
+      <v-col v-for="n in 4" :key="n" cols="6" sm="6" md="3" class="d-flex">
         <v-card class="product-card" elevation="0" rounded="xl">
           <v-skeleton-loader type="image, article" />
         </v-card>
@@ -13,14 +13,14 @@
 
     <!-- Products -->
     <v-row v-else-if="hasProducts">
-      <v-col v-for="product in props.products" :key="(product as any).id" cols="12" sm="6" md="3" class="d-flex">
+      <v-col v-for="product in props.products" :key="(product as any).id" cols="6" sm="6" md="3" class="d-flex">
         <ProductCard v-if="normalizeProduct(product)" :product="normalizeProduct(product)" />
       </v-col>
     </v-row>
 
     <!-- Empty State - Skeleton Loading -->
     <v-row v-else>
-      <v-col v-for="n in 4" :key="n" cols="12" sm="6" md="3" class="d-flex">
+      <v-col v-for="n in 4" :key="n" cols="6" sm="6" md="3" class="d-flex">
         <v-card class="product-card" elevation="0" rounded="xl">
           <v-skeleton-loader type="image, article" />
         </v-card>
