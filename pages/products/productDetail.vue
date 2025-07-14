@@ -42,13 +42,15 @@
           <v-divider class="mb-2"></v-divider>
           <div class="detail-row"><span class="label">İlan no</span><span class="value">{{ product.ad_no }}</span></div>
           <v-divider></v-divider>
+          <div class="detail-row"><span class="label">İlan tarihi</span><span class="value">{{ formatDate(product.created_at || product.ad_date) }}</span></div>
+          <v-divider></v-divider>
           <div class="detail-row"><span class="label">Konum</span><span class="value">{{ product.city?.name || '' }} / {{ product.district?.name || '' }}</span></div>
           <v-divider></v-divider>
           <div class="detail-row"><span class="label">İletişim</span><span class="value">{{ product.owner?.phone || '-' }}</span></div>
           <v-divider></v-divider>
           <div class="detail-row"><span class="label">Kategori</span><span class="value">{{ product.categories?.[0]?.name || '-' }}</span></div>
           <v-divider></v-divider>
-          <div class="detail-row"><span class="label">Durum</span><span class="value">{{ product.condition === 'new' ? 'Yeni' : 'İkinci El' }}</span></div>
+          <div class="detail-row"><span class="label">İlan Durum</span><span class="value">{{ product.condition === 'new' ? 'Yeni' : 'İkinci El' }}</span></div>
           <v-divider></v-divider>
           <div class="detail-row align-start">
             <span class="label">Açıklama</span>
