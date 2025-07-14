@@ -1,13 +1,16 @@
 <!-- layouts/default.vue -->
 <template>
   <v-app>
-    <AppHeader />
+    <AppHeader v-if="!isLoginPage" />
     <slot />
   </v-app>
 </template>
 
 <script lang="ts" setup>
 import AppHeader from '~/components/AppHeader.vue'
+
+const route = useRoute()
+const isLoginPage = computed(() => route.path === '/login')
 </script>
 
 <style scoped>

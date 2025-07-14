@@ -1,7 +1,7 @@
 <template>
   <v-main class="login-page">
     <v-card class="login-modal-card">
-      <v-btn icon class="close-btn" @click="$emit('update:modelValue', false)">
+      <v-btn icon class="close-btn" @click="handleClose">
         <v-icon>mdi-close</v-icon>
       </v-btn>
       <v-card-text>
@@ -16,6 +16,7 @@
               variant="underlined"
               class="mb-2"
               color="#8B2865"
+              autocomplete="off"
           />
           <v-text-field
               label="Şifre"
@@ -25,6 +26,7 @@
               variant="underlined"
               class="mb-1"
               color="#8B2865"
+              autocomplete="off"
           />
           <div class="d-flex justify-space-between align-center mb-2">
             <v-checkbox
@@ -66,8 +68,15 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{ modelValue: boolean }>()
-defineEmits(['close', 'update:modelValue'])
+const router = useRouter()
+
+const handleClose = () => {
+  if (window.history.length > 1) {
+    router.back()
+  } else {
+    router.push('/')
+  }
+}
 </script>
 
 <style scoped>
