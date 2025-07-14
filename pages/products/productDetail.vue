@@ -1,152 +1,152 @@
 <template>
-  <div class="product-detail-page">
+  <v-main class="product-detail-page">
     <v-container>
-      <!-- Loading State -->
-      <div v-if="pending" class="text-center py-8">
-        <v-progress-circular indeterminate size="64" color="primary" />
-        <p class="mt-4">Ürün bilgileri yükleniyor...</p>
-      </div>
-
-      <!-- Error State -->
-      <div v-else-if="error" class="text-center py-8">
-        <v-alert type="error" variant="tonal" class="mx-auto" style="max-width: 400px">
-          <template v-slot:title>Hata Oluştu</template>
-          Ürün bilgileri yüklenirken bir hata oluştu.
-          <template v-slot:append>
-            <v-btn color="error" variant="text" @click="refresh"> Tekrar Dene </v-btn>
-          </template>
-        </v-alert>
-      </div>
-
-      <!-- Product Content -->
-      <div v-else-if="product">
-        <v-row>
-          <!-- Product Images -->
-          <v-col cols="12" md="6">
-            <v-card>
-              <v-img :src="product.showcase_image || '/images/placeholder.jpg'" height="400" cover />
-            </v-card>
-          </v-col>
-
-          <!-- Product Info -->
-          <v-col cols="12" md="6">
-            <h1 class="text-h4 mb-4">{{ product.title }}</h1>
-            <p class="text-body-1 mb-4">{{ product.description }}</p>
-
-            <div class="mb-4">
-              <v-chip color="primary" variant="tonal" class="mr-2">
-                {{ product.category?.name }}
-              </v-chip>
-              <v-chip color="secondary" variant="tonal">
-                {{ product.city }}
-              </v-chip>
+      <v-row>
+        <!-- Sol Kısım: Ürün Görseli ve Bilgiler -->
+        <v-col cols="12" md="6" class="left-section">
+          <v-img
+            src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8"
+            aspect-ratio="16/10"
+            class="rounded-lg"
+          >
+            <template #placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+              </v-row>
+            </template>
+            <div class="like-info">
+              <v-icon color="deep-purple-accent-400">mdi-heart</v-icon>
+              <span>52</span>
             </div>
+          </v-img>
+          <div class="meta-info d-flex align-center mt-2">
+            <v-icon size="18" class="mr-1" color="grey">mdi-clock-outline</v-icon>
+            <span class="mr-4 text-grey">2 gün önce güncellendi</span>
+            <v-icon size="18" class="mr-1" color="grey">mdi-calendar-outline</v-icon>
+            <span class="text-grey">10.01.2023</span>
+          </div>
+          <div class="mt-4">
+            <h3 class="product-title">Dizüstü Bilgisayar</h3>
+            <div class="product-location">Maltepe / İstanbul</div>
+          </div>
+          <div class="mt-6 d-flex justify-space-between">
+            <v-btn color="primary" class="action-btn" variant="flat">Düzenle</v-btn>
+            <v-btn color="primary" class="action-btn" variant="flat">Yayından kaldır</v-btn>
+          </div>
+        </v-col>
 
-            <div class="d-flex align-center mb-4">
-              <v-avatar size="40" class="mr-3">
-                <v-img :src="product.user?.avatar || '/images/default-avatar.jpg'" />
-              </v-avatar>
-              <div>
-                <p class="font-weight-medium mb-0">{{ product.user?.name }}</p>
-                <p class="text-caption text-grey mb-0">{{ product.user?.city }}</p>
-              </div>
-            </div>
-
-            <v-btn color="primary" size="large" block rounded="xl" class="mb-4"> Takas Teklifi Ver </v-btn>
-          </v-col>
-        </v-row>
-
-        <!-- Related Products -->
-        <v-row v-if="relatedProducts?.length" class="mt-8">
-          <v-col cols="12">
-            <h2 class="text-h5 mb-4">Benzer Ürünler</h2>
-            <v-row>
-              <v-col v-for="relatedProduct in relatedProducts" :key="relatedProduct.id" cols="12" sm="6" md="4" lg="3">
-                <ProductCard :product="relatedProduct" />
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </div>
-
-      <!-- Not Found -->
-      <div v-else class="text-center py-8">
-        <v-alert type="warning" variant="tonal" class="mx-auto" style="max-width: 400px">
-          <template v-slot:title>Ürün Bulunamadı</template>
-          Aradığınız ürün bulunamadı veya kaldırılmış olabilir.
-          <template v-slot:append>
-            <v-btn color="warning" variant="text" to="/"> Ana Sayfaya Dön </v-btn>
-          </template>
-        </v-alert>
-      </div>
+        <!-- Sağ Kısım: Kullanıcı ve Detaylar -->
+        <v-col cols="12" md="6" class="right-section">
+          <div class="user-info d-flex align-center mb-4">
+            <v-avatar size="48" color="deep-purple-accent-400">
+              <v-icon size="32">mdi-account</v-icon>
+            </v-avatar>
+            <span class="ml-3 user-name">Zeynep Tektaş</span>
+          </div>
+          <div class="price mb-4">12.000 TL</div>
+          <v-divider class="mb-2"></v-divider>
+          <div class="detail-row"><span class="label">İlan no</span><span class="value">145878</span></div>
+          <v-divider></v-divider>
+          <div class="detail-row"><span class="label">Konum</span><span class="value">Üsküdar / İstanbul</span></div>
+          <v-divider></v-divider>
+          <div class="detail-row"><span class="label">İletişim</span><span class="value">0532 000 0000</span></div>
+          <v-divider></v-divider>
+          <div class="detail-row"><span class="label">Marka</span><span class="value">Asus</span></div>
+          <v-divider></v-divider>
+          <div class="detail-row"><span class="label">Model</span><span class="value">Vivobook</span></div>
+          <v-divider></v-divider>
+          <div class="detail-row align-start">
+            <span class="label">Açıklama</span>
+            <span class="value">
+              Cihaz çiziksiz, hatasızdır. Ekran koruyucu ve şarj aleti bulunmaktadır. 30.10.2025 tarihine kadar garantisi devam etmektedir.
+            </span>
+          </div>
+        </v-col>
+      </v-row>
     </v-container>
-  </div>
+  </v-main>
 </template>
 
 <script setup>
-const route = useRoute()
-const productId = route.params.id
-
-// ✅ TEMİZ VE BASİT - Mevcut composable yapısını kullan
-const {
-  data: product,
-  pending,
-  error,
-  refresh
-} = await useLazyAsyncData(`product-${productId}`, () => useProducts().getProductById(productId), {
-  default: () => null,
-  server: true
-})
-
-// Benzer ürünler - sadece kategori kodu varsa
-const { data: relatedProducts } = await useLazyAsyncData(
-  `related-${productId}`,
-  () => {
-    if (!product.value?.category_code) return []
-    return useProducts().getProductsByCategory(product.value.category_code, 4)
-  },
-  {
-    default: () => [],
-    server: true,
-    watch: [product]
-  }
-)
-
-// SEO - Dinamik
-watchEffect(() => {
-  if (product.value) {
-    useHead({
-      title: `${product.value.title} - Takasimo`,
-      meta: [
-        {
-          name: 'description',
-          content: product.value.description || 'Ürün detay sayfası'
-        },
-        {
-          property: 'og:title',
-          content: product.value.title
-        },
-        {
-          property: 'og:image',
-          content: product.value.showcase_image
-        }
-      ]
-    })
-  }
-})
-
-// 404 handling
-if (process.server && !product.value && !pending.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: 'Ürün bulunamadı'
-  })
-}
+// Burada ileride dinamik veri çekmek için route parametreleri ve API entegrasyonu eklenebilir.
 </script>
 
 <style scoped>
 .product-detail-page {
-  min-height: 100vh;
-  padding: 2rem 0;
+  background: #fff;
+}
+.left-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.right-section {
+  padding-left: 32px;
+}
+.like-info {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 24px;
+  padding: 4px 12px;
+  font-size: 18px;
+  color: #8d2065;
+  font-weight: 500;
+}
+.meta-info {
+  font-size: 15px;
+  color: #888;
+}
+.product-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.product-location {
+  font-size: 18px;
+  color: #888;
+}
+.action-btn {
+  min-width: 180px;
+  font-size: 20px;
+  font-weight: 500;
+  background: #8d2065 !important;
+  color: #fff !important;
+  border-radius: 12px;
+}
+.user-info .user-name {
+  font-size: 22px;
+  font-weight: 600;
+}
+.price {
+  font-size: 32px;
+  font-weight: 700;
+  color: #8d2065;
+}
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 18px;
+}
+.detail-row .label {
+  font-weight: 600;
+  min-width: 120px;
+}
+.detail-row .value {
+  flex: 1;
+  text-align: right;
+  font-weight: 400;
+  margin-left: 16px;
+}
+.detail-row.align-start {
+  align-items: flex-start;
+}
+.detail-row.align-start .value {
+  text-align: left;
 }
 </style>

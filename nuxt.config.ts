@@ -52,6 +52,10 @@ export default defineNuxtConfig({
         {
           path: '/signup',
           file: '~/pages/auth/signup.vue'
+        },
+        {
+          path: '/product-detail/:id',
+          file: '~/pages/products/productDetail.vue'
         }
       )
     }
