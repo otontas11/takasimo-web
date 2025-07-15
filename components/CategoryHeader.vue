@@ -121,7 +121,7 @@ const updateContainerWidth = () => {
 const navigateToCategory = (category: Category) => {
   const slug = category.category_code || category.code || category.id?.toString()
   if (slug) {
-    navigateTo(`/kategori/${slug}`)
+    navigateTo(`/category-detail/${slug}`)
   }
 }
 
