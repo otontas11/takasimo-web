@@ -90,10 +90,10 @@ export const useCategoriesStore = defineStore('categories', () => {
   // ✅ RETURN - Expose state, getters, and actions
   return {
     // State
-    categories: readonly(categories),
-    selectedCategory: readonly(selectedCategory),
-    loading: readonly(loading),
-    error: readonly(error),
+    categories,
+    selectedCategory,
+    loading,
+    error,
 
     // Getters
     getAllCategories,

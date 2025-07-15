@@ -1,7 +1,7 @@
 import { useProductsApi } from '~/composables/api/useProductsApi'
 
 export const useProductsStore = defineStore('products', () => {
-  const { getProductById, getProducts, searchProducts: searchProductsApi } = useProductsApi()
+  const { getProductById, getProducts } = useProductsApi()
 
   // ✅ STATE - Reactive references
   const products = ref<any[]>([])
@@ -120,7 +120,18 @@ export const useProductsStore = defineStore('products', () => {
     setError(null)
 
     try {
-      const response = await searchProductsApi(query, filters)
+      const params = {
+        query: query,
+        filters: {
+          page: 1,
+          per_page: perPage.value,
+          sort_by: sortBy.value,
+          sort_order: sortOrder.value,
+          ...filters
+        }
+      }
+
+      const response = await getProducts(params)
 
       if (response) {
         const productData = Array.isArray(response) ? response : (response as any).data || []
@@ -140,17 +151,17 @@ export const useProductsStore = defineStore('products', () => {
   // ✅ RETURN - Expose state, getters, and actions
   return {
     // State
-    products: readonly(products),
-    selectedProduct: readonly(selectedProduct),
-    loading: readonly(loading),
-    error: readonly(error),
-    currentPage: readonly(currentPage),
-    totalPages: readonly(totalPages),
-    totalItems: readonly(totalItems),
-    perPage: readonly(perPage),
-    filters: readonly(filters),
-    sortBy: readonly(sortBy),
-    sortOrder: readonly(sortOrder),
+    products,
+    selectedProduct,
+    loading,
+    error,
+    currentPage,
+    totalPages,
+    totalItems,
+    perPage,
+    filters,
+    sortBy,
+    sortOrder,
 
     // Getters
     getAllProducts,
