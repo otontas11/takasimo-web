@@ -1,75 +1,102 @@
-# Nuxt Minimal Starter
+# Takasimo Web - Nuxt 3
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+İkinci el alışveriş platformu - Nuxt 3 ile geliştirilmiş modern web uygulaması.
 
-## Setup
+## 🚀 Özellikler
 
-Make sure to install dependencies:
+- **Modern UI/UX**: Vuetify 3 ile tasarlanmış responsive arayüz
+- **SSR**: Server-side rendering ile SEO optimizasyonu
+- **TypeScript**: Tip güvenliği
+- **Pinia**: State management
+- **API Integration**: RESTful API entegrasyonu
+- **Responsive Design**: Mobil ve desktop uyumlu
 
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+## 📦 Kurulum
 
 ```bash
-# npm
+# Dependencies yükle
+npm install --legacy-peer-deps
+
+# Development server başlat
 npm run dev
 
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
+# Build
 npm run build
 
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
+# Preview
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## 🌐 Vercel Deployment
+
+### Otomatik Deploy
+1. GitHub'a push edin
+2. [Vercel](https://vercel.com)'e gidin
+3. "New Project" → GitHub repo'nuzu seçin
+4. Framework: **Nuxt.js** seçin
+5. Deploy edin
+
+### Manuel Deploy
+```bash
+# Vercel CLI kur
+npm i -g vercel
+
+# Login
+vercel login
+
+# Deploy
+vercel --prod
+```
+
+### Environment Variables
+Vercel dashboard'da şu değişkenleri ekleyin:
+```
+NUXT_PUBLIC_API_BASE=https://ap1.takasimo.com/api
+NODE_ENV=production
+```
+
+## 🏗️ Proje Yapısı
+
+```
+├── components/          # Vue bileşenleri
+├── pages/              # Sayfa bileşenleri
+├── stores/             # Pinia store'ları
+├── composables/        # Composables
+├── assets/             # Statik dosyalar
+├── public/             # Public dosyalar
+└── utils/              # Yardımcı fonksiyonlar
+```
+
+## 🔧 Teknolojiler
+
+- **Nuxt 3**: Vue.js framework
+- **Vuetify 3**: UI component library
+- **Pinia**: State management
+- **TypeScript**: Type safety
+- **Vercel**: Hosting platform
+
+## 📱 Sayfalar
+
+- `/` - Ana sayfa
+- `/category-detail/:slug` - Kategori detay
+- `/product-detail/:id` - Ürün detay
+- `/login` - Giriş
+- `/signup` - Kayıt
+
+## 🎨 Tasarım
+
+- Modern ve temiz arayüz
+- Responsive tasarım
+- Material Design prensipleri
+- Kullanıcı dostu navigasyon
+
+## 🚀 Performance
+
+- SSR ile hızlı yükleme
+- Code splitting
+- Image optimization
+- Caching strategies
+
+## 📄 Lisans
+
+MIT License
