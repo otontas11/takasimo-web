@@ -5,15 +5,11 @@ export const useCategoriesStore = defineStore('categories', () => {
 
   // ✅ STATE - Reactive references
   const categories = ref<any[]>([])
-  const selectedCategory = ref<any>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
 
   // ✅ GETTERS - Computed properties
   const getAllCategories = computed(() => categories.value)
-  const mainCategories = computed(() => categories.value.filter((cat: any) => !cat.parent_id))
-  const getSubCategories = computed(() => (parentId: any) => categories.value.filter((cat: any) => cat.parent_id === parentId))
-  const getCategoryById = computed(() => (id: any) => categories.value.find((cat: any) => cat.id === id))
   const isLoading = computed(() => loading.value)
   const getError = computed(() => error.value)
 
@@ -26,12 +22,12 @@ export const useCategoriesStore = defineStore('categories', () => {
     error.value = value
   }
 
-  const setCategories = (data: any[]) => {
-    categories.value = data
+  const clearError = () => {
+    setError(null)
   }
 
-  const setSelectedCategory = (category: any) => {
-    selectedCategory.value = category
+  const setCategories = (data: any[]) => {
+    categories.value = data
   }
 
   const fetchCategories = async () => {
@@ -56,59 +52,22 @@ export const useCategoriesStore = defineStore('categories', () => {
     }
   }
 
-  const fetchCategoryById = async (id: any) => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      const { getCategoryById } = useCategoriesApi()
-      const response = await getCategoryById(id)
-
-      if (response) {
-        setSelectedCategory(response)
-      }
-
-      return { success: true }
-    } catch (err: any) {
-      console.error('Category fetch error:', err)
-      setError('Kategori yüklenirken hata oluştu')
-      return { success: false, error: 'Kategori yüklenirken hata oluştu' }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const clearError = () => {
-    setError(null)
-  }
-
-  const clearCategories = () => {
-    setCategories([])
-    setSelectedCategory(null)
-  }
 
   // ✅ RETURN - Expose state, getters, and actions
   return {
     // State
     categories,
-    selectedCategory,
     loading,
     error,
 
     // Getters
     getAllCategories,
-    mainCategories,
-    getSubCategories,
-    getCategoryById,
     isLoading,
     getError,
 
     // Actions
     fetchCategories,
-    fetchCategoryById,
     setCategories,
-    setSelectedCategory,
     clearError,
-    clearCategories
   }
 })

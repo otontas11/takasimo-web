@@ -22,37 +22,63 @@ export const useCategoriesApi = () => {
 
   const getAllCategories = async () => {
     try {
-      const response = await api.get('categories', {
-        filter: ['{"k": "is_deleted", "o": "=", "v": false}']
-      })
+      const filter = ['{"k": "is_deleted", "o": "=", "v": false}'];
 
-      return response
+      const response = await api.get('categories', {
+        filter: filter,
+        limit: 1000,
+        orderBy: ['{"k": "sequence", "v": "asc"}', '{"k": "name", "v": "asc"}'],
+        with: ['children']
+      });
+
+      return response;
     } catch (error) {
-      console.error('getAllCategories error:', error)
-      throw error
+      console.error('getAllCategories error:', error);
+      throw error;
     }
   }
 
   const getCategoryById = async (id: string) => {
     try {
-      const response = await api.get(`categories/${id}`)
-      return response
+      const filter = [
+        '{"k": "is_deleted", "o": "=", "v": false}',
+        `{"k": "id", "o": "=", "v": "${id}"}`
+      ];
+
+      const response = await api.get('categories', {
+        filter: filter,
+        limit: 1,
+        with: ['children', 'parent']
+      });
+
+      return response;
     } catch (error) {
-      console.error('getCategoryById error:', error)
-      throw error
+      console.error('getCategoryById error:', error);
+      throw error;
     }
   }
 
-  const getSubCategories = async (parentId: string) => {
+  const getSubCategoriesById = async (id: string) => {
     try {
-      const response = await api.get('categories', {
-        filter: ['{"k": "is_deleted", "o": "=", "v": false}', `{"k": "parent_code", "o": "=", "v": "${parentId}"}`]
-      })
+      const filter = [
+        '{"k": "is_deleted", "o": "=", "v": false}',
+        `{"k": "parent_code", "o": "=", "v": "${id}"}`
+      ];
 
-      return response
+      const response = await api.get('categories', {
+        filter: filter,
+        limit: 1000,
+        orderBy: [
+          '{"k": "sequence", "v": "asc"}',
+          '{"k": "name", "v": "asc"}'
+        ],
+        with: ['children']
+      });
+
+      return response;
     } catch (error) {
-      console.error('getSubCategories error:', error)
-      throw error
+      console.error('getSubCategoriesById error:', error);
+      throw error;
     }
   }
 
@@ -60,6 +86,6 @@ export const useCategoriesApi = () => {
     getMainCategories,
     getAllCategories,
     getCategoryById,
-    getSubCategories
+    getSubCategoriesById
   }
 }

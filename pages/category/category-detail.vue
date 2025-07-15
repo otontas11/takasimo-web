@@ -1,5 +1,5 @@
 <template>
-  <div class="category-detail-page">
+  <v-main class="category-detail-page">
     <v-container class="pa-0" style="max-width: 1320px">
       <v-row>
         <!-- Left Sidebar - Filters -->
@@ -67,12 +67,13 @@
         </v-col>
       </v-row>
     </v-container>
-  </div>
+  </v-main>
 </template>
 
 <script setup lang="ts">
 import CategoryFilters from '~/components/CategoryFilters.vue'
 import ProductCard from '~/components/ProductCard.vue'
+import {useCategoriesApi} from "~/composables/api/useCategoriesApi";
 
 // Sample data
 const { generateSampleProducts, generateSampleCategories } = useSampleData()
@@ -82,6 +83,8 @@ const loading = ref(false)
 const sortBy = ref('smart')
 const currentPage = ref(1)
 const hasMoreProducts = ref(true)
+
+const subCategories=ref([])
 
 // Sample products for demonstration
 const sampleProducts = ref(generateSampleProducts())
@@ -105,9 +108,6 @@ const products = computed(() => {
   return sampleProducts.value
 })
 
-const subCategories = computed(() => {
-  return sampleCategories.value
-})
 
 const sortOptions = [
   { title: 'Akıllı Sıralama', value: 'smart' },
@@ -153,6 +153,7 @@ watch(sortBy, async (newSort) => {
 // Initialize
 onMounted(async () => {
   loading.value = true
+  subCategories.value=useCategoriesApi().getCategoryById(route.params.id)
 
   try {
     // Kategori ve ürünleri paralel olarak yükle
