@@ -1,109 +1,3 @@
-<script setup lang="ts">
-import CategoryFilters from '~/components/CategoryFilters.vue'
-import ProductCard from '~/components/ProductCard.vue'
-
-// Route params
-const route = useRoute()
-const categorySlug = route.params.slug as string
-
-// Store
-const productsStore = useProductsStore()
-const categoriesStore = useCategoriesStore()
-
-// Sample data
-const { generateSampleProducts, generateSampleCategories } = useSampleData()
-
-// Reactive data
-const loading = ref(false)
-const sortBy = ref('smart')
-const currentPage = ref(1)
-const hasMoreProducts = ref(true)
-
-// Sample products for demonstration
-const sampleProducts = ref(generateSampleProducts())
-const sampleCategories = ref(generateSampleCategories())
-
-// Computed
-const categoryTitle = computed(() => {
-  return `${categoryName.value} İlanları ve Fiyatları`
-})
-
-const categoryName = computed(() => {
-  // Bu kısım gerçek kategori verisiyle güncellenecek
-  return 'Telefon'
-})
-
-const totalResults = computed(() => {
-  return 293806 // Sample total count
-})
-
-const products = computed(() => {
-  return sampleProducts.value
-})
-
-const subCategories = computed(() => {
-  return sampleCategories.value
-})
-
-const sortOptions = [
-  { title: 'Akıllı Sıralama', value: 'smart' },
-  { title: 'Fiyat (Düşükten Yükseğe)', value: 'price_asc' },
-  { title: 'Fiyat (Yüksekten Düşüğe)', value: 'price_desc' },
-  { title: 'Tarih (Yeniden Eskiye)', value: 'date_desc' },
-  { title: 'Tarih (Eskiden Yeniye)', value: 'date_asc' }
-]
-
-// Methods
-const handleFavorite = (productId: string | number) => {
-  // Favori işlemi burada yapılacak
-  console.log('Toggle favorite for product:', productId)
-}
-
-const loadMoreProducts = async () => {
-  if (loading.value) return
-  
-  loading.value = true
-  currentPage.value++
-  
-  try {
-    // await productsStore.fetchProducts(currentPage.value) // Original line commented out
-    // Eğer daha fazla ürün yoksa hasMoreProducts'ı false yap
-    // if (productsStore.getAllProducts.length >= productsStore.totalItems) { // Original line commented out
-    //   hasMoreProducts.value = false
-    // }
-  } catch (error) {
-    console.error('Load more products error:', error)
-  } finally {
-    loading.value = false
-  }
-}
-
-// Watch for sort changes
-watch(sortBy, async (newSort) => {
-  // Sıralama değiştiğinde ürünleri yeniden yükle
-  currentPage.value = 1
-  hasMoreProducts.value = true
-  // await productsStore.fetchProducts(1) // Original line commented out
-})
-
-// Initialize
-onMounted(async () => {
-  loading.value = true
-  
-  try {
-    // Kategori ve ürünleri paralel olarak yükle
-    // await Promise.all([ // Original line commented out
-    //   categoriesStore.fetchCategories(),
-    //   productsStore.fetchProducts(1)
-    // ])
-  } catch (error) {
-    console.error('Initial load error:', error)
-  } finally {
-    loading.value = false
-  }
-})
-</script>
-
 <template>
   <div class="category-detail-page">
     <v-container class="pa-0" style="max-width: 1320px">
@@ -175,6 +69,104 @@ onMounted(async () => {
     </v-container>
   </div>
 </template>
+
+<script setup lang="ts">
+import CategoryFilters from '~/components/CategoryFilters.vue'
+import ProductCard from '~/components/ProductCard.vue'
+
+// Sample data
+const { generateSampleProducts, generateSampleCategories } = useSampleData()
+
+// Reactive data
+const loading = ref(false)
+const sortBy = ref('smart')
+const currentPage = ref(1)
+const hasMoreProducts = ref(true)
+
+// Sample products for demonstration
+const sampleProducts = ref(generateSampleProducts())
+const sampleCategories = ref(generateSampleCategories())
+
+// Computed
+const categoryTitle = computed(() => {
+  return `${categoryName.value} İlanları ve Fiyatları`
+})
+
+const categoryName = computed(() => {
+  // Bu kısım gerçek kategori verisiyle güncellenecek
+  return 'Telefon'
+})
+
+const totalResults = computed(() => {
+  return 293806 // Sample total count
+})
+
+const products = computed(() => {
+  return sampleProducts.value
+})
+
+const subCategories = computed(() => {
+  return sampleCategories.value
+})
+
+const sortOptions = [
+  { title: 'Akıllı Sıralama', value: 'smart' },
+  { title: 'Fiyat (Düşükten Yükseğe)', value: 'price_asc' },
+  { title: 'Fiyat (Yüksekten Düşüğe)', value: 'price_desc' },
+  { title: 'Tarih (Yeniden Eskiye)', value: 'date_desc' },
+  { title: 'Tarih (Eskiden Yeniye)', value: 'date_asc' }
+]
+
+// Methods
+const handleFavorite = (productId: string | number) => {
+  // Favori işlemi burada yapılacak
+  console.log('Toggle favorite for product:', productId)
+}
+
+const loadMoreProducts = async () => {
+  if (loading.value) return
+
+  loading.value = true
+  currentPage.value++
+
+  try {
+    // await productsStore.fetchProducts(currentPage.value) // Original line commented out
+    // Eğer daha fazla ürün yoksa hasMoreProducts'ı false yap
+    // if (productsStore.getAllProducts.length >= productsStore.totalItems) { // Original line commented out
+    //   hasMoreProducts.value = false
+    // }
+  } catch (error) {
+    console.error('Load more products error:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+// Watch for sort changes
+watch(sortBy, async (newSort) => {
+  // Sıralama değiştiğinde ürünleri yeniden yükle
+  currentPage.value = 1
+  hasMoreProducts.value = true
+  // await productsStore.fetchProducts(1) // Original line commented out
+})
+
+// Initialize
+onMounted(async () => {
+  loading.value = true
+
+  try {
+    // Kategori ve ürünleri paralel olarak yükle
+    // await Promise.all([ // Original line commented out
+    //   categoriesStore.fetchCategories(),
+    //   productsStore.fetchProducts(1)
+    // ])
+  } catch (error) {
+    console.error('Initial load error:', error)
+  } finally {
+    loading.value = false
+  }
+})
+</script>
 
 <style scoped>
 .category-detail-page {
