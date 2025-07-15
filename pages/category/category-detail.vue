@@ -4,10 +4,7 @@
       <v-row>
         <!-- Left Sidebar - Filters -->
         <v-col cols="12" md="3" class="sidebar-col">
-          <CategoryFilters 
-            :category-title="categoryTitle"
-            :categories="subCategories"
-          />
+          <CategoryFilters :categories="subCategories" />
         </v-col>
 
         <!-- Right Content - Products -->
@@ -75,6 +72,13 @@ import CategoryFilters from '~/components/CategoryFilters.vue'
 import ProductCard from '~/components/ProductCard.vue'
 import {useCategoriesApi} from "~/composables/api/useCategoriesApi";
 
+// Route params
+const route = useRoute()
+
+console.log("route.params.slug",route.params)
+// API
+const { getCategoryById, getSubCategoriesById } = useCategoriesApi()
+
 // Sample data
 const { generateSampleProducts, generateSampleCategories } = useSampleData()
 
@@ -84,20 +88,18 @@ const sortBy = ref('smart')
 const currentPage = ref(1)
 const hasMoreProducts = ref(true)
 
-const subCategories=ref([])
+const subCategories = ref<any[]>([])
+const currentCategory = ref<any>(null)
+
+const categoryId = computed(()=>route.params.id)
+
 
 // Sample products for demonstration
 const sampleProducts = ref(generateSampleProducts())
 const sampleCategories = ref(generateSampleCategories())
 
-// Computed
-const categoryTitle = computed(() => {
-  return `${categoryName.value} İlanları ve Fiyatları`
-})
-
 const categoryName = computed(() => {
-  // Bu kısım gerçek kategori verisiyle güncellenecek
-  return 'Telefon'
+  return currentCategory.value?.name || 'Kategori'
 })
 
 const totalResults = computed(() => {
@@ -107,7 +109,6 @@ const totalResults = computed(() => {
 const products = computed(() => {
   return sampleProducts.value
 })
-
 
 const sortOptions = [
   { title: 'Akıllı Sıralama', value: 'smart' },
@@ -153,9 +154,15 @@ watch(sortBy, async (newSort) => {
 // Initialize
 onMounted(async () => {
   loading.value = true
-  subCategories.value=useCategoriesApi().getCategoryById(route.params.id)
 
   try {
+    // Alt kategorileri al
+    const subCategoriesResponse = await getSubCategoriesById(categoryId.value)
+    console.log("subCategoriesResponse",subCategoriesResponse)
+    if (subCategoriesResponse && subCategoriesResponse.data) {
+      subCategories.value = subCategoriesResponse.data
+    }
+
     // Kategori ve ürünleri paralel olarak yükle
     // await Promise.all([ // Original line commented out
     //   categoriesStore.fetchCategories(),

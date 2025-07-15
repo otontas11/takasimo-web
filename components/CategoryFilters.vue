@@ -2,7 +2,7 @@
   <div class="category-filters">
     <!-- Header -->
     <div class="filters-header">
-      <h2>{{ categoryTitle }}</h2>
+      <h2> categoryTitle </h2>
     </div>
 
     <!-- Categories Section -->
@@ -14,7 +14,6 @@
       <div v-show="sections.categories" class="section-content">
         <div v-for="category in categories" :key="category.id" class="category-item">
           <span class="category-name">{{ category.name }}</span>
-          <span class="category-count">({{ category.count }})</span>
         </div>
       </div>
     </div>
@@ -51,22 +50,6 @@
         >
           Mevcut konumu kullan
         </v-btn>
-      </div>
-    </div>
-
-    <!-- Secure Listings Section -->
-    <div class="filter-section">
-      <div class="section-header">
-        <span>Cüzdanım Güvenli İlanlar</span>
-        <v-switch v-model="filters.secureListings" hide-details density="compact" />
-      </div>
-    </div>
-
-    <!-- Free Shipping Section -->
-    <div class="filter-section">
-      <div class="section-header">
-        <span>Ücretsiz Kargo</span>
-        <v-switch v-model="filters.freeShipping" hide-details density="compact" />
       </div>
     </div>
 
@@ -137,12 +120,10 @@
 import { ref, reactive } from 'vue'
 
 interface Props {
-  categoryTitle?: string
   categories?: Array<{ id: string; name: string; count: number }>
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  categoryTitle: 'Telefon İlanları ve Fiyatları',
   categories: () => [
     { id: '1', name: 'Telefon', count: 109728 },
     { id: '2', name: 'iPhone iOS Telefon', count: 109728 },
@@ -165,8 +146,6 @@ const sections = reactive({
 const filters = reactive({
   province: null,
   district: null,
-  secureListings: false,
-  freeShipping: false,
   minPrice: null,
   maxPrice: null,
   listingDate: 'all',

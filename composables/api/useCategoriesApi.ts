@@ -58,7 +58,7 @@ export const useCategoriesApi = () => {
     }
   }
 
-  const getSubCategoriesById = async (id: string) => {
+  const getSubCategoriesById = async (id:any) => {
     try {
       const filter = [
         '{"k": "is_deleted", "o": "=", "v": false}',
