@@ -11,7 +11,7 @@
 
       <section class="categories-section">
         <v-container>
-          <PopularCaxtegories :categories="allCategories" :loading="categoriesStore.isLoading" />
+          <PopularCategories :categories="allCategories" :loading="categoriesStore.isLoading" />
         </v-container>
       </section>
 
