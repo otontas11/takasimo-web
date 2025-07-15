@@ -14,7 +14,8 @@
     "format:check": "prettier --check .",
     "stylelint": "stylelint \"**/*.{css,vue}\"",
     "stylelint:fix": "stylelint \"**/*.{css,vue}\" --fix",
-    "format:all": "npm run format && npm run stylelint:fix && npm run lint:fix"
+    "format:all": "npm run format && npm run stylelint:fix && npm run lint:fix",
+    "start": "nuxt start"
   },
   "dependencies": {
     "@ionic/vue": "^8.6.4",
@@ -40,7 +41,7 @@
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "eslint": "^9.29.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",
     "postcss-html": "^1.8.0",
