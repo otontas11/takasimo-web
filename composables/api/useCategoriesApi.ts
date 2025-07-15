@@ -26,7 +26,7 @@ export const useCategoriesApi = () => {
 
       const response = await api.get('categories', {
         filter: filter,
-        limit: 1000,
+        limit: 100,
         orderBy: ['{"k": "sequence", "v": "asc"}', '{"k": "name", "v": "asc"}'],
         with: ['children']
       });
@@ -67,12 +67,11 @@ export const useCategoriesApi = () => {
 
       const response = await api.get('categories', {
         filter: filter,
-        limit: 1000,
         orderBy: [
           '{"k": "sequence", "v": "asc"}',
           '{"k": "name", "v": "asc"}'
         ],
-        with: ['children']
+        with: ['children', 'parent']
       });
 
       return response;

@@ -2,7 +2,7 @@
   <div class="category-filters">
     <!-- Header -->
     <div class="filters-header">
-      <h2> categoryTitle </h2>
+      <h2> {{categories[0]?.parent?.name}} </h2>
     </div>
 
     <!-- Categories Section -->
