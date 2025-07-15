@@ -6,7 +6,7 @@
           <div class="d-flex align-center justify-space-between category-container">
             <!-- Categories -->
             <div ref="categoryListRef" class="category-list">
-              <ClientOnly>
+
                 <template v-if="visibleCategories.length > 0">
                   <span
                     v-for="(category, index) in visibleCategories"
@@ -19,10 +19,12 @@
                   </span>
                 </template>
                 <template v-else>
-                  <!-- Placeholder for empty state to prevent hydration mismatch -->
-                  <span class="category-item placeholder">Kategoriler yükleniyor...</span>
+                  <!-- Skeleton loading for categories -->
+                  <div class="skeleton-container">
+                    <div v-for="i in 6" :key="i" class="skeleton-item"></div>
+                  </div>
                 </template>
-              </ClientOnly>
+
             </div>
 
             <!-- See All Link -->
@@ -194,6 +196,38 @@ watch(containerWidth, () => {
   cursor: default;
   font-style: italic;
 }
+
+/* Skeleton Loading Styles */
+.skeleton-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.skeleton-item {
+  width: 80px;
+  height: 20px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 .see-all-link {
   color: #8b2865;
   text-decoration: none;
@@ -207,10 +241,12 @@ watch(containerWidth, () => {
   min-width: 120px;
   margin-left: 1.5rem;
 }
+
 .see-all-link:hover {
   color: #6d1e4f;
   text-decoration: none;
 }
+
 @media (max-width: 600px) {
   .category-container {
     flex-direction: row;
@@ -243,6 +279,14 @@ watch(containerWidth, () => {
     margin-top: 0;
     font-size: 0.9rem;
     align-self: auto;
+  }
+  .skeleton-container {
+    gap: 0.6rem;
+  }
+  
+  .skeleton-item {
+    width: 60px;
+    height: 16px;
   }
 }
 </style>
