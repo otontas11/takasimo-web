@@ -26,7 +26,8 @@ export default defineNuxtPlugin({
         VBtn: {
           style: 'text-transform: none;'
         }
-      }
+      },
+      ssr: true
     })
 
     nuxtApp.vueApp.use(vuetify)

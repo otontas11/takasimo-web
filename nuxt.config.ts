@@ -5,7 +5,11 @@ export default defineNuxtConfig({
 
   modules: ['@nuxt/content', '@nuxt/eslint', '@nuxt/image', '@nuxt/scripts', '@pinia/nuxt'],
 
-  css: ['~/assets/css/main.css', 'vuetify/lib/styles/main.sass', '@mdi/font/css/materialdesignicons.min.css'],
+  css: [
+    '~/assets/css/main.css', 
+    'vuetify/styles',
+    '@mdi/font/css/materialdesignicons.css'
+  ],
 
   build: {
     transpile: ['vuetify']

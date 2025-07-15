@@ -69,15 +69,21 @@
       <!-- Menü Linkleri (örnek) -->
       <v-list nav dense>
         <v-list-item link>
-          <v-list-item-icon><v-icon>mdi-home</v-icon></v-list-item-icon>
+          <template v-slot:prepend>
+            <v-icon>mdi-home</v-icon>
+          </template>
           <v-list-item-title>Ana Sayfa</v-list-item-title>
         </v-list-item>
         <v-list-item link>
-          <v-list-item-icon><v-icon>mdi-format-list-bulleted</v-icon></v-list-item-icon>
+          <template v-slot:prepend>
+            <v-icon>mdi-format-list-bulleted</v-icon>
+          </template>
           <v-list-item-title>İlanlarım</v-list-item-title>
         </v-list-item>
         <v-list-item link>
-          <v-list-item-icon><v-icon>mdi-logout</v-icon></v-list-item-icon>
+          <template v-slot:prepend>
+            <v-icon>mdi-logout</v-icon>
+          </template>
           <v-list-item-title>Çıkış Yap</v-list-item-title>
         </v-list-item>
       </v-list>
@@ -92,14 +98,20 @@ const isMobile = ref(false)
 const { router } = useRouter()
 
 const checkMobile = () => {
-  isMobile.value = window.innerWidth < 960
+  if (process.client) {
+    isMobile.value = window.innerWidth < 960
+  }
 }
 onMounted(() => {
   checkMobile()
-  window.addEventListener('resize', checkMobile)
+  if (process.client) {
+    window.addEventListener('resize', checkMobile)
+  }
 })
 onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
+  if (process.client) {
+    window.removeEventListener('resize', checkMobile)
+  }
 })
 </script>
 

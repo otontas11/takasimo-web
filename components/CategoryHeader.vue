@@ -6,21 +6,23 @@
           <div class="d-flex align-center justify-space-between category-container">
             <!-- Categories -->
             <div ref="categoryListRef" class="category-list">
-              <template v-if="visibleCategories.length > 0">
-                <span
+              <ClientOnly>
+                <template v-if="visibleCategories.length > 0">
+                  <span
                     v-for="(category, index) in visibleCategories"
                     :key="(category as any).id || (category as any).category_code || index"
                     class="category-item"
                     :class="{ 'font-weight-bold': index % 2 === 0 }"
                     @click="navigateToCategory(category)"
-                >
-                  {{ (category as any).name }}
-                </span>
-              </template>
-              <template v-else>
-                <!-- Placeholder for empty state to prevent hydration mismatch -->
-                <span class="category-item placeholder">Kategoriler yükleniyor...</span>
-              </template>
+                  >
+                    {{ (category as any).name }}
+                  </span>
+                </template>
+                <template v-else>
+                  <!-- Placeholder for empty state to prevent hydration mismatch -->
+                  <span class="category-item placeholder">Kategoriler yükleniyor...</span>
+                </template>
+              </ClientOnly>
             </div>
 
             <!-- See All Link -->
@@ -58,6 +60,7 @@ const scrollThreshold = 300 // 300px scroll sonrası scrollable olur
 const categoryListRef = ref<HTMLElement | null>(null)
 const containerWidth = ref(0)
 const windowWidth = ref(1024) // Default desktop width
+const isClient = ref(false)
 
 const updateWindowWidth = () => {
   if (process.client) {
@@ -67,7 +70,7 @@ const updateWindowWidth = () => {
 
 // Computed properties
 const visibleCategories = computed(() => {
-  if (!props.categories || props.categories.length === 0) {
+  if (!isClient.value || !props.categories || props.categories.length === 0) {
     return []
   }
   if (windowWidth.value > 600) {
@@ -122,6 +125,7 @@ const navigateToCategory = (category: Category) => {
 
 // Lifecycle
 onMounted(() => {
+  isClient.value = true
   if (process.client) {
     window.addEventListener('scroll', handleScroll)
     window.addEventListener('resize', updateContainerWidth)
