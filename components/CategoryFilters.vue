@@ -27,14 +27,14 @@
       <div v-show="sections.location" class="section-content">
         <v-select
             v-model="filters.province"
-            :items="cities"
+            :items="provinces"
             class="mb-3"
             density="compact"
             label="İl seçin"
             variant="outlined"
             item-title="name"
             item-value="id"
-            
+
         />
         <v-select
             v-model="filters.district"
@@ -143,7 +143,7 @@ const filters = reactive({
   keyword: ''
 })
 
-const cities = ref([])
+const provinces = ref([])
 const districts = ['Beyoğlu', 'Kadıköy', 'Beşiktaş', 'Şişli', 'Üsküdar']
 
 
@@ -158,8 +158,8 @@ onMounted(async () => {
       subCategories.value = subCategoriesResponse.data
     }
     
-    const city=await getCities()
-    cities.value = city?.data ||[]
+    const cities=await getCities()
+    provinces.value = cities?.data ||[]
 
   } catch (error) {
     console.error('Initial load error:', error)
