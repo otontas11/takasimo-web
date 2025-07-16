@@ -24,7 +24,7 @@
                   class="sort-select"
                   density="compact"
                   hide-details
-                  label="Akıllı Sıralama"
+                  label="Gelişmiş Sıralama"
                   prepend-inner-icon="mdi-sort-variant"
                   variant="outlined"
               />
@@ -64,15 +64,13 @@
 
 <script lang="ts" setup>
 import CategoryFilters from '~/components/CategoryFilters.vue'
-import ProductCard from '~/components/ProductCard.vue'
-
+-
 // Sample data
-const {generateSampleProducts} = useSampleData()
 const productsStore = useProductsStore()
 
 // Reactive data
 const loading = ref(false)
-const sortBy = ref('smart')
+const sortBy = ref('date_desc')
 const currentPage = ref(1)
 const hasMoreProducts = ref(true)
 
@@ -86,22 +84,14 @@ const totalResults = computed(() => {
   return 293806 // Sample total count
 })
 
-
 const products = computed(() => productsStore.getAllProducts)
 
 const sortOptions = [
-  {title: 'Akıllı Sıralama', value: 'smart'},
-  {title: 'Fiyat (Düşükten Yükseğe)', value: 'price_asc'},
-  {title: 'Fiyat (Yüksekten Düşüğe)', value: 'price_desc'},
-  {title: 'Tarih (Yeniden Eskiye)', value: 'date_desc'},
-  {title: 'Tarih (Eskiden Yeniye)', value: 'date_asc'}
+  {title: 'Tarihe göre sırala (Önce en yeni)', value: 'date_desc'},
+  {title: 'Tarihe göre sırala (Önce en eski)', value: 'date_asc'},
+  {title: 'Fiyata göre sırala (Önce en yüksek)', value: 'price_desc'},
+  {title: 'Fiyata göre sırala (Önce en düşük)', value: 'price_asc'}
 ]
-
-// Methods
-const handleFavorite = (productId: string | number) => {
-  // Favori işlemi burada yapılacak
-  console.log('Toggle favorite for product:', productId)
-}
 
 const loadMoreProducts = async () => {
   if (loading.value) return
