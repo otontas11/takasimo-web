@@ -17,6 +17,7 @@
 
       <section class="products-section">
         <v-container>
+          <h2 class="text-h5 mb-6 text-center font-weight-bold">Öne Çıkan Ürünler</h2>
           <FeaturedProducts :products="products" @loadMore="handleLoadMore" />
         </v-container>
       </section>

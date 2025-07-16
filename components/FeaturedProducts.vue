@@ -1,6 +1,5 @@
 <template>
   <div class="featured-products py-8">
-    <h2 class="text-h5 mb-6 text-center font-weight-bold">Öne Çıkan Ürünler</h2>
 
     <!-- Loading State -->
     <v-row v-if="shouldShowLoading">

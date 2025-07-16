@@ -4,7 +4,7 @@
       <v-row>
         <!-- Left Sidebar - Filters -->
         <v-col class="sidebar-col" cols="12" md="3">
-          <CategoryFilters :categories="subCategories"/>
+          <CategoryFilters />
         </v-col>
 
         <!-- Right Content - Products -->
@@ -32,13 +32,8 @@
           </div>
 
           <!-- Products Grid -->
-          <div class="products-grid">
-            <ProductCard
-                v-for="product in products"
-                :key="product.id"
-                :product="product"
-                @favorite="handleFavorite"
-            />
+          <div class="products-cards">
+            <FeaturedProducts :products="products" />
           </div>
 
           <!-- Load More Button -->
@@ -73,6 +68,7 @@ import ProductCard from '~/components/ProductCard.vue'
 
 // Sample data
 const {generateSampleProducts} = useSampleData()
+const productsStore = useProductsStore()
 
 // Reactive data
 const loading = ref(false)
@@ -82,9 +78,6 @@ const hasMoreProducts = ref(true)
 
 const currentCategory = ref<any>(null)
 
-// Sample products for demonstration
-const sampleProducts = ref(generateSampleProducts())
-
 const categoryName = computed(() => {
   return currentCategory.value?.name || 'Kategori'
 })
@@ -93,9 +86,8 @@ const totalResults = computed(() => {
   return 293806 // Sample total count
 })
 
-const products = computed(() => {
-  return sampleProducts.value
-})
+
+const products = computed(() => productsStore.getAllProducts)
 
 const sortOptions = [
   {title: 'Akıllı Sıralama', value: 'smart'},
@@ -192,13 +184,6 @@ onMounted(async () => {
   min-width: 200px;
 }
 
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-  margin-bottom: 32px;
-}
-
 .load-more-section {
   display: flex;
   justify-content: center;
@@ -232,11 +217,6 @@ onMounted(async () => {
 
   .sort-select {
     min-width: 100%;
-  }
-
-  .products-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 16px;
   }
 
   .sidebar-col {
