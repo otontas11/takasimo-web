@@ -64,7 +64,7 @@
 
 <script lang="ts" setup>
 import CategoryFilters from '~/components/CategoryFilters.vue'
--
+
 // Sample data
 const productsStore = useProductsStore()
 
