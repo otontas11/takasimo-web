@@ -6,10 +6,8 @@ export const useLocationApi = () => {
     const getCities = async () => {
         try {
             const response = api.get('cities', {
-                params: {
-                    filter: [JSON.stringify({ k: "is_deleted", o: "=", v: false })],
-                    limit:100
-                }
+                filter: [JSON.stringify({ k: "is_deleted", o: "=", v: false })],
+                limit:100
             })
 
             return response
@@ -22,12 +20,11 @@ export const useLocationApi = () => {
     const getDistricts = async (cityCode: any) => {
         try {
             const response = api.get('districts', {
-                params: {
-                    filter: [JSON.stringify({k: "city_code", o: "=", v: `${cityCode}`})],
-                    per_page: 100
-                }
+                filter: [JSON.stringify({k: "city_code", o: "=", v: cityCode})],
+                per_page: 100
             })
 
+            console.log('getDistricts API response for cityCode:', cityCode, response)
             return response
 
         } catch (error) {

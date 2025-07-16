@@ -25,6 +25,7 @@
         <v-icon :class="{ 'rotate': !sections.location }">mdi-chevron-up</v-icon>
       </div>
       <div v-show="sections.location" class="section-content">
+        <b>{{filters.province}}</b>
         <v-select
             v-model="filters.province"
             :items="provinces"
@@ -34,7 +35,7 @@
             variant="outlined"
             item-title="name"
             item-value="id"
-
+            @update:model-value="onProvinceChange"
         />
         <v-select
             v-model="filters.district"
@@ -144,7 +145,7 @@ const filters = reactive({
 })
 
 const provinces = ref([])
-const districts = ['Beyoğlu', 'Kadıköy', 'Beşiktaş', 'Şişli', 'Üsküdar']
+const districts = ref([])
 
 
 // Initialize
@@ -154,12 +155,12 @@ onMounted(async () => {
     // Alt kategorileri al
     const subCategoriesResponse = await getSubCategoriesById(categoryId.value)
     console.log("subCategoriesResponse", subCategoriesResponse)
-    if (subCategoriesResponse && subCategoriesResponse.data) {
-      subCategories.value = subCategoriesResponse.data
+    if (subCategoriesResponse && (subCategoriesResponse as any).data) {
+      subCategories.value = (subCategoriesResponse as any).data
     }
     
     const cities=await getCities()
-    provinces.value = cities?.data ||[]
+    provinces.value = (cities as any)?.data ||[]
 
   } catch (error) {
     console.error('Initial load error:', error)
@@ -167,6 +168,32 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+// Province değiştiğinde çağrılacak fonksiyon
+const onProvinceChange = (provinceId: any) => {
+  console.log("provinceId",provinceId)
+  // District'i sıfırla
+  filters.district = null
+  districts.value = []
+  
+  // Eğer province seçildiyse ilçeleri getir
+  if (provinceId) {
+    loadDistricts(provinceId)
+  }
+}
+
+// İlçeleri yükle
+const loadDistricts = async (provinceId: any) => {
+  try {
+    console.log('Loading districts for provinceId:', provinceId)
+    const districtsResponse = await getDistricts(provinceId)
+    districts.value = (districtsResponse as any)?.data || []
+    console.log('Districts loaded:', districts.value)
+  } catch (error) {
+    console.error('Error loading districts:', error)
+    districts.value = []
+  }
+}
 
 const toggleSection = (section: keyof typeof sections) => {
   sections[section] = !sections[section]
