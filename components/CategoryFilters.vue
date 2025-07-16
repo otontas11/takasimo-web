@@ -80,16 +80,14 @@
     <!-- Listing Date Section -->
     <div class="filter-section">
       <div class="section-header" @click="toggleSection('date')">
-        <span>İlan Tarihi</span>
+        <span>Takas</span>
         <v-icon :class="{ 'rotate': !sections.date }">mdi-chevron-up</v-icon>
       </div>
       <div v-show="sections.date" class="section-content">
         <v-radio-group v-model="filters.listingDate" density="compact">
           <v-radio label="Tümü" value="all"/>
-          <v-radio label="Son 24 saat" value="24h"/>
-          <v-radio label="Son 3 gün içinde" value="3d"/>
-          <v-radio label="Son 7 gün içinde" value="7d"/>
-          <v-radio label="Son 15 gün içinde" value="15d"/>
+          <v-radio label="Var" value="24h"/>
+          <v-radio label="Yok" value="3d"/>
         </v-radio-group>
       </div>
     </div>
