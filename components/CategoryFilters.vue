@@ -32,6 +32,9 @@
             density="compact"
             label="İl seçin"
             variant="outlined"
+            item-title="name"
+            item-value="id"
+            
         />
         <v-select
             v-model="filters.district"
@@ -40,16 +43,9 @@
             density="compact"
             label="İlçe seçin"
             variant="outlined"
+            item-title="name"
+            item-value="id"
         />
-        <v-btn
-            class="w-100"
-            color="primary"
-            prepend-icon="mdi-map-marker"
-            size="small"
-            variant="outlined"
-        >
-          Mevcut konumu kullan
-        </v-btn>
       </div>
     </div>
 
@@ -147,7 +143,7 @@ const filters = reactive({
   keyword: ''
 })
 
-const cities = ['İstanbul', 'Ankara', 'İzmir', 'Bursa', 'Antalya']
+const cities = ref([])
 const districts = ['Beyoğlu', 'Kadıköy', 'Beşiktaş', 'Şişli', 'Üsküdar']
 
 
@@ -163,7 +159,7 @@ onMounted(async () => {
     }
     
     const city=await getCities()
-    console.log("city",city)
+    cities.value = city?.data ||[]
 
   } catch (error) {
     console.error('Initial load error:', error)

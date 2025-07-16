@@ -7,14 +7,14 @@ export const useLocationApi = () => {
         try {
             const response = api.get('cities', {
                 params: {
-                    filter: [JSON.stringify({k: "is_deleted", o: "=", v: false})],
-                    limit: 100,
+                    filter: [JSON.stringify({ k: "is_deleted", o: "=", v: false })],
+                    limit:100
                 }
             })
 
             return response
         } catch (error) {
-            console.error('getProductById error:', error)
+            console.error('getCities error:', error)
             throw error
         }
     }
@@ -24,14 +24,14 @@ export const useLocationApi = () => {
             const response = api.get('districts', {
                 params: {
                     filter: [JSON.stringify({k: "city_code", o: "=", v: `${cityCode}`})],
-                    limit: 100
+                    per_page: 100
                 }
             })
 
             return response
 
         } catch (error) {
-            console.error('getProductById error:', error)
+            console.error('getDistricts error:', error)
             throw error
         }
 

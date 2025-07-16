@@ -28,6 +28,7 @@ export const useApi = () => {
         })
         url += `?${searchParams.toString()}`
         console.log('🔗 API Request URL:', url)
+        console.log('🔗 API Request Params:', params)
       }
 
       // Body
@@ -35,7 +36,9 @@ export const useApi = () => {
         requestOptions.body = JSON.stringify(body)
       }
 
-      return await $fetch(url, requestOptions)
+      const result = await $fetch(url, requestOptions)
+      console.log('🔗 API Response for', endpoint, ':', result)
+      return result
     } catch (error: any) {
       console.error('API Request Error:', error)
       throw createError({
