@@ -5,35 +5,13 @@ export const useProductsStore = defineStore('products', () => {
 
   // ✅ STATE - Reactive references
   const products = ref<any[]>([])
-  const selectedProduct = ref<any>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  // Pagination
-  const currentPage = ref(1)
-  const totalPages = ref(1)
-  const totalItems = ref(0)
-  const perPage = ref(12)
-
-  // Filters
-  const filters = ref({
-    category: null as string | null,
-    minPrice: null as number | null,
-    maxPrice: null as number | null,
-    brand: null as string | null,
-    search: '' as string
-  })
-
-  // Sorting
-  const sortBy = ref('created_at')
-  const sortOrder = ref('desc')
-
   // ✅ GETTERS - Computed properties
   const getAllProducts = computed(() => products.value)
-  const getSelectedProduct = computed(() => selectedProduct.value)
   const isLoading = computed(() => loading.value)
   const getError = computed(() => error.value)
-  const getCurrentPage = computed(() => currentPage.value)
 
   // ✅ ACTIONS - Functions
   const setLoading = (value: boolean) => {
@@ -44,29 +22,12 @@ export const useProductsStore = defineStore('products', () => {
     error.value = value
   }
 
-  const setProducts = (data: any[]) => {
-    products.value = data
-  }
-
-  const setPagination = (data: any) => {
-    currentPage.value = data.current_page || 1
-    totalPages.value = data.last_page || 1
-    totalItems.value = data.total || 0
-    perPage.value = data.per_page || 12
-  }
-
-  const clearFilters = () => {
-    filters.value = {
-      category: null,
-      minPrice: null,
-      maxPrice: null,
-      brand: null,
-      search: ''
-    }
-  }
-
   const clearError = () => {
     setError(null)
+  }
+
+  const setProducts = (data: any[]) => {
+    products.value = data
   }
 
   const fetchProducts = async (page: number = 1) => {
@@ -74,21 +35,8 @@ export const useProductsStore = defineStore('products', () => {
     setError(null)
 
     try {
-      const params = {
-        query: filters.value.search || '',
-        filters: {
-          page: page,
-          per_page: perPage.value,
-          sort_by: sortBy.value,
-          sort_order: sortOrder.value,
-          category: filters.value.category,
-          min_price: filters.value.minPrice,
-          max_price: filters.value.maxPrice,
-          brand: filters.value.brand
-        }
-      }
 
-      const response = await getProducts(params)
+      const response = await getProducts()
 
       if (response) {
         const productData = Array.isArray(response) ? response : (response as any).data || []
@@ -100,9 +48,6 @@ export const useProductsStore = defineStore('products', () => {
           setProducts([...products.value, ...productData])
         }
 
-        if ((response as any).meta) {
-          setPagination((response as any).meta)
-        }
       }
 
       return { success: true }
@@ -124,9 +69,8 @@ export const useProductsStore = defineStore('products', () => {
         query: query,
         filters: {
           page: 1,
-          per_page: perPage.value,
-          sort_by: sortBy.value,
-          sort_order: sortOrder.value,
+          per_page: 1,
+          sort_order: "",
           ...filters
         }
       }
@@ -152,29 +96,18 @@ export const useProductsStore = defineStore('products', () => {
   return {
     // State
     products,
-    selectedProduct,
     loading,
     error,
-    currentPage,
-    totalPages,
-    totalItems,
-    perPage,
-    filters,
-    sortBy,
-    sortOrder,
 
     // Getters
     getAllProducts,
-    getSelectedProduct,
     isLoading,
     getError,
-    getCurrentPage,
 
     // Actions
     fetchProducts,
     searchProducts,
     setProducts,
-    clearFilters,
     clearError
   }
 })
