@@ -25,7 +25,6 @@
         <v-icon :class="{ 'rotate': !sections.location }">mdi-chevron-up</v-icon>
       </div>
       <div v-show="sections.location" class="section-content">
-        <b>{{filters.province}}</b>
         <v-select
             v-model="filters.province"
             :items="provinces"
@@ -77,17 +76,17 @@
       </div>
     </div>
 
-    <!-- Listing Date Section -->
+    <!-- Exchange Section -->
     <div class="filter-section">
-      <div class="section-header" @click="toggleSection('date')">
+      <div class="section-header" @click="toggleSection('exchange')">
         <span>Takas</span>
-        <v-icon :class="{ 'rotate': !sections.date }">mdi-chevron-up</v-icon>
+        <v-icon :class="{ 'rotate': !sections.exchange }">mdi-chevron-up</v-icon>
       </div>
-      <div v-show="sections.date" class="section-content">
-        <v-radio-group v-model="filters.listingDate" density="compact">
+      <div v-show="sections.exchange" class="section-content">
+        <v-radio-group v-model="filters.exchange" density="compact">
           <v-radio label="Tümü" value="all"/>
-          <v-radio label="Var" value="24h"/>
-          <v-radio label="Yok" value="3d"/>
+          <v-radio label="Var" value="yes"/>
+          <v-radio label="Yok" value="no"/>
         </v-radio-group>
       </div>
     </div>
@@ -117,8 +116,6 @@ import {useCategoriesApi} from "~/composables/api/useCategoriesApi";
 import {useLocationApi} from "~/composables/api/useLocationApi";
 
 const route = useRoute()
-const loading = ref(false)
-
 const subCategories = ref<any[]>([])
 
 const {getSubCategoriesById} = useCategoriesApi()
@@ -129,7 +126,7 @@ const sections = reactive({
   subCategories: true,
   location: true,
   price: true,
-  date: true,
+  exchange: true,
   keyword: true
 })
 
@@ -138,7 +135,7 @@ const filters = reactive({
   district: null,
   minPrice: null,
   maxPrice: null,
-  listingDate: 'all',
+  exchange: 'all',
   keyword: ''
 })
 
@@ -162,8 +159,6 @@ onMounted(async () => {
 
   } catch (error) {
     console.error('Initial load error:', error)
-  } finally {
-    loading.value = false
   }
 })
 
