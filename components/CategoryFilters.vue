@@ -2,30 +2,27 @@
   <div class="category-filters">
     <!-- Header -->
     <div class="filters-header">
-      <h2> {{ subCategories[0]?.parent?.name }} </h2>
+      <h2>{{ categoryTitle }}</h2>
     </div>
 
-    <!-- Categories Section -->
-    <div class="filter-section">
-      <div class="section-header" @click="toggleSection('subCategories')">
-        <span>Kategoriler</span>
-        <v-icon :class="{ 'rotate': !sections.subCategories }">mdi-chevron-up</v-icon>
+    <!-- Filter Sections -->
+    <div v-for="section in filterSections" :key="section.key" class="filter-section">
+      <div class="section-header" @click="toggleSection(section.key)">
+        <span>{{ section.title }}</span>
+        <v-icon :class="{ 'rotate': !sections[section.key] }">mdi-chevron-up</v-icon>
       </div>
-      <div v-show="sections.subCategories" class="section-content">
-        <div v-for="category in subCategories" :key="category.id" class="category-item">
-          <span class="category-name">{{ category.name }}</span>
+      
+      <div v-show="sections[section.key]" class="section-content">
+        <!-- Categories Section -->
+        <div v-if="section.key === 'subCategories'">
+          <div v-for="category in subCategories" :key="category.id" class="category-item">
+            <span class="category-name">{{ category.name }}</span>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Location Section -->
-    <div class="filter-section">
-      <div class="section-header" @click="toggleSection('location')">
-        <span>Konum</span>
-        <v-icon :class="{ 'rotate': !sections.location }">mdi-chevron-up</v-icon>
-      </div>
-      <div v-show="sections.location" class="section-content">
-        <v-select
+        <!-- Location Section -->
+        <div v-else-if="section.key === 'location'">
+          <v-select
             v-model="filters.province"
             :items="provinces"
             class="mb-3"
@@ -35,8 +32,8 @@
             item-title="name"
             item-value="id"
             @update:model-value="onProvinceChange"
-        />
-        <v-select
+          />
+          <v-select
             v-model="filters.district"
             :items="districts"
             class="mb-3"
@@ -45,104 +42,123 @@
             variant="outlined"
             item-title="name"
             item-value="id"
-        />
-      </div>
-    </div>
-
-    <!-- Price Section -->
-    <div class="filter-section">
-      <div class="section-header" @click="toggleSection('price')">
-        <span>Fiyat</span>
-        <v-icon :class="{ 'rotate': !sections.price }">mdi-chevron-up</v-icon>
-      </div>
-      <div v-show="sections.price" class="section-content">
-        <div class="price-inputs">
-          <v-text-field
-              v-model="filters.minPrice"
-              class="mr-2"
-              density="compact"
-              label="Min"
-              type="number"
-              variant="outlined"
-          />
-          <v-text-field
-              v-model="filters.maxPrice"
-              density="compact"
-              label="Maks"
-              type="number"
-              variant="outlined"
           />
         </div>
-      </div>
-    </div>
 
-    <!-- Exchange Section -->
-    <div class="filter-section">
-      <div class="section-header" @click="toggleSection('exchange')">
-        <span>Takas</span>
-        <v-icon :class="{ 'rotate': !sections.exchange }">mdi-chevron-up</v-icon>
-      </div>
-      <div v-show="sections.exchange" class="section-content">
-        <v-radio-group v-model="filters.exchange" density="compact">
-          <v-radio label="Tümü" value="all"/>
-          <v-radio label="Var" value="yes"/>
-          <v-radio label="Yok" value="no"/>
-        </v-radio-group>
-      </div>
-    </div>
+        <!-- Price Section -->
+        <div v-else-if="section.key === 'price'" class="price-inputs">
+          <v-text-field
+            v-model="filters.minPrice"
+            class="mr-2"
+            density="compact"
+            label="Min"
+            type="number"
+            variant="outlined"
+          />
+          <v-text-field
+            v-model="filters.maxPrice"
+            density="compact"
+            label="Maks"
+            type="number"
+            variant="outlined"
+          />
+        </div>
 
-    <!-- Keyword Filter Section -->
-    <div class="filter-section">
-      <div class="section-header" @click="toggleSection('keyword')">
-        <span>Kelime ile Filtrele</span>
-        <v-icon :class="{ 'rotate': !sections.keyword }">mdi-chevron-up</v-icon>
-      </div>
-      <div v-show="sections.keyword" class="section-content">
-        <v-text-field
+        <!-- Exchange Section -->
+        <div v-else-if="section.key === 'exchange'">
+          <v-radio-group v-model="filters.exchange" density="compact">
+            <v-radio 
+              v-for="option in exchangeOptions" 
+              :key="option.value"
+              :label="option.label" 
+              :value="option.value"
+            />
+          </v-radio-group>
+        </div>
+
+        <!-- Keyword Section -->
+        <div v-else-if="section.key === 'keyword'">
+          <v-text-field
             v-model="filters.keyword"
             density="compact"
             label="Kelime ara"
             prepend-inner-icon="mdi-magnify"
             variant="outlined"
-        />
+          />
+        </div>
       </div>
     </div>
 
-    <v-btn @click="submitSearch">Search</v-btn>
+    <!-- Search Button -->
+    <div class="search-section">
+      <v-btn 
+        @click="submitSearch" 
+        color="primary" 
+        block 
+        :loading="isSearching"
+        :disabled="!hasActiveFilters"
+      >
+        {{ isSearching ? 'Aranıyor...' : 'Ara' }}
+      </v-btn>
+    </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import {reactive, ref} from 'vue'
-import {useCategoriesApi} from "~/composables/api/useCategoriesApi";
-import {useLocationApi} from "~/composables/api/useLocationApi";
-import {useProductsStore} from "~/stores/productsStore";
+<script setup>
+import { reactive, ref, computed, onMounted } from 'vue'
+import { useCategoriesApi } from "~/composables/api/useCategoriesApi"
+import { useLocationApi } from "~/composables/api/useLocationApi"
+import { useProductsStore } from "~/stores/productsStore"
 
+
+
+// Composables
 const route = useRoute()
-const subCategories = ref<any[]>([])
-
-const {getSubCategoriesById} = useCategoriesApi()
-const {getCities,getDistricts}=useLocationApi()
+const { getSubCategoriesById } = useCategoriesApi()
+const { getCities, getDistricts } = useLocationApi()
 const productsStore = useProductsStore()
 
-const categoryId = computed(() => route.params.id)
+// Reactive data
+const subCategories = ref([])
+const provinces = ref([])
+const districts = ref([])
+const isSearching = ref(false)
 
+// Computed properties
+const categoryId = computed(() => route.params.id)
+const categoryTitle = computed(() => subCategories.value[0]?.parent?.name || 'Kategoriler')
+
+const hasActiveFilters = computed(() => {
+  return filters.province || 
+         filters.district || 
+         filters.minPrice || 
+         filters.maxPrice || 
+         filters.exchange !== 'all' || 
+         filters.keyword.trim()
+})
+
+// Filter sections configuration
+const filterSections = [
+  { key: 'subCategories', title: 'Kategoriler' },
+  { key: 'location', title: 'Konum' },
+  { key: 'price', title: 'Fiyat' },
+  { key: 'exchange', title: 'Takas' },
+  { key: 'keyword', title: 'Kelime ile Filtrele' }
+]
+
+const exchangeOptions = [
+  { label: 'Tümü', value: 'all' },
+  { label: 'Var', value: 'yes' },
+  { label: 'Yok', value: 'no' }
+]
+
+// Reactive state
 const sections = reactive({
   subCategories: true,
   location: true,
   price: true,
   exchange: true,
   keyword: true
-})
-
-const data = reactive({
-  categoryCode: '',
-  selectedCities: [] as number[],
-  selectedDistricts: [] as number[],
-  swap: '' as string | boolean,
-  priceRange: { min: null as string | number | null, max: null as string | number | null },
-  dateSort: 'desc' as string,
-  priceSort: '' as string
 })
 
 const filters = reactive({
@@ -154,101 +170,103 @@ const filters = reactive({
   keyword: ''
 })
 
-const provinces = ref([])
-const districts = ref([])
-
-
-// Initialize
-onMounted(async () => {
-
-  try {
-    // Alt kategorileri al
-    const subCategoriesResponse = await getSubCategoriesById(categoryId.value)
-
-    if (subCategoriesResponse && (subCategoriesResponse as any).data) {
-      subCategories.value = (subCategoriesResponse as any).data
-    }
-    
-    const cities=await getCities()
-    provinces.value = (cities as any)?.data ||[]
-
-  } catch (error) {
-    console.error('Initial load error:', error)
-  }
+const searchData = reactive({
+  categoryCode: '',
+  selectedCities: [],
+  selectedDistricts: [],
+  swap: '',
+  priceRange: { min: null, max: null },
+  dateSort: 'desc',
+  priceSort: ''
 })
 
-// Province değiştiğinde çağrılacak fonksiyon
-const onProvinceChange = (provinceId: any) => {
-  // District'i sıfırla
+// Methods
+const toggleSection = (sectionKey) => {
+  if (sectionKey in sections) {
+    sections[sectionKey] = !sections[sectionKey]
+  }
+}
+
+const onProvinceChange = (provinceId) => {
+  // Reset district when province changes
   filters.district = null
   districts.value = []
   
-  // Eğer province seçildiyse ilçeleri getir
+  // Load districts for selected province
   if (provinceId) {
     loadDistricts(provinceId)
   }
 }
 
-// İlçeleri yükle
-const loadDistricts = async (provinceId: any) => {
+const loadDistricts = async (provinceId) => {
   try {
-    const districtsResponse = await getDistricts(provinceId)
-    districts.value = (districtsResponse as any)?.data || []
+    const response = await getDistricts(provinceId)
+    districts.value = response?.data || []
   } catch (error) {
     console.error('Error loading districts:', error)
     districts.value = []
   }
 }
 
-const toggleSection = (section: keyof typeof sections) => {
-  sections[section] = !sections[section]
+const prepareSearchData = () => {
+  return {
+    categoryCode: String(categoryId.value),
+    selectedCities: filters.province ? [filters.province] : [],
+    selectedDistricts: filters.district ? [filters.district] : [],
+    swap: filters.exchange === 'yes' ? true : filters.exchange === 'no' ? false : '',
+    priceRange: {
+      min: filters.minPrice,
+      max: filters.maxPrice
+    },
+    dateSort: 'desc',
+    priceSort: ''
+  }
 }
 
+const submitSearch = async () => {
+  if (!hasActiveFilters.value) return
 
-const submitSearch = () => {
-  // Category code - route'dan al
-  data.categoryCode = String(categoryId.value)
+  isSearching.value = true
   
-  // Selected cities - filters.province'den al
-  if (filters.province) {
-    data.selectedCities = [filters.province]
-  } else {
-    data.selectedCities = []
+  try {
+    // Prepare search data
+    Object.assign(searchData, prepareSearchData())
+    
+    console.log('Search data:', searchData)
+    
+    // Execute search
+    const result = await productsStore.fetchFilteredProducts(1, searchData)
+    
+    if (result.success) {
+      console.log('Search completed successfully')
+    } else {
+      console.error('Search failed:', result.error)
+    }
+  } catch (error) {
+    console.error('Error during search:', error)
+  } finally {
+    isSearching.value = false
   }
-  
-  // Selected districts - filters.district'den al
-  if (filters.district) {
-    data.selectedDistricts = [filters.district]
-  } else {
-    data.selectedDistricts = []
-  }
-  
-  // Swap filter - filters.exchange'den al
-  if (filters.exchange === 'yes') {
-    data.swap = true
-  } else if (filters.exchange === 'no') {
-    data.swap = false
-  } else {
-    data.swap = ''
-  }
-  
-  // Price range - filters.minPrice ve filters.maxPrice'den al
-  data.priceRange.min = filters.minPrice
-  data.priceRange.max = filters.maxPrice
-  
-  // Keyword - filters.keyword'den al (eğer API destekliyorsa)
-  
-  console.log('Search data:', data)
-  
-  productsStore
-    .fetchFilteredProducts(1, data)
-    .then(res => {
-      console.log("Filtered products response:", res)
-    })
-    .catch(error => {
-      console.error("Error fetching filtered products:", error)
-    })
 }
+
+const initializeData = async () => {
+  try {
+    // Load subcategories
+    const subCategoriesResponse = await getSubCategoriesById(categoryId.value)
+    if (subCategoriesResponse && subCategoriesResponse.data) {
+      subCategories.value = subCategoriesResponse.data
+    }
+    
+    // Load cities
+    const citiesResponse = await getCities()
+    provinces.value = citiesResponse?.data || []
+  } catch (error) {
+    console.error('Initialization error:', error)
+  }
+}
+
+// Lifecycle
+onMounted(initializeData)
 </script>
 
 <style scoped>
@@ -290,6 +308,11 @@ const submitSearch = () => {
   font-weight: 500;
   color: #333;
   margin-bottom: 10px;
+  transition: color 0.2s ease;
+}
+
+.section-header:hover {
+  color: #8b2865;
 }
 
 .section-header span {
@@ -318,11 +341,6 @@ const submitSearch = () => {
   color: #666;
 }
 
-.category-count {
-  font-size: 0.8rem;
-  color: #999;
-}
-
 .price-inputs {
   display: flex;
   gap: 8px;
@@ -330,6 +348,12 @@ const submitSearch = () => {
 
 .price-inputs .v-text-field {
   flex: 1;
+}
+
+.search-section {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
 }
 
 .v-icon.rotate {
