@@ -154,7 +154,7 @@ onMounted(async () => {
   try {
     // Alt kategorileri al
     const subCategoriesResponse = await getSubCategoriesById(categoryId.value)
-    console.log("subCategoriesResponse", subCategoriesResponse)
+
     if (subCategoriesResponse && (subCategoriesResponse as any).data) {
       subCategories.value = (subCategoriesResponse as any).data
     }
@@ -171,7 +171,6 @@ onMounted(async () => {
 
 // Province değiştiğinde çağrılacak fonksiyon
 const onProvinceChange = (provinceId: any) => {
-  console.log("provinceId",provinceId)
   // District'i sıfırla
   filters.district = null
   districts.value = []
@@ -185,10 +184,8 @@ const onProvinceChange = (provinceId: any) => {
 // İlçeleri yükle
 const loadDistricts = async (provinceId: any) => {
   try {
-    console.log('Loading districts for provinceId:', provinceId)
     const districtsResponse = await getDistricts(provinceId)
     districts.value = (districtsResponse as any)?.data || []
-    console.log('Districts loaded:', districts.value)
   } catch (error) {
     console.error('Error loading districts:', error)
     districts.value = []

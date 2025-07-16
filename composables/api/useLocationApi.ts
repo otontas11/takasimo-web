@@ -24,7 +24,6 @@ export const useLocationApi = () => {
                 per_page: 100
             })
 
-            console.log('getDistricts API response for cityCode:', cityCode, response)
             return response
 
         } catch (error) {
