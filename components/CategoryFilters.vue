@@ -107,6 +107,8 @@
         />
       </div>
     </div>
+
+    <v-btn @click="submitSearch">Search</v-btn>
   </div>
 </template>
 
@@ -114,12 +116,15 @@
 import {reactive, ref} from 'vue'
 import {useCategoriesApi} from "~/composables/api/useCategoriesApi";
 import {useLocationApi} from "~/composables/api/useLocationApi";
+import {useProductsStore} from "~/stores/productsStore";
 
 const route = useRoute()
 const subCategories = ref<any[]>([])
 
 const {getSubCategoriesById} = useCategoriesApi()
 const {getCities,getDistricts}=useLocationApi()
+const productsStore = useProductsStore()
+
 const categoryId = computed(() => route.params.id)
 
 const sections = reactive({
@@ -128,6 +133,16 @@ const sections = reactive({
   price: true,
   exchange: true,
   keyword: true
+})
+
+const data = reactive({
+  categoryCode: '',
+  selectedCities: [] as number[],
+  selectedDistricts: [] as number[],
+  swap: '' as string | boolean,
+  priceRange: { min: null as string | number | null, max: null as string | number | null },
+  dateSort: 'desc' as string,
+  priceSort: '' as string
 })
 
 const filters = reactive({
@@ -187,6 +202,52 @@ const loadDistricts = async (provinceId: any) => {
 
 const toggleSection = (section: keyof typeof sections) => {
   sections[section] = !sections[section]
+}
+
+
+const submitSearch = () => {
+  // Category code - route'dan al
+  data.categoryCode = String(categoryId.value)
+  
+  // Selected cities - filters.province'den al
+  if (filters.province) {
+    data.selectedCities = [filters.province]
+  } else {
+    data.selectedCities = []
+  }
+  
+  // Selected districts - filters.district'den al
+  if (filters.district) {
+    data.selectedDistricts = [filters.district]
+  } else {
+    data.selectedDistricts = []
+  }
+  
+  // Swap filter - filters.exchange'den al
+  if (filters.exchange === 'yes') {
+    data.swap = true
+  } else if (filters.exchange === 'no') {
+    data.swap = false
+  } else {
+    data.swap = ''
+  }
+  
+  // Price range - filters.minPrice ve filters.maxPrice'den al
+  data.priceRange.min = filters.minPrice
+  data.priceRange.max = filters.maxPrice
+  
+  // Keyword - filters.keyword'den al (eğer API destekliyorsa)
+  
+  console.log('Search data:', data)
+  
+  productsStore
+    .fetchFilteredProducts(1, data)
+    .then(res => {
+      console.log("Filtered products response:", res)
+    })
+    .catch(error => {
+      console.error("Error fetching filtered products:", error)
+    })
 }
 </script>
 

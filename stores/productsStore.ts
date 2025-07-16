@@ -1,7 +1,7 @@
 import { useProductsApi } from '~/composables/api/useProductsApi'
 
 export const useProductsStore = defineStore('products', () => {
-  const { getProductById, getProducts } = useProductsApi()
+  const { getProductById, getProducts, getProductsFilterQuery } = useProductsApi()
 
   // ✅ STATE - Reactive references
   const products = ref<any[]>([])
@@ -37,6 +37,36 @@ export const useProductsStore = defineStore('products', () => {
     try {
 
       const response = await getProducts()
+
+      if (response) {
+        const productData = Array.isArray(response) ? response : (response as any).data || []
+
+        // İlk sayfa ise verileri sıfırla, değilse mevcut listeye ekle
+        if (page === 1) {
+          setProducts(productData)
+        } else {
+          setProducts([...products.value, ...productData])
+        }
+
+      }
+
+      return { success: true }
+    } catch (err: any) {
+      console.error('Products fetch error:', err)
+      setError('Ürünler yüklenirken hata oluştu')
+      return { success: false, error: 'Ürünler yüklenirken hata oluştu' }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchFilteredProducts = async (page: number = 1,data:any) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+
+      const response = await getProductsFilterQuery(page,data)
 
       if (response) {
         const productData = Array.isArray(response) ? response : (response as any).data || []
@@ -108,6 +138,7 @@ export const useProductsStore = defineStore('products', () => {
     fetchProducts,
     searchProducts,
     setProducts,
-    clearError
+    clearError,
+    fetchFilteredProducts
   }
 })

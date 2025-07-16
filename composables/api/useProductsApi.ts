@@ -40,8 +40,62 @@ export const useProductsApi = () => {
 
   }
 
+
+
+  const getProductsFilterQuery = (page: number, payload: any) => {
+    const citynum = ref<number[]>([]);
+    const districtnum = ref<number[]>([]);
+    payload.selectedCities.forEach((element: any) => {
+      citynum.value.push(element)
+    })
+    payload.selectedDistricts.forEach((element: any) => {
+      districtnum.value.push(element)
+    })
+
+    const filter: string[] = [
+      `{"k": "category_code", "o": "=", "v": "${payload.categoryCode}"}`,
+    ];
+
+    const orderBy: string[] = []
+
+    if (payload.swap === true || payload.swap === false) {
+      filter.push(`{"k":"swap","o":"=","v":${payload.swap}}`);
+    }
+
+    if (citynum.value.length >= 1) {
+      filter.push(`{"k": "city", "o": "in", "v": ${JSON.stringify(citynum.value)}}`);
+    }
+    if (districtnum.value.length >= 1) {
+      filter.push(`{"k": "district", "o": "in", "v": ${JSON.stringify(districtnum.value)}}`);
+    }
+
+    if (payload.priceRange.min >= 0 && payload.priceRange.max > 0) {
+      filter.push(`{"k": "price", "o": ">=", "v": ${payload.priceRange.min}}`);
+      filter.push(`{"k": "price", "o": "<=", "v": ${payload.priceRange.max}}`);
+    }
+
+    if (payload.dateSort !== "") {
+      orderBy.push(`{"k":"created_at","o":"=","v":"${payload.dateSort}"}`);
+    }
+
+    if (payload.priceSort !== "") {
+      orderBy.push(`{"k":"price","o":"=","v":"${payload.priceSort}"}`);
+    }
+    //sadece aktif olan ilanalr gelsin
+    filter.push(`{"k": "status", "o": "=", "v": true}`);
+
+    return api.get('products', {
+      filter: filter,
+      with: ['images', 'owner','city', 'district'],
+      orderBy: orderBy,
+      page: page
+    });
+
+  }
+
   return {
     getProducts,
-    getProductById
+    getProductById,
+    getProductsFilterQuery
   }
 }
