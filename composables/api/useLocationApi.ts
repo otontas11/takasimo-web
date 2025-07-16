@@ -1,0 +1,45 @@
+import {useApi} from '~/composables/api/useApi'
+
+export const useLocationApi = () => {
+    const {api} = useApi()
+
+    const getCities = async () => {
+        try {
+            const response = api.get('cities', {
+                params: {
+                    filter: [JSON.stringify({k: "is_deleted", o: "=", v: false})],
+                    limit: 100,
+                }
+            })
+
+            return response
+        } catch (error) {
+            console.error('getProductById error:', error)
+            throw error
+        }
+    }
+
+    const getDistricts = async (cityCode: any) => {
+        try {
+            const response = api.get('districts', {
+                params: {
+                    filter: [JSON.stringify({k: "city_code", o: "=", v: `${cityCode}`})],
+                    limit: 100
+                }
+            })
+
+            return response
+
+        } catch (error) {
+            console.error('getProductById error:', error)
+            throw error
+        }
+
+    }
+
+
+    return {
+        getCities,
+        getDistricts
+    }
+}

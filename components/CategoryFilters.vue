@@ -2,17 +2,17 @@
   <div class="category-filters">
     <!-- Header -->
     <div class="filters-header">
-      <h2> {{categories[0]?.parent?.name}} </h2>
+      <h2> {{ subCategories[0]?.parent?.name }} </h2>
     </div>
 
     <!-- Categories Section -->
     <div class="filter-section">
-      <div class="section-header" @click="toggleSection('categories')">
+      <div class="section-header" @click="toggleSection('subCategories')">
         <span>Kategoriler</span>
-        <v-icon :class="{ 'rotate': !sections.categories }">mdi-chevron-up</v-icon>
+        <v-icon :class="{ 'rotate': !sections.subCategories }">mdi-chevron-up</v-icon>
       </div>
-      <div v-show="sections.categories" class="section-content">
-        <div v-for="category in categories" :key="category.id" class="category-item">
+      <div v-show="sections.subCategories" class="section-content">
+        <div v-for="category in subCategories" :key="category.id" class="category-item">
           <span class="category-name">{{ category.name }}</span>
         </div>
       </div>
@@ -26,27 +26,27 @@
       </div>
       <div v-show="sections.location" class="section-content">
         <v-select
-          v-model="filters.province"
-          :items="provinces"
-          label="İl seçin"
-          variant="outlined"
-          density="compact"
-          class="mb-3"
+            v-model="filters.province"
+            :items="cities"
+            class="mb-3"
+            density="compact"
+            label="İl seçin"
+            variant="outlined"
         />
         <v-select
-          v-model="filters.district"
-          :items="districts"
-          label="İlçe seçin"
-          variant="outlined"
-          density="compact"
-          class="mb-3"
+            v-model="filters.district"
+            :items="districts"
+            class="mb-3"
+            density="compact"
+            label="İlçe seçin"
+            variant="outlined"
         />
         <v-btn
-          color="primary"
-          variant="outlined"
-          size="small"
-          class="w-100"
-          prepend-icon="mdi-map-marker"
+            class="w-100"
+            color="primary"
+            prepend-icon="mdi-map-marker"
+            size="small"
+            variant="outlined"
         >
           Mevcut konumu kullan
         </v-btn>
@@ -62,19 +62,19 @@
       <div v-show="sections.price" class="section-content">
         <div class="price-inputs">
           <v-text-field
-            v-model="filters.minPrice"
-            label="Min"
-            variant="outlined"
-            density="compact"
-            type="number"
-            class="mr-2"
+              v-model="filters.minPrice"
+              class="mr-2"
+              density="compact"
+              label="Min"
+              type="number"
+              variant="outlined"
           />
           <v-text-field
-            v-model="filters.maxPrice"
-            label="Maks"
-            variant="outlined"
-            density="compact"
-            type="number"
+              v-model="filters.maxPrice"
+              density="compact"
+              label="Maks"
+              type="number"
+              variant="outlined"
           />
         </div>
       </div>
@@ -88,11 +88,11 @@
       </div>
       <div v-show="sections.date" class="section-content">
         <v-radio-group v-model="filters.listingDate" density="compact">
-          <v-radio value="all" label="Tümü" />
-          <v-radio value="24h" label="Son 24 saat" />
-          <v-radio value="3d" label="Son 3 gün içinde" />
-          <v-radio value="7d" label="Son 7 gün içinde" />
-          <v-radio value="15d" label="Son 15 gün içinde" />
+          <v-radio label="Tümü" value="all"/>
+          <v-radio label="Son 24 saat" value="24h"/>
+          <v-radio label="Son 3 gün içinde" value="3d"/>
+          <v-radio label="Son 7 gün içinde" value="7d"/>
+          <v-radio label="Son 15 gün içinde" value="15d"/>
         </v-radio-group>
       </div>
     </div>
@@ -105,38 +105,33 @@
       </div>
       <div v-show="sections.keyword" class="section-content">
         <v-text-field
-          v-model="filters.keyword"
-          label="Kelime ara"
-          variant="outlined"
-          density="compact"
-          prepend-inner-icon="mdi-magnify"
+            v-model="filters.keyword"
+            density="compact"
+            label="Kelime ara"
+            prepend-inner-icon="mdi-magnify"
+            variant="outlined"
         />
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, reactive } from 'vue'
+<script lang="ts" setup>
+import {reactive, ref} from 'vue'
+import {useCategoriesApi} from "~/composables/api/useCategoriesApi";
+import {useLocationApi} from "~/composables/api/useLocationApi";
 
-interface Props {
-  categories?: Array<{ id: string; name: string; count: number }>
-}
+const route = useRoute()
+const loading = ref(false)
 
-const props = withDefaults(defineProps<Props>(), {
-  categories: () => [
-    { id: '1', name: 'Telefon', count: 109728 },
-    { id: '2', name: 'iPhone iOS Telefon', count: 109728 },
-    { id: '3', name: 'Android Telefon', count: 103933 },
-    { id: '4', name: 'Telefon Aksesuarları', count: 47221 },
-    { id: '5', name: 'Diğer Cep Telefonları', count: 13551 },
-    { id: '6', name: 'Telefon Yedek Parçaları', count: 13332 },
-    { id: '7', name: 'Telsiz & Masaüstü Telefon', count: 6071 }
-  ]
-})
+const subCategories = ref<any[]>([])
+
+const {getSubCategoriesById} = useCategoriesApi()
+const {getCities,getDistricts}=useLocationApi()
+const categoryId = computed(() => route.params.id)
 
 const sections = reactive({
-  categories: true,
+  subCategories: true,
   location: true,
   price: true,
   date: true,
@@ -152,8 +147,30 @@ const filters = reactive({
   keyword: ''
 })
 
-const provinces = ['İstanbul', 'Ankara', 'İzmir', 'Bursa', 'Antalya']
+const cities = ['İstanbul', 'Ankara', 'İzmir', 'Bursa', 'Antalya']
 const districts = ['Beyoğlu', 'Kadıköy', 'Beşiktaş', 'Şişli', 'Üsküdar']
+
+
+// Initialize
+onMounted(async () => {
+
+  try {
+    // Alt kategorileri al
+    const subCategoriesResponse = await getSubCategoriesById(categoryId.value)
+    console.log("subCategoriesResponse", subCategoriesResponse)
+    if (subCategoriesResponse && subCategoriesResponse.data) {
+      subCategories.value = subCategoriesResponse.data
+    }
+    
+    const city=await getCities()
+    console.log("city",city)
+
+  } catch (error) {
+    console.error('Initial load error:', error)
+  } finally {
+    loading.value = false
+  }
+})
 
 const toggleSection = (section: keyof typeof sections) => {
   sections[section] = !sections[section]
