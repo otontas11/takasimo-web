@@ -4,7 +4,7 @@
       <v-row>
         <!-- Left Sidebar - Filters -->
         <v-col class="sidebar-col" cols="12" md="3">
-          <CategoryFilters />
+          <CategoryFilters ref="categoryFiltersRef" />
         </v-col>
 
         <!-- Right Content - Products -->
@@ -21,6 +21,8 @@
               <v-select
                   v-model="sortBy"
                   :items="sortOptions"
+                  item-title="title"
+                  item-value="value"
                   class="sort-select"
                   density="compact"
                   hide-details
@@ -74,6 +76,7 @@ const loading = ref(false)
 const sortBy = ref('date_desc')
 const currentPage = ref(1)
 const hasMoreProducts = ref(true)
+const categoryFiltersRef = ref()
 
 const currentCategory = ref<any>(null)
 
@@ -88,14 +91,28 @@ const totalResults = computed(() => {
 const products = computed(() => productsStore.getAllProducts)
 
 const sortOptions = [
-  {title: 'Tarihe göre sırala (Önce en yeni)', value: 'date_desc'},
-  {title: 'Tarihe göre sırala (Önce en eski)', value: 'date_asc'},
-  {title: 'Fiyata göre sırala (Önce en yüksek)', value: 'price_desc'},
-  {title: 'Fiyata göre sırala (Önce en düşük)', value: 'price_asc'}
+  {title: 'Tarihe göre sırala (Önce en yeni)', value: 'DESC',key:1},
+  {title: 'Tarihe göre sırala (Önce en eski)', value: 'ASC',key:2},
+  {title: 'Fiyata göre sırala (Önce en yüksek)', value: 'DESC',key:3},
+  {title: 'Fiyata göre sırala (Önce en düşük)', value: 'ASC',key:4}
 ]
 
-const onSortChange=()=>{
-  console.log("sortOptions",sortBy.value)
+const onSortChange = async () => {
+  console.log("sortOptions", sortBy.value)
+  
+  // Sıralama değiştiğinde filtreleme yap
+  try {
+    if (categoryFiltersRef.value) {
+      // Sıralama değerini searchData'ya ekle
+      categoryFiltersRef.value.searchData.dateSort = sortBy.value
+      categoryFiltersRef.value.searchData.priceSort = ''
+      
+      // Filtreleme yap
+      await categoryFiltersRef.value.submitSearch()
+    }
+  } catch (error) {
+    console.error('Sort change error:', error)
+  }
 }
 
 const loadMoreProducts = async () => {

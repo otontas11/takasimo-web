@@ -160,7 +160,7 @@ const searchData = reactive({
   selectedDistricts: [],
   swap: '',
   priceRange: { min: null, max: null },
-  dateSort: 'desc',
+  dateSort: 'date_desc',
   priceSort: ''
 })
 
@@ -202,8 +202,8 @@ const prepareSearchData = () => {
       min: filters.minPrice,
       max: filters.maxPrice
     },
-    dateSort: 'desc',
-    priceSort: ''
+    dateSort: searchData.dateSort,
+    priceSort: searchData.priceSort
   }
 }
 
@@ -249,6 +249,12 @@ const initializeData = async () => {
 
 // Lifecycle
 onMounted(initializeData)
+
+// Expose methods and data for parent component
+defineExpose({
+  searchData,
+  submitSearch
+})
 </script>
 
 <style scoped>
