@@ -7,6 +7,17 @@ export const useProductsStore = defineStore('products', () => {
   const products = ref<any[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
+  
+  // Filter and sort state
+  const currentFilters = ref({
+    categoryCode: '',
+    selectedCities: [],
+    selectedDistricts: [],
+    swap: '',
+    priceRange: { min: null, max: null },
+    dateSort: 'DESC',
+    priceSort: ''
+  })
 
   // ✅ GETTERS - Computed properties
   const getAllProducts = computed(() => products.value)
@@ -28,6 +39,20 @@ export const useProductsStore = defineStore('products', () => {
 
   const setProducts = (data: any[]) => {
     products.value = data
+  }
+
+  const setFilters = (filters: any) => {
+    currentFilters.value = { ...currentFilters.value, ...filters }
+  }
+
+  const updateSort = (sortType: 'date' | 'price', order: 'ASC' | 'DESC') => {
+    if (sortType === 'date') {
+      currentFilters.value.dateSort = order
+      currentFilters.value.priceSort = ''
+    } else if (sortType === 'price') {
+      currentFilters.value.dateSort = ''
+      currentFilters.value.priceSort = order
+    }
   }
 
   const fetchProducts = async (page: number = 1) => {
@@ -60,13 +85,15 @@ export const useProductsStore = defineStore('products', () => {
     }
   }
 
-  const fetchFilteredProducts = async (page: number = 1,data:any) => {
+  const fetchFilteredProducts = async (page: number = 1, filters?: any) => {
     setLoading(true)
     setError(null)
 
     try {
-
-      const response = await getProductsFilterQuery(page,data)
+      // Merge filters with current filters
+      const mergedFilters = filters ? { ...currentFilters.value, ...filters } : currentFilters.value
+      
+      const response = await getProductsFilterQuery(page, mergedFilters)
 
       if (response) {
         const productData = Array.isArray(response) ? response : (response as any).data || []
@@ -77,7 +104,6 @@ export const useProductsStore = defineStore('products', () => {
         } else {
           setProducts([...products.value, ...productData])
         }
-
       }
 
       return { success: true }
@@ -88,6 +114,14 @@ export const useProductsStore = defineStore('products', () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const applySort = async (sortType: 'date' | 'price', order: 'ASC' | 'DESC') => {
+    // Update sort in store
+    updateSort(sortType, order)
+    
+    // Apply sort with current filters
+    return await fetchFilteredProducts(1)
   }
 
   const searchProducts = async (query: string, filters: any = {}) => {
@@ -128,6 +162,7 @@ export const useProductsStore = defineStore('products', () => {
     products,
     loading,
     error,
+    currentFilters,
 
     // Getters
     getAllProducts,
@@ -138,6 +173,9 @@ export const useProductsStore = defineStore('products', () => {
     fetchProducts,
     searchProducts,
     setProducts,
+    setFilters,
+    updateSort,
+    applySort,
     clearError,
     fetchFilteredProducts
   }

@@ -100,25 +100,14 @@ const sortOptions = [
 const onSortChange = async () => {
   console.log("sortOptions", sortBy.value)
   
-  // Sıralama değiştiğinde filtreleme yap
+  // Sıralama değiştiğinde store üzerinden işlem yap
   try {
-    if (categoryFiltersRef.value) {
-      // Seçilen seçeneği bul
-      const selectedOption = sortOptions.find(option => option.value === sortBy.value)
-      
-      if (selectedOption) {
-        // Sıralama tipini belirle
-        if (selectedOption.key === 'date') {
-          categoryFiltersRef.value.searchData.dateSort = selectedOption.order // 'DESC' veya 'ASC'
-          categoryFiltersRef.value.searchData.priceSort = ''
-        } else if (selectedOption.key === 'price') {
-          categoryFiltersRef.value.searchData.dateSort = ''
-          categoryFiltersRef.value.searchData.priceSort = selectedOption.order // 'DESC' veya 'ASC'
-        }
-      }
-      
-      // Filtreleme yap
-      await categoryFiltersRef.value.submitSearch()
+    // Seçilen seçeneği bul
+    const selectedOption = sortOptions.find(option => option.value === sortBy.value)
+    
+    if (selectedOption) {
+      // Store üzerinden sıralama uygula
+      await productsStore.applySort(selectedOption.key as 'date' | 'price', selectedOption.order as 'ASC' | 'DESC')
     }
   } catch (error) {
     console.error('Sort change error:', error)

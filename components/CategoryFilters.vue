@@ -154,15 +154,8 @@ const filters = reactive({
   keyword: ''
 })
 
-const searchData = reactive({
-  categoryCode: '',
-  selectedCities: [],
-  selectedDistricts: [],
-  swap: '',
-  priceRange: { min: null, max: null },
-  dateSort: 'DESC',
-  priceSort: ''
-})
+// Store'dan mevcut filtreleri al
+const currentFilters = computed(() => productsStore.currentFilters)
 
 // Methods
 const toggleSection = (sectionKey) => {
@@ -202,8 +195,8 @@ const prepareSearchData = () => {
       min: filters.minPrice,
       max: filters.maxPrice
     },
-    dateSort: searchData.dateSort,
-    priceSort: searchData.priceSort
+    dateSort: currentFilters.value.dateSort,
+    priceSort: currentFilters.value.priceSort
   }
 }
 
@@ -212,12 +205,13 @@ const submitSearch = async () => {
   
   try {
     // Prepare search data
-    Object.assign(searchData, prepareSearchData())
+    const searchData = prepareSearchData()
     
     console.log('Search data:', searchData)
     
-    // Execute search
-    const result = await productsStore.fetchFilteredProducts(1, searchData)
+    // Update store filters and execute search
+    productsStore.setFilters(searchData)
+    const result = await productsStore.fetchFilteredProducts(1)
     
     if (result.success) {
       console.log('Search completed successfully')
@@ -250,9 +244,8 @@ const initializeData = async () => {
 // Lifecycle
 onMounted(initializeData)
 
-// Expose methods and data for parent component
+// Expose methods for parent component
 defineExpose({
-  searchData,
   submitSearch
 })
 </script>
