@@ -35,7 +35,6 @@
           />
           <v-select
             v-model="filters.district"
-            :items="districts"
             class="mb-3"
             density="compact"
             label="İlçe seçin"
@@ -91,13 +90,7 @@
 
     <!-- Search Button -->
     <div class="search-section">
-      <v-btn 
-        @click="submitSearch" 
-        color="primary" 
-        block 
-        :loading="isSearching"
-        :disabled="!hasActiveFilters"
-      >
+      <v-btn @click="submitSearch" color="primary" block :loading="isSearching">
         {{ isSearching ? 'Aranıyor...' : 'Ara' }}
       </v-btn>
     </div>
@@ -127,15 +120,6 @@ const isSearching = ref(false)
 // Computed properties
 const categoryId = computed(() => route.params.id)
 const categoryTitle = computed(() => subCategories.value[0]?.parent?.name || 'Kategoriler')
-
-const hasActiveFilters = computed(() => {
-  return filters.province || 
-         filters.district || 
-         filters.minPrice || 
-         filters.maxPrice || 
-         filters.exchange !== 'all' || 
-         filters.keyword.trim()
-})
 
 // Filter sections configuration
 const filterSections = [
@@ -224,8 +208,6 @@ const prepareSearchData = () => {
 }
 
 const submitSearch = async () => {
-  if (!hasActiveFilters.value) return
-
   isSearching.value = true
   
   try {

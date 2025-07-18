@@ -27,6 +27,7 @@
                   label="Gelişmiş Sıralama"
                   prepend-inner-icon="mdi-sort-variant"
                   variant="outlined"
+                  @update:model-value="onSortChange"
               />
             </div>
           </div>
@@ -92,6 +93,10 @@ const sortOptions = [
   {title: 'Fiyata göre sırala (Önce en yüksek)', value: 'price_desc'},
   {title: 'Fiyata göre sırala (Önce en düşük)', value: 'price_asc'}
 ]
+
+const onSortChange=()=>{
+  console.log("sortOptions",sortBy.value)
+}
 
 const loadMoreProducts = async () => {
   if (loading.value) return
