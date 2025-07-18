@@ -70,6 +70,7 @@ import CategoryFilters from '~/components/CategoryFilters.vue'
 
 // Sample data
 const productsStore = useProductsStore()
+const route = useRoute()
 
 // Reactive data
 const loading = ref(false)
@@ -146,7 +147,21 @@ onMounted(async () => {
   loading.value = true
 
   try {
-    console.log("")
+    // Default filtrelerle ilk isteği at
+    const defaultFilters = {
+      categoryCode: String(route.params.id),
+      selectedCities: [],
+      selectedDistricts: [],
+      swap: '',
+      priceRange: { min: null, max: null },
+      dateSort: 'DESC',
+      priceSort: ''
+    }
+    
+    // Store'a default filtreleri set et ve istek at
+    productsStore.setFilters(defaultFilters)
+    await productsStore.fetchFilteredProducts(1)
+    
   } catch (error) {
     console.error('Initial load error:', error)
   } finally {
