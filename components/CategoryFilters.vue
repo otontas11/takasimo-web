@@ -160,7 +160,7 @@ const searchData = reactive({
   selectedDistricts: [],
   swap: '',
   priceRange: { min: null, max: null },
-  dateSort: 'date_desc',
+  dateSort: 'DESC',
   priceSort: ''
 })
 

@@ -91,10 +91,10 @@ const totalResults = computed(() => {
 const products = computed(() => productsStore.getAllProducts)
 
 const sortOptions = [
-  {title: 'Tarihe göre sırala (Önce en yeni)', value: 'DESC',key:1},
-  {title: 'Tarihe göre sırala (Önce en eski)', value: 'ASC',key:2},
-  {title: 'Fiyata göre sırala (Önce en yüksek)', value: 'DESC',key:3},
-  {title: 'Fiyata göre sırala (Önce en düşük)', value: 'ASC',key:4}
+  {title: 'Tarihe göre sırala (Önce en yeni)', value: 'date_desc', key: 'date', order: 'DESC'},
+  {title: 'Tarihe göre sırala (Önce en eski)', value: 'date_asc', key: 'date', order: 'ASC'},
+  {title: 'Fiyata göre sırala (Önce en yüksek)', value: 'price_desc', key: 'price', order: 'DESC'},
+  {title: 'Fiyata göre sırala (Önce en düşük)', value: 'price_asc', key: 'price', order: 'ASC'}
 ]
 
 const onSortChange = async () => {
@@ -103,9 +103,19 @@ const onSortChange = async () => {
   // Sıralama değiştiğinde filtreleme yap
   try {
     if (categoryFiltersRef.value) {
-      // Sıralama değerini searchData'ya ekle
-      categoryFiltersRef.value.searchData.dateSort = sortBy.value
-      categoryFiltersRef.value.searchData.priceSort = ''
+      // Seçilen seçeneği bul
+      const selectedOption = sortOptions.find(option => option.value === sortBy.value)
+      
+      if (selectedOption) {
+        // Sıralama tipini belirle
+        if (selectedOption.key === 'date') {
+          categoryFiltersRef.value.searchData.dateSort = selectedOption.order // 'DESC' veya 'ASC'
+          categoryFiltersRef.value.searchData.priceSort = ''
+        } else if (selectedOption.key === 'price') {
+          categoryFiltersRef.value.searchData.dateSort = ''
+          categoryFiltersRef.value.searchData.priceSort = selectedOption.order // 'DESC' veya 'ASC'
+        }
+      }
       
       // Filtreleme yap
       await categoryFiltersRef.value.submitSearch()
