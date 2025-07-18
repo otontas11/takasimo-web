@@ -5,6 +5,8 @@ export const useProductsStore = defineStore('products', () => {
 
   // ✅ STATE - Reactive references
   const products = ref<any[]>([])
+  const totalProducts = ref<any>(0)
+  const totalPages = ref<any>(0)
   const loading = ref(false)
   const error = ref<string | null>(null)
   
@@ -55,6 +57,13 @@ export const useProductsStore = defineStore('products', () => {
     }
   }
 
+  const setTotalProductsAndPages = (response: any) => {
+    totalPages.value = response.last_page
+    totalProducts.value = response.total
+
+    console.log("ssss",totalProducts.value)
+  }
+
   const fetchProducts = async (page: number = 1) => {
     setLoading(true)
     setError(null)
@@ -94,7 +103,9 @@ export const useProductsStore = defineStore('products', () => {
       const mergedFilters = filters ? { ...currentFilters.value, ...filters } : currentFilters.value
       
       const response = await getProductsFilterQuery(page, mergedFilters)
+      setTotalProductsAndPages(response as any)
 
+        console.log("getProductsFilterQuery",response)
       if (response) {
         const productData = Array.isArray(response) ? response : (response as any).data || []
 
@@ -163,6 +174,8 @@ export const useProductsStore = defineStore('products', () => {
     loading,
     error,
     currentFilters,
+    totalProducts,
+    totalPages,
 
     // Getters
     getAllProducts,
@@ -176,6 +189,7 @@ export const useProductsStore = defineStore('products', () => {
     setFilters,
     updateSort,
     applySort,
+    setTotalProductsAndPages,
     clearError,
     fetchFilteredProducts
   }

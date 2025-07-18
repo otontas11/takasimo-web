@@ -4,7 +4,7 @@
       <v-row>
         <!-- Left Sidebar - Filters -->
         <v-col class="sidebar-col" cols="12" md="3">
-          <CategoryFilters ref="categoryFiltersRef" />
+          <CategoryFilters ref="categoryFiltersRef"/>
         </v-col>
 
         <!-- Right Content - Products -->
@@ -13,7 +13,7 @@
           <div class="content-header">
             <div class="results-info">
               <span class="results-text">
-                İkinci El {{ categoryName }} kategorisinde 
+                Bu kategoride toplam
                 <strong>{{ totalResults }}</strong> ilan bulundu
               </span>
             </div>
@@ -21,11 +21,11 @@
               <v-select
                   v-model="sortBy"
                   :items="sortOptions"
-                  item-title="title"
-                  item-value="value"
                   class="sort-select"
                   density="compact"
                   hide-details
+                  item-title="title"
+                  item-value="value"
                   label="Gelişmiş Sıralama"
                   prepend-inner-icon="mdi-sort-variant"
                   variant="outlined"
@@ -36,12 +36,12 @@
 
           <!-- Products Grid -->
           <div class="products-cards">
-            <FeaturedProducts :products="products" />
+            <FeaturedProducts :products="products"/>
           </div>
 
           <!-- Infinite Scroll Loading -->
           <div v-if="loading" class="load-more-section">
-            <v-progress-circular indeterminate color="primary" size="40" width="4" class="mb-4" />
+            <v-progress-circular class="mb-4" color="primary" indeterminate size="40" width="4"/>
             <div class="text-body-2 text-medium-emphasis">Daha fazla ürün yükleniyor...</div>
           </div>
 
@@ -82,7 +82,7 @@ const categoryName = computed(() => {
 })
 
 const totalResults = computed(() => {
-  return 293806 // Sample total count
+  return productsStore.totalProducts || 0
 })
 
 const products = computed(() => productsStore.getAllProducts)
@@ -96,12 +96,12 @@ const sortOptions = [
 
 const onSortChange = async () => {
   console.log("sortOptions", sortBy.value)
-  
+
   // Sıralama değiştiğinde store üzerinden işlem yap
   try {
     // Seçilen seçeneği bul
     const selectedOption = sortOptions.find(option => option.value === sortBy.value)
-    
+
     if (selectedOption) {
       // Store üzerinden sıralama uygula
       await productsStore.applySort(selectedOption.key as 'date' | 'price', selectedOption.order as 'ASC' | 'DESC')
@@ -120,10 +120,10 @@ const loadMoreProducts = async () => {
 
   try {
     const result = await productsStore.fetchFilteredProducts(currentPage.value)
-    
+
     // Eğer yeni ürün gelmediyse daha fazla ürün yok
     const currentCount = productsStore.getAllProducts.length
-    
+
     if (currentCount <= previousCount) {
       hasMoreProducts.value = false
     }
@@ -154,18 +154,18 @@ onMounted(async () => {
       selectedCities: [],
       selectedDistricts: [],
       swap: '',
-      priceRange: { min: null, max: null },
+      priceRange: {min: null, max: null},
       dateSort: 'DESC',
       priceSort: ''
     }
-    
+
     // Store'a default filtreleri set et ve istek at
     productsStore.setFilters(defaultFilters)
     await productsStore.fetchFilteredProducts(1)
-    
+
     // Infinite scroll için observer başlat
     setupInfiniteScroll()
-    
+
   } catch (error) {
     console.error('Initial load error:', error)
   } finally {
@@ -177,14 +177,14 @@ onMounted(async () => {
 const setupInfiniteScroll = () => {
   if (process.client) {
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMoreProducts.value && !loading.value) {
-          loadMoreProducts()
-        }
-      },
-      { root: null, threshold: 0.1, rootMargin: '100px' }
+        (entries) => {
+          if (entries[0].isIntersecting && hasMoreProducts.value && !loading.value) {
+            loadMoreProducts()
+          }
+        },
+        {root: null, threshold: 0.1, rootMargin: '100px'}
     )
-    
+
     if (infiniteScrollTrigger.value) {
       observer.observe(infiniteScrollTrigger.value)
     }
