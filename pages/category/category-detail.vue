@@ -39,19 +39,14 @@
             <FeaturedProducts :products="products" />
           </div>
 
-          <!-- Load More Button -->
-          <div v-if="hasMoreProducts" class="load-more-section">
-            <v-btn
-                :loading="loading"
-                class="load-more-btn"
-                color="primary"
-                size="large"
-                variant="outlined"
-                @click="loadMoreProducts"
-            >
-              Daha Fazla Yükle
-            </v-btn>
+          <!-- Infinite Scroll Loading -->
+          <div v-if="loading" class="load-more-section">
+            <v-progress-circular indeterminate color="primary" size="40" width="4" class="mb-4" />
+            <div class="text-body-2 text-medium-emphasis">Daha fazla ürün yükleniyor...</div>
           </div>
+
+          <!-- Infinite Scroll Trigger -->
+          <div ref="infiniteScrollTrigger" class="infinite-scroll-trigger"></div>
 
           <!-- No Results -->
           <div v-if="!loading && products.length === 0" class="no-results">
@@ -78,6 +73,7 @@ const sortBy = ref('date_desc')
 const currentPage = ref(1)
 const hasMoreProducts = ref(true)
 const categoryFiltersRef = ref()
+const infiniteScrollTrigger = ref()
 
 const currentCategory = ref<any>(null)
 
@@ -116,19 +112,24 @@ const onSortChange = async () => {
 }
 
 const loadMoreProducts = async () => {
-  if (loading.value) return
+  if (loading.value || !hasMoreProducts.value) return
 
   loading.value = true
+  const previousCount = productsStore.getAllProducts.length
   currentPage.value++
 
   try {
-    // await productsStore.fetchProducts(currentPage.value) // Original line commented out
-    // Eğer daha fazla ürün yoksa hasMoreProducts'ı false yap
-    // if (productsStore.getAllProducts.length >= productsStore.totalItems) { // Original line commented out
-    //   hasMoreProducts.value = false
-    // }
+    const result = await productsStore.fetchFilteredProducts(currentPage.value)
+    
+    // Eğer yeni ürün gelmediyse daha fazla ürün yok
+    const currentCount = productsStore.getAllProducts.length
+    
+    if (currentCount <= previousCount) {
+      hasMoreProducts.value = false
+    }
   } catch (error) {
     console.error('Load more products error:', error)
+    currentPage.value-- // Hata durumunda sayfa numarasını geri al
   } finally {
     loading.value = false
   }
@@ -139,7 +140,7 @@ watch(sortBy, async (newSort) => {
   // Sıralama değiştiğinde ürünleri yeniden yükle
   currentPage.value = 1
   hasMoreProducts.value = true
-  // await productsStore.fetchProducts(1) // Original line commented out
+  // Store'da sıralama zaten uygulanıyor, sadece sayfa sıfırla
 })
 
 // Initialize
@@ -162,12 +163,33 @@ onMounted(async () => {
     productsStore.setFilters(defaultFilters)
     await productsStore.fetchFilteredProducts(1)
     
+    // Infinite scroll için observer başlat
+    setupInfiniteScroll()
+    
   } catch (error) {
     console.error('Initial load error:', error)
   } finally {
     loading.value = false
   }
 })
+
+// Infinite scroll setup
+const setupInfiniteScroll = () => {
+  if (process.client) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMoreProducts.value && !loading.value) {
+          loadMoreProducts()
+        }
+      },
+      { root: null, threshold: 0.1, rootMargin: '100px' }
+    )
+    
+    if (infiniteScrollTrigger.value) {
+      observer.observe(infiniteScrollTrigger.value)
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -218,6 +240,11 @@ onMounted(async () => {
 
 .load-more-btn {
   min-width: 200px;
+}
+
+.infinite-scroll-trigger {
+  height: 20px;
+  width: 100%;
 }
 
 .no-results {
