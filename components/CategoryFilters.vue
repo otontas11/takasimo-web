@@ -206,9 +206,7 @@ const submitSearch = async () => {
   try {
     // Prepare search data
     const searchData = prepareSearchData()
-    
-    console.log('Search data:', searchData)
-    
+
     // Update store filters and execute search
     productsStore.setFilters(searchData)
     const result = await productsStore.fetchFilteredProducts(1)

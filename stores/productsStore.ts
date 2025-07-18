@@ -60,8 +60,6 @@ export const useProductsStore = defineStore('products', () => {
   const setTotalProductsAndPages = (response: any) => {
     totalPages.value = response.last_page
     totalProducts.value = response.total
-
-    console.log("ssss",totalProducts.value)
   }
 
   const fetchProducts = async (page: number = 1) => {
@@ -105,7 +103,6 @@ export const useProductsStore = defineStore('products', () => {
       const response = await getProductsFilterQuery(page, mergedFilters)
       setTotalProductsAndPages(response as any)
 
-        console.log("getProductsFilterQuery",response)
       if (response) {
         const productData = Array.isArray(response) ? response : (response as any).data || []
 

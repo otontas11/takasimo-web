@@ -12,7 +12,6 @@ export const useCategoriesApi = () => {
         limit: 11,
         orderBy: ['{"k": "sequence", "v": "asc"}', '{"k": "name", "v": "asc"}']
       })
-      console.log('getMainCategories', response)
       return response
     } catch (error) {
       console.error('getMainCategories error:', error)

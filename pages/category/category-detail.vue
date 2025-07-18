@@ -95,7 +95,6 @@ const sortOptions = [
 ]
 
 const onSortChange = async () => {
-  console.log("sortOptions", sortBy.value)
 
   // Sıralama değiştiğinde store üzerinden işlem yap
   try {
