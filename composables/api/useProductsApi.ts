@@ -94,7 +94,7 @@ export const useProductsApi = () => {
   }
 
   // herhangi bir kullancıın ürünleirn al
-  const getOwnerProducts = (code: string,page=1) => {
+  const getSellerProfileAndProducts = (code: string,page=1) => {
 
     //filter.push(`{"k": "status", "o": "=", "v": true}`); //onaylanmış urunler
     //filter.push(`{"k": "swap", "o": "=", "v": true}`); //onaylanmış urunler
@@ -112,6 +112,6 @@ export const useProductsApi = () => {
     getProducts,
     getProductById,
     getProductsFilterQuery,
-    getOwnerProducts
+    getSellerProfileAndProducts
   }
 }
