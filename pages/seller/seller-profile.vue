@@ -1,72 +1,3 @@
-<script setup lang="ts">
-import { useProductsApi } from '~/composables/api/useProductsApi'
-import { getImageUrl } from '~/utils/getImageUrl.js'
-
-const route = useRoute()
-const { getSellerProfileAndProducts } = useProductsApi()
-
-const sellerData = ref<any[]>([])
-const loading = ref(true)
-const error = ref<string | null>(null)
-
-// Helper functions
-const formatPrice = (price: number): string => {
-  return `${price?.toLocaleString('tr-TR') || 0} TL`
-}
-
-const truncateText = (text: string, maxLength: number): string => {
-  if (!text) return ''
-  return text.length <= maxLength ? text : text.substring(0, maxLength) + '...'
-}
-
-const navigateToProduct = (productCode: string) => {
-  navigateTo(`/products/product-detail/${productCode}`)
-}
-
-// Fetch seller data
-const fetchSellerData = async () => {
-  loading.value = true
-  error.value = null
-  
-  try {
-    const sellerId = route.params.id as string
-    if (!sellerId) {
-      throw new Error('Satıcı ID bulunamadı')
-    }
-
-    const response = await getSellerProfileAndProducts(sellerId, 1)
-    sellerData.value = (response as any)?.data || []
-  } catch (err: any) {
-    console.error('Seller profile fetch error:', err)
-    error.value = 'Satıcı bilgileri yüklenirken hata oluştu'
-  } finally {
-    loading.value = false
-  }
-}
-
-// Lifecycle
-onMounted(() => {
-  fetchSellerData()
-})
-
-// SEO
-useHead({
-  title: computed(() => {
-    const sellerName = sellerData.value[0]?.owner?.name || 'Satıcı'
-    return `${sellerName} - Satıcı Profili - Takasimo`
-  }),
-  meta: [
-    {
-      name: 'description',
-      content: computed(() => {
-        const sellerName = sellerData.value[0]?.owner?.name || 'Satıcı'
-        return `${sellerName} satıcısının ürünlerini keşfedin. Takasimo'da güvenilir alışveriş.`
-      })
-    }
-  ]
-})
-</script>
-
 <template>
   <v-main class="seller-profile-page">
     <v-container>
@@ -181,6 +112,75 @@ useHead({
     </v-container>
   </v-main>
 </template>
+
+<script setup lang="ts">
+import { useProductsApi } from '~/composables/api/useProductsApi'
+import { getImageUrl } from '~/utils/getImageUrl.js'
+
+const route = useRoute()
+const { getSellerProfileAndProducts } = useProductsApi()
+
+const sellerData = ref<any[]>([])
+const loading = ref(true)
+const error = ref<string | null>(null)
+
+// Helper functions
+const formatPrice = (price: number): string => {
+  return `${price?.toLocaleString('tr-TR') || 0} TL`
+}
+
+const truncateText = (text: string, maxLength: number): string => {
+  if (!text) return ''
+  return text.length <= maxLength ? text : text.substring(0, maxLength) + '...'
+}
+
+const navigateToProduct = (productCode: string) => {
+  navigateTo(`/product-detail/${productCode}`)
+}
+
+// Fetch seller data
+const fetchSellerData = async () => {
+  loading.value = true
+  error.value = null
+
+  try {
+    const sellerId = route.params.id as string
+    if (!sellerId) {
+      throw new Error('Satıcı ID bulunamadı')
+    }
+
+    const response = await getSellerProfileAndProducts(sellerId, 1)
+    sellerData.value = (response as any)?.data || []
+  } catch (err: any) {
+    console.error('Seller profile fetch error:', err)
+    error.value = 'Satıcı bilgileri yüklenirken hata oluştu'
+  } finally {
+    loading.value = false
+  }
+}
+
+// Lifecycle
+onMounted(() => {
+  fetchSellerData()
+})
+
+// SEO
+useHead({
+  title: computed(() => {
+    const sellerName = sellerData.value[0]?.owner?.name || 'Satıcı'
+    return `${sellerName} - Satıcı Profili - Takasimo`
+  }),
+  meta: [
+    {
+      name: 'description',
+      content: computed(() => {
+        const sellerName = sellerData.value[0]?.owner?.name || 'Satıcı'
+        return `${sellerName} satıcısının ürünlerini keşfedin. Takasimo'da güvenilir alışveriş.`
+      })
+    }
+  ]
+})
+</script>
 
 <style scoped>
 .seller-profile-page {
