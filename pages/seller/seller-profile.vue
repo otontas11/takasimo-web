@@ -58,48 +58,8 @@
             <span class="text-body-2 text-grey">{{ sellerData.length }} ürün bulundu</span>
           </div>
 
-          <!-- Products Grid -->
-          <v-row>
-            <v-col 
-              v-for="item in sellerData" 
-              :key="item.product_code" 
-              cols="12" 
-              sm="6" 
-              md="4" 
-              lg="3"
-              class="d-flex"
-            >
-              <v-card class="product-card w-100" elevation="1" rounded="lg" hover @click="navigateToProduct(item.product.product_code)">
-                <div class="product-image-container">
-                  <v-img 
-                    :src="getImageUrl({ path: item.product.showcase_image })" 
-                    :alt="item.product.name"
-                    height="200"
-                    cover
-                    class="product-image"
-                  />
-                </div>
-                <v-card-text class="pa-3">
-                  <h4 class="product-title text-subtitle-2 font-weight-medium mb-2">
-                    {{ truncateText(item.product.name, 50) }}
-                  </h4>
-                  <div class="product-price text-h6 font-weight-bold mb-2">
-                    {{ formatPrice(item.product.price) }}
-                  </div>
-                  <div class="product-location text-caption text-grey">
-                    {{ item.product.city?.name }}, {{ item.product.district?.name }}
-                  </div>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-
-          <!-- No Products -->
-          <div v-if="sellerData.length === 0" class="text-center py-10">
-            <v-icon color="grey-lighten-1" size="64" class="mb-4">mdi-package-variant</v-icon>
-            <h3 class="text-h6 text-grey-darken-1 mb-2">Ürün bulunamadı</h3>
-            <p class="text-body-2 text-grey">Bu satıcının henüz ürünü bulunmuyor.</p>
-          </div>
+          <!-- Products using FeaturedProducts component -->
+          <FeaturedProducts :products="normalizedProducts" @loadMore="handleLoadMore" />
         </div>
       </div>
 
@@ -123,6 +83,24 @@ const { getSellerProfileAndProducts } = useProductsApi()
 const sellerData = ref<any[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
+const currentPage = ref(1)
+
+// Computed properties
+const normalizedProducts = computed(() => {
+  return sellerData.value.map(item => ({
+    id: item.product_code,
+    name: item.product.name,
+    description: item.product.description,
+    price: item.product.price,
+    showcase_image: item.product.showcase_image,
+    product_code: item.product.product_code,
+    category: item.product.category,
+    city: item.product.city,
+    district: item.product.district,
+    created_at: item.created_at,
+    owner: item.owner
+  }))
+})
 
 // Helper functions
 const formatPrice = (price: number): string => {
@@ -136,6 +114,22 @@ const truncateText = (text: string, maxLength: number): string => {
 
 const navigateToProduct = (productCode: string) => {
   navigateTo(`/product-detail/${productCode}`)
+}
+
+const handleLoadMore = async () => {
+  try {
+    currentPage.value++
+    const sellerId = route.params.id as string
+    const response = await getSellerProfileAndProducts(sellerId, currentPage.value)
+    const newData = (response as any)?.data || []
+    
+    if (newData.length > 0) {
+      sellerData.value = [...sellerData.value, ...newData]
+    }
+  } catch (err: any) {
+    console.error('Load more error:', err)
+    currentPage.value-- // Revert page number on error
+  }
 }
 
 // Fetch seller data
@@ -207,53 +201,7 @@ useHead({
   align-items: center;
 }
 
-.product-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
 
-.product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-  border-color: #8b2865;
-}
-
-.product-image-container {
-  position: relative;
-  overflow: hidden;
-  border-radius: 8px 8px 0 0;
-}
-
-.product-image {
-  transition: transform 0.3s ease;
-}
-
-.product-card:hover .product-image {
-  transform: scale(1.05);
-}
-
-.product-title {
-  color: #1e293b;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-height: 2.4rem;
-}
-
-.product-price {
-  color: #8b2865;
-}
-
-.product-location {
-  font-size: 0.75rem;
-}
 
 @media (max-width: 768px) {
   .seller-details h2 {
