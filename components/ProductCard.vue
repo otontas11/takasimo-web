@@ -100,7 +100,7 @@ const formatDate = (dateString?: string): string => {
 const navigateToProduct = () => {
   console.log("props.product", props.product)
   const slug = props.product.product_code.toString()
-  navigateTo(`/products/product-detail/${slug}`)
+  navigateTo(`/product-detail/${slug}`)
 }
 </script>
 
