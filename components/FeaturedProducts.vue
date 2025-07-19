@@ -107,15 +107,15 @@ const normalizeProduct = (product: any) => {
     description: product.description || '',
     price: product.price || 0,
     image: product.showcase_image || product.image_url || '/images/placeholder.jpg',
+    product_code: product.product_code,
     category: product.category?.name || 'Kategori',
     city: product.city,
     district: product.district,
+    created_at: product.created_at,
     user: {
       name: product.user?.name || product.owner?.name || 'Kullanıcı',
       avatar: product.user?.avatar || product.owner?.avatar || '/images/default-avatar.jpg'
     },
-    created_at: product.created_at,
-    product_code: product.product_code
   } as any
 }
 
