@@ -27,11 +27,36 @@
 
             </div>
 
-            <!-- See All Link -->
-            <a href="#" class="see-all-link">
-              Tümünü gör
-              <v-icon size="16" class="ml-1">mdi-chevron-right</v-icon>
-            </a>
+            <!-- See All Link with Dropdown -->
+            <div 
+              class="see-all-container"
+              @mouseenter="handleMouseEnter"
+              @mouseleave="handleMouseLeave"
+            >
+              <a href="#" class="see-all-link">
+                Tümünü gör
+                <v-icon size="16" class="ml-1">mdi-chevron-down</v-icon>
+              </a>
+              
+              <!-- Dropdown Menu -->
+              <div 
+                v-if="showDropdown && remainingCategories.length > 0" 
+                class="dropdown-menu"
+                @mouseenter="handleMouseEnter"
+                @mouseleave="handleMouseLeave"
+              >
+                <div class="dropdown-content">
+                  <div 
+                    v-for="category in remainingCategories" 
+                    :key="(category as any).id || (category as any).category_code"
+                    class="dropdown-item"
+                    @click="navigateToCategory(category)"
+                  >
+                    {{ (category as any).name }}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </v-col>
       </v-row>
@@ -63,6 +88,7 @@ const categoryListRef = ref<HTMLElement | null>(null)
 const containerWidth = ref(0)
 const windowWidth = ref(1024) // Default desktop width
 const isClient = ref(false)
+const showDropdown = ref(false)
 
 const updateWindowWidth = () => {
   if (process.client) {
@@ -80,6 +106,14 @@ const visibleCategories = computed(() => {
   }
   // Mobilde sadece 4 kategori
   return props.categories.slice(0, 4)
+})
+
+const remainingCategories = computed(() => {
+  if (!props.categories || props.categories.length === 0) {
+    return []
+  }
+  const visibleCount = windowWidth.value > 600 ? 8 : 4
+  return props.categories.slice(visibleCount)
 })
 
 // Methods
@@ -125,6 +159,29 @@ const navigateToCategory = (category: Category) => {
   }
 }
 
+let closeTimeout: NodeJS.Timeout | null = null
+
+const handleMouseLeave = () => {
+  // Önceki timeout'u temizle
+  if (closeTimeout) {
+    clearTimeout(closeTimeout)
+  }
+  
+  // Daha uzun gecikme ile dropdown'ı kapat
+  closeTimeout = setTimeout(() => {
+    showDropdown.value = false
+  }, 300)
+}
+
+const handleMouseEnter = () => {
+  // Mouse girdiğinde timeout'u temizle
+  if (closeTimeout) {
+    clearTimeout(closeTimeout)
+    closeTimeout = null
+  }
+  showDropdown.value = true
+}
+
 // Lifecycle
 onMounted(() => {
   isClient.value = true
@@ -145,6 +202,11 @@ onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll)
     window.removeEventListener('resize', updateContainerWidth)
     window.removeEventListener('resize', updateWindowWidth)
+  }
+  
+  // Timeout'u temizle
+  if (closeTimeout) {
+    clearTimeout(closeTimeout)
   }
 })
 
@@ -228,6 +290,12 @@ watch(containerWidth, () => {
   }
 }
 
+.see-all-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .see-all-link {
   color: #8b2865;
   text-decoration: none;
@@ -240,11 +308,56 @@ watch(containerWidth, () => {
   flex-shrink: 0;
   min-width: 120px;
   margin-left: 1.5rem;
+  cursor: pointer;
 }
 
 .see-all-link:hover {
   color: #6d1e4f;
   text-decoration: none;
+}
+
+/* Dropdown Styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  min-width: 200px;
+  animation: dropdown-fade-in 0.2s ease-out;
+}
+
+.dropdown-content {
+  padding: 8px 0;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  color: #333;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #8b2865;
+}
+
+@keyframes dropdown-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 600px) {
@@ -287,6 +400,11 @@ watch(containerWidth, () => {
   .skeleton-item {
     width: 60px;
     height: 16px;
+  }
+  
+  .dropdown-menu {
+    right: -10px;
+    min-width: 180px;
   }
 }
 </style>
