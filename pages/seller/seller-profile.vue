@@ -102,20 +102,6 @@ const normalizedProducts = computed(() => {
   }))
 })
 
-// Helper functions
-const formatPrice = (price: number): string => {
-  return `${price?.toLocaleString('tr-TR') || 0} TL`
-}
-
-const truncateText = (text: string, maxLength: number): string => {
-  if (!text) return ''
-  return text.length <= maxLength ? text : text.substring(0, maxLength) + '...'
-}
-
-const navigateToProduct = (productCode: string) => {
-  navigateTo(`/product-detail/${productCode}`)
-}
-
 const handleLoadMore = async () => {
   try {
     currentPage.value++
@@ -200,8 +186,6 @@ useHead({
   display: flex;
   align-items: center;
 }
-
-
 
 @media (max-width: 768px) {
   .seller-details h2 {
