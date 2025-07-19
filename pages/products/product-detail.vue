@@ -30,7 +30,11 @@
         </v-col>
         <!-- Sağ Kısım: Kullanıcı ve Detaylar -->
         <v-col cols="12" md="6" class="right-section">
-          <div class="user-info d-flex align-center mb-4">
+          <div 
+            class="user-info d-flex align-center mb-4" 
+            @click="navigateToSellerProfile(product.owner?.user_code)"
+            style="cursor: pointer;"
+          >
             <v-avatar size="48" color="deep-purple-accent-400">
               <v-icon size="32">mdi-account</v-icon>
             </v-avatar>
@@ -87,6 +91,12 @@ function timeAgo(dateStr) {
   if (diff < 86400) return `${Math.floor(diff / 3600)} saat önce`
   if (diff < 2592000) return `${Math.floor(diff / 86400)} gün önce`
   return formatDate(dateStr)
+}
+
+function navigateToSellerProfile(userCode) {
+  if (userCode) {
+    navigateTo(`/seller-profile/${userCode}`)
+  }
 }
 
 onMounted(async () => {
