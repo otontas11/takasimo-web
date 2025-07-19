@@ -35,25 +35,29 @@ import PopularCategories from '~/components/populer-categories/PopularCategories
 const categoriesStore = useCategoriesStore()
 const productsStore = useProductsStore()
 
-const currentPage = computed(() => productsStore.getCurrentPage)
-
 // Store'lardan veri al
 const allCategories = computed(() => categoriesStore.getAllCategories)
 const products = computed(() => productsStore.getAllProducts)
 
 // ✅ SSR-SAFE - Sadece useAsyncData ile fetch yap
 await useAsyncData('init-home', () => {
-  return Promise.all([categoriesStore.fetchCategories(), productsStore.fetchProducts(currentPage.value)])
+  return Promise.all([categoriesStore.fetchCategories(), productsStore.fetchProducts(1)])
 })
 
 onMounted(async () => {
   if (!allCategories.value.length) await categoriesStore.fetchCategories()
-  if (!products.value.length) await productsStore.fetchProducts(currentPage.value)
+  if (!products.value.length) await productsStore.fetchProducts(1)
 })
 
-// ✅ LOAD MORE - 2. sayfa için ürün yükle
+onUnmounted(() => {
+  productsStore.clearProducts()
+})
+
+// ✅ LOAD MORE - Sonraki sayfa için ürün yükle
 const handleLoadMore = async () => {
-  await productsStore.fetchProducts(currentPage.value + 1)
+  const nextPage = productsStore.getCurrentPage + 1
+  console.log('Loading page:', nextPage) // Debug için
+  await productsStore.fetchProducts(nextPage)
 }
 </script>
 

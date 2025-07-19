@@ -7,6 +7,7 @@ export const useProductsStore = defineStore('products', () => {
   const products = ref<any[]>([])
   const totalProducts = ref<any>(0)
   const totalPages = ref<any>(0)
+  const currentPage = ref(1)
   const loading = ref(false)
   const error = ref<string | null>(null)
   
@@ -25,6 +26,7 @@ export const useProductsStore = defineStore('products', () => {
   const getAllProducts = computed(() => products.value)
   const isLoading = computed(() => loading.value)
   const getError = computed(() => error.value)
+  const getCurrentPage = computed(() => currentPage.value)
 
   // ✅ ACTIONS - Functions
   const setLoading = (value: boolean) => {
@@ -41,6 +43,11 @@ export const useProductsStore = defineStore('products', () => {
 
   const setProducts = (data: any[]) => {
     products.value = data
+  }
+
+  const clearProducts = () => {
+    products.value = []
+    currentPage.value = 1
   }
 
   const setFilters = (filters: any) => {
@@ -67,8 +74,7 @@ export const useProductsStore = defineStore('products', () => {
     setError(null)
 
     try {
-
-      const response = await getProducts()
+      const response = await getProducts({ page })
 
       if (response) {
         const productData = Array.isArray(response) ? response : (response as any).data || []
@@ -76,10 +82,11 @@ export const useProductsStore = defineStore('products', () => {
         // İlk sayfa ise verileri sıfırla, değilse mevcut listeye ekle
         if (page === 1) {
           setProducts(productData)
+          currentPage.value = 1
         } else {
           setProducts([...products.value, ...productData])
+          currentPage.value = page
         }
-
       }
 
       return { success: true }
@@ -178,11 +185,13 @@ export const useProductsStore = defineStore('products', () => {
     getAllProducts,
     isLoading,
     getError,
+    getCurrentPage,
 
     // Actions
     fetchProducts,
     searchProducts,
     setProducts,
+    clearProducts,
     setFilters,
     updateSort,
     applySort,
