@@ -64,6 +64,10 @@ export default defineNuxtConfig({
         {
           path: '/category-detail/:id',
           file: '~/pages/category/category-detail.vue'
+        },
+        {
+          path: '/seller-profile/:id',
+          file: '~/pages/seller/seller-profile.vue'
         }
       )
     }

@@ -93,9 +93,25 @@ export const useProductsApi = () => {
 
   }
 
+  // herhangi bir kullancıın ürünleirn al
+  const getOwnerProducts = (code: string,page=1) => {
+
+    //filter.push(`{"k": "status", "o": "=", "v": true}`); //onaylanmış urunler
+    //filter.push(`{"k": "swap", "o": "=", "v": true}`); //onaylanmış urunler
+
+    return api.get(`owner-products/${code}?page=${page}`, {
+      params: {
+        with: ["images", "owner","doping","city"],
+
+      }
+    })
+  }
+
+
   return {
     getProducts,
     getProductById,
-    getProductsFilterQuery
+    getProductsFilterQuery,
+    getOwnerProducts
   }
 }
