@@ -70,7 +70,9 @@ const displayCategories = computed(() => {
 // Methods
 const navigateToCategory = (category) => {
   const slug = category.category_code || category.id?.toString()
-  navigateTo(`/kategori/${slug}`)
+  if (slug) {
+    navigateTo(`/category-detail/${slug}`)
+  }
 }
 
 const truncateText = (text, maxLength = 15) => {
