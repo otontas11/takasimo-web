@@ -1,8 +1,8 @@
 <template>
   <div class="featured-products py-8">
 
-    <!-- Loading State -->
-    <v-row v-if="shouldShowLoading">
+    <!-- Initial Loading State - Only show when no products and loading -->
+    <v-row v-if="shouldShowInitialLoading">
       <v-col v-for="n in 4" :key="n" cols="6" sm="6" md="3" class="d-flex">
         <v-card class="product-card" elevation="0" rounded="xl">
           <v-skeleton-loader type="image, article" />
@@ -17,18 +17,18 @@
       </v-col>
     </v-row>
 
-    <!-- Empty State - Skeleton Loading -->
-    <v-row v-else>
-      <v-col v-for="n in 4" :key="n" cols="6" sm="6" md="3" class="d-flex">
-        <v-card class="product-card" elevation="0" rounded="xl">
-          <v-skeleton-loader type="image, article" />
-        </v-card>
+    <!-- Empty State - No products and not loading -->
+    <v-row v-else-if="!isLoading">
+      <v-col cols="12" class="text-center">
+        <v-icon class="mb-4" color="grey-lighten-1" size="64">mdi-package-variant</v-icon>
+        <h3 class="text-h6 text-grey-darken-1 mb-2">Ürün bulunamadı</h3>
+        <p class="text-body-2 text-grey">Bu kategoride henüz ürün bulunmuyor.</p>
       </v-col>
     </v-row>
 
     <!-- Infinite Scroll Loading -->
     <div ref="infiniteScrollTrigger" class="infinite-scroll-loading">
-      <v-row v-if="isLoading">
+      <v-row v-if="isLoading && hasProducts">
         <v-col cols="12" class="text-center">
           <v-progress-circular indeterminate color="primary" size="40" width="4" class="mb-4" />
           <div class="text-body-2 text-medium-emphasis">Daha fazla ürün yükleniyor...</div>
@@ -62,9 +62,9 @@ const hasProducts = computed(() => {
   return Array.isArray(props.products) && props.products.length > 0
 })
 
-// SSR-safe loading state - only show loading if we have no data and are actually loading
-const shouldShowLoading = computed(() => {
-  return isLoading.value && !hasInitialData.value && !hasProducts.value
+// ✅ Skeleton loading logic - Only show during initial load when no products exist
+const shouldShowInitialLoading = computed(() => {
+  return isLoading.value && !hasProducts.value
 })
 
 const refresh = async () => {
