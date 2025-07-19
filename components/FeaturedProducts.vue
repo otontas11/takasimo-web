@@ -108,8 +108,8 @@ const normalizeProduct = (product: any) => {
     price: product.price || 0,
     image: product.showcase_image || product.image_url || '/images/placeholder.jpg',
     category: product.category?.name || 'Kategori',
-    city: product.city || 'Şehir',
-    district: product.district || 'İlçe',
+    city: product.city,
+    district: product.district,
     user: {
       name: product.user?.name || product.owner?.name || 'Kullanıcı',
       avatar: product.user?.avatar || product.owner?.avatar || '/images/default-avatar.jpg'
